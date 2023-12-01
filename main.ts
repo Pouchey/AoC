@@ -1,5 +1,5 @@
+import { readdir, readdirSync } from 'fs';
 import * as readline from 'readline';
-import * as child_process from 'child_process';
 
 const SELECTED_YEAR = 2023;
 
@@ -8,20 +8,33 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-rl.question('Enter the day: ', (number) => {
-  const scriptPath = `${SELECTED_YEAR}/${number}/index.ts`;
-  const child = child_process.spawn('node', [scriptPath]);
+rl.question('Enter the day: ', async (number) => {
+  const scriptPath = `${SELECTED_YEAR}/${number}`;
 
-  child.stdout.on('data', (data) => {
-    console.log(`Output: ${data}`);
-  });
+  try {
+    const script = await import(`./${scriptPath}`);
 
-  child.stderr.on('data', (data) => {
-    console.error(`Error: ${data}`);
-  });
+    console.log('=====================');
+    console.log('');
+    console.log(`Running Advent of Code 2023 /${number}`);
+    console.log('');
+    console.log('=====================');
 
-  child.on('close', (code) => {
-    console.log(`Child process exited with code ${code}`);
+    script.default();
+  } catch (error) {
+    console.log(error);
+    const availableScipts = readdirSync(`${SELECTED_YEAR}`);
+    const availableSciptsString = availableScipts.join(' \\ ');
+    console.log('=====================');
+    console.log('');
+    console.log(`Advent of Code 2023 /${number} not found.`);
+    console.log('');
+    console.log('Available scripts:');
+    console.log('');
+    console.log(availableSciptsString);
+    console.log('');
+    console.log('=====================');
+  } finally {
     rl.close();
-  });
+  }
 });
