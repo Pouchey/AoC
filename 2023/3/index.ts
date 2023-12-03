@@ -1,0 +1,148 @@
+import path from 'path';
+import { readInput } from '../../utils/file';
+
+type Matrix = string[][];
+
+const loadData = () => {
+  const input = readInput(path.join(__dirname, 'data', 'input'));
+  const lines = input.split('\n');
+  const matrix: Matrix = [];
+
+  lines.forEach((line) => {
+    const row = line.split('');
+    matrix.push(row);
+  });
+
+  return matrix;
+};
+
+const calculate1 = () => {
+  const data = loadData();
+
+  const partNumber = [];
+
+  for (let i = 0; i < data.length; i++) {
+    const row = data[i];
+    for (let j = 0; j < row.length; j++) {
+      const cell = row[j];
+
+      if (!isNaN(parseInt(cell, 10))) {
+        const fullNumber = [cell];
+        let count = 0;
+
+        while (!isNaN(parseInt(row[j + 1], 10))) {
+          fullNumber.push(row[j + 1]);
+          count++;
+          j++;
+        }
+
+        // look around the full number
+        const left = j - count - 1 < 0 ? 0 : j - count - 1;
+        const right = j + 1 > row.length - 1 ? row.length - 1 : j + 1;
+        const top = i - 1 < 0 ? 0 : i - 1;
+        const bottom = i + 1 > data.length - 1 ? data.length - 1 : i + 1;
+
+        // look at the char around the full number
+        for (let i2 = top; i2 <= bottom; i2++) {
+          const row2 = data[i2];
+          for (let j2 = left; j2 <= right; j2++) {
+            const cell2 = row2[j2];
+            if (isNaN(parseInt(cell2, 10)) && cell2 !== '.') {
+              partNumber.push(fullNumber.join(''));
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  const result = partNumber.reduce((acc, cur) => acc + parseInt(cur, 10), 0);
+
+  return result;
+};
+
+interface FindFullNumberNeighbor {
+  data: Matrix;
+  i: number;
+  j: number;
+}
+
+const findFullNumberNeighbor = ({ data, i, j }: FindFullNumberNeighbor) => {
+  const left = j - 1 < 0 ? 0 : j - 1;
+  const right = j + 1 > data[i].length - 1 ? data[i].length - 1 : j + 1;
+  const top = i - 1 < 0 ? 0 : i - 1;
+  const bottom = i + 1 > data.length - 1 ? data.length - 1 : i + 1;
+
+  const fullNumber = [];
+  let numberIndex = 0;
+
+  for (let i2 = top; i2 <= bottom; i2++) {
+    const row2 = data[i2];
+    for (let j2 = left; j2 <= right; j2++) {
+      const cell2 = row2[j2];
+      if (!isNaN(parseInt(cell2, 10))) {
+        fullNumber[numberIndex] = cell2;
+        let leftJ = j2;
+        let rightJ = j2;
+        // look left
+        while (leftJ > 0 && !isNaN(parseInt(row2[leftJ - 1], 10))) {
+          fullNumber[numberIndex] = row2[leftJ - 1].concat(fullNumber[numberIndex]);
+          leftJ--;
+        }
+        // look right
+        while (rightJ < row2.length && !isNaN(parseInt(row2[rightJ + 1], 10))) {
+          fullNumber[numberIndex] = fullNumber[numberIndex].concat(row2[rightJ + 1]);
+          rightJ++;
+        }
+
+        numberIndex++;
+        j2 = rightJ;
+      }
+    }
+  }
+
+  return fullNumber;
+};
+
+const calculate2 = () => {
+  const data = loadData();
+
+  const gearRatio = [];
+
+  for (let i = 0; i < data.length; i++) {
+    const row = data[i];
+    for (let j = 0; j < row.length; j++) {
+      const cell = row[j];
+      if (isNaN(parseInt(cell, 10)) && cell === '*') {
+        const partNumbers = findFullNumberNeighbor({
+          data,
+          i,
+          j
+        });
+
+        if (partNumbers.length === 2) {
+          const result = parseInt(partNumbers[0], 10) * parseInt(partNumbers[1], 10);
+          gearRatio.push(result);
+        }
+      }
+    }
+  }
+
+  const result = gearRatio.reduce((acc, cur) => acc + cur, 0);
+
+  return result;
+};
+
+export default () => {
+  const firstStep = calculate1();
+  const secondStep = calculate2();
+
+  console.log('');
+  console.log('Result of first step:');
+  console.log(firstStep);
+  console.log('');
+  console.log('Result of second step:');
+  console.log(secondStep);
+  console.log('');
+};
