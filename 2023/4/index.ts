@@ -11,7 +11,6 @@ const loadData = () => {
   return data;
 };
 
-// Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
 const regex1 = /Card\s+(\d+):\s*((?:\s*\d+)+) \|\s*((?:\s*\d+)+)/g;
 
 const calculate1 = () => {
@@ -19,7 +18,6 @@ const calculate1 = () => {
 
   const result = data.reduce((acc, cur) => {
     const matches = [...cur.matchAll(regex1)];
-    // const card = matches[0][1];
     const winNumbers = matches[0][2]
       .replace(/\s\s+/g, ' ')
       .split(' ')
@@ -46,7 +44,6 @@ const calculate2 = () => {
 
   const points = data.map((card) => {
     const matches = [...card.matchAll(regex1)];
-    // const card = matches[0][1];
     const winNumbers = matches[0][2]
       .replace(/\s\s+/g, ' ')
       .split(' ')
@@ -70,13 +67,6 @@ const calculate2 = () => {
         cards[i + j] += 1 * cards[i];
       }
   }
-
-  // [ 4, 2, 2, 1, 0,  0 ] - total points
-  // [ 1, 1, 1, 1, 1,  1 ] - original
-  // [ 1, 2, 2, 2, 2,  1 ] - won 1 - 1,2,3,4,5
-  // [ 1, 2, 4, 4, 2,  1 ] - won 2 *2 - 3,4
-  // [ 1, 2, 4, 8, 6,  1 ] - won 3 * 4 - 4,5
-  // [ 1, 2, 4, 8, 14, 1] - won 4 * 8 - 5
 
   const result = cards.reduce((acc, cur) => acc + cur, 0);
 
