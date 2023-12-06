@@ -9,6 +9,7 @@ import {
 } from './utils/file';
 import { getExample, getInput, submit } from './utils/aoc';
 import { assertEqual } from './utils/assert';
+import { log } from './utils/logger';
 
 // Create the interface
 const rl = readline.createInterface({
@@ -18,9 +19,7 @@ const rl = readline.createInterface({
 
 // Help command
 if (argv.includes('--help') || argv.includes('-h')) {
-  console.log(
-    'Usage:\nnode runner.js <day> <year>\nday and year defaults to current day and current year'
-  );
+  log('Usage:\nnode runner.js <day> <year>\nday and year defaults to current day and current year');
   process.exit();
 }
 
@@ -43,8 +42,8 @@ const execute = async () => {
       createDataFile(scriptPath, 'input', input);
     }
   } catch (error) {
-    if (error instanceof Error) console.log(error.message);
-    else console.log('There was an error.');
+    if (error instanceof Error) log(error.message, 'error', 'red');
+    else log('There was an error.', 'error', 'red');
 
     process.exit();
   }
@@ -52,9 +51,9 @@ const execute = async () => {
   const exampleFile = readInput(`./${scriptPath}/data/example`);
   const inputFile = readInput(`./${scriptPath}/data/input`);
 
-  console.log('=====================\n');
-  console.log(`Running Advent of Code 2023 /${day}\n`);
-  console.log('=====================\n');
+  log('=====================\n', 'info', 'yellow');
+  log(`Running Advent of Code 2023 /${day}\n`, 'info', 'christmas');
+  log('=====================\n', 'info', 'yellow');
   const script = await import(`./${scriptPath}`);
 
   const { solve1, solve2, exampleAnswer1, exampleAnswer2, firstPartCompleted } = script;
@@ -64,29 +63,31 @@ const execute = async () => {
   const exampleAnswer = firstPartCompleted ? exampleAnswer2 : exampleAnswer1;
 
   // try solve on example
-  console.log(`Part ${part}:\n`);
-  console.log('Running example:\n');
+  log(`Part ${part}:\n`, 'info', 'blue');
+  log('Running example:\n', 'info', 'cyan');
   const exampleOutput = solve(exampleFile);
   if (!assertEqual(exampleOutput, exampleAnswer)) {
     process.exit();
   }
 
-  console.log('Running solve:\n');
+  log('Running solve:\n', 'info', 'cyan');
   // try solve on input
   console.time('Solved in');
   const inputOutput = solve(inputFile);
   console.timeEnd('Solved in');
-  console.log(`Result is: ${inputOutput}`);
-  console.log('=====================\n');
+  log(`Result is: `, 'log', 'green');
+  log(`${inputOutput}\n`, 'log', 'magenta');
+
+  log('=====================\n', 'info', 'yellow');
 
   rl.question('Submit this answer? (y/n) ', async (answer) => {
     if (['y', 'Y'].includes(answer)) {
-      console.log('Submitting...');
+      log('Submitting...', 'info', 'blue');
       await submit(year, day, inputOutput, part);
     } else {
-      console.log('Not submitting.');
+      log('Not submitting.', 'info', 'blue');
     }
-    console.log('=====================');
+    log('=====================', 'info', 'yellow');
 
     rl.close();
   });

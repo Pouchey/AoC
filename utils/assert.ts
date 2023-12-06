@@ -1,10 +1,12 @@
+import { log } from './logger';
+
 export function assertEqual(actual: unknown, expected: unknown) {
   if (actual !== expected) {
-    console.log('Example 1 failed!');
-    console.log(`Expected ${expected}, got ${actual}\n`);
+    log('Example 1 failed!', 'error', 'red');
+    log(`Expected ${expected}, got ${actual}\n`, 'log', 'red');
     return false;
   }
-  console.log(`test successful, got ${JSON.stringify(expected)}\n`);
+  log(`test successful, got ${JSON.stringify(expected)}\n`, 'log', 'christmas');
 
   return true;
 }

@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import { log } from './logger';
 dotenv.config();
 
 export const getExample = async (year: string, day: string) => {
@@ -61,7 +62,7 @@ export const submit = async (
     const match = response.match(/You have (.*?) left to wait/);
 
     if (!match) {
-      console.error("You gave an answer too recently but the time couldn't be parsed.");
+      log("You gave an answer too recently but the time couldn't be parsed.", 'error', 'christmas');
       return false;
     }
 
@@ -80,25 +81,25 @@ export const submit = async (
       );
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }
-    console.log('');
+    log('');
     return submit(year, day, answer, level);
   }
 
   if (response.includes('not the right answer')) {
     if (response.includes('too high')) {
-      console.log('Answer is too high');
+      log('Answer is too high', 'error', 'christmas');
       return false;
     } else if (response.includes('too low')) {
-      console.log('Answer is too low');
+      log('Answer is too low', 'error', 'christmas');
       return true;
     } else {
-      console.log('Answer not correct');
+      log('Answer not correct', 'error', 'christmas');
       return false;
     }
   }
 
   if (response.includes('Did you already complete it')) {
-    console.log('Already completed');
+    log('Already completed', 'error', 'christmas');
     return true;
   }
 
@@ -106,9 +107,8 @@ export const submit = async (
     return true;
   }
 
-  console.log('Urecognized response while submitting, logging raw response');
-  console.log(response);
-  console.log('===========================================================');
+  log('Urecognized response while submitting, logging raw response', 'error', 'red');
+  log(response, 'error');
 
   return false;
 };

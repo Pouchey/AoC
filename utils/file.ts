@@ -8,13 +8,14 @@ import {
   writeFileSync
 } from 'fs';
 import { resolve } from 'path';
+import { log } from './logger';
 
 export const readInput = (filePath: string): string => {
   try {
     const data = readFileSync(filePath, 'utf8');
     return data;
   } catch (error) {
-    console.error(`Error reading input file: ${error}`);
+    log(`Error reading input file: ${error}`, 'error', 'red');
     return '';
   }
 };
@@ -32,20 +33,20 @@ export const todayDataExists = (scriptPath: string) => {
 
 export const createTodayFolder = async (scriptPath: string) => {
   if (!todayFolderExists(scriptPath)) {
-    console.log(`Couldn't find files in ${scriptPath}.`);
+    log(`Couldn't find files in ${scriptPath}.`, 'warn', 'yellow');
 
     const folderPath = resolve(`./${scriptPath}`);
     const templatePath = resolve('./2023/00');
 
-    console.log('Creating folder...');
+    log('Creating folder...', 'info', 'blue');
     if (!existsSync(folderPath)) mkdirSync(folderPath);
 
-    console.log('Copying template to script path...');
+    log('Copying template to script path...', 'info', 'blue');
     if (!existsSync(`${folderPath}/index.ts`))
       copyFileSync(`${templatePath}/index.ts`, `${folderPath}/index.ts`);
 
     const dataPath = resolve(`./${scriptPath}/data`);
-    console.log('Creating data folder...');
+    log('Creating data folder...', 'info', 'blue');
     if (!existsSync(dataPath)) mkdirSync(dataPath);
   }
 };
@@ -57,7 +58,7 @@ export const createDataFile = async (
 ) => {
   const dataPath = resolve(`./${scriptPath}/data/${type}`);
   if (!existsSync(dataPath)) {
-    console.log('Creating data file...');
+    log('Creating data file...', 'info', 'blue');
     writeFileSync(dataPath, data, 'utf8');
   }
 };
