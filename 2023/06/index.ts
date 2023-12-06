@@ -5,7 +5,7 @@ const timeRegex = /.:(.*)/g;
 const loadData = (input: string, merged = false) => {
   const lines = input.split('\n');
   const data: Data = [];
-  console.log(lines);
+
   lines.forEach((line) => {
     const row = [...line.matchAll(timeRegex)][0][1]
       .trim()
@@ -40,15 +40,15 @@ export const solve1 = (input: string) => {
 export const solve2 = (input: string) => {
   const data = loadData(input, true);
 
-  const [time, distance] = data;
-  const wins = time.map((row, index) => {
-    const speeds = Array.from({ length: row }, (_, i) => i);
-    const distanceForEachSpeed = speeds.map((speed, ind) => speed * (row - ind));
+  const [time, distance] = data.flatMap((row) => row);
+  // find the first win
+  let i = 0;
+  do {
+    i++;
+  } while (i * (time - i) < distance && i < time);
 
-    const numberOfWins = distanceForEachSpeed.filter((dist) => dist > distance[index]).length;
-    return numberOfWins;
-  });
-  const result = wins.reduce((acc, win) => acc * win, 1);
+  const last = time - i;
+  const result = last - i + 1;
 
   return result;
 };
