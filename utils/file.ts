@@ -24,6 +24,12 @@ export const todayFolderExists = (scriptPath: string) => {
   return existsSync(folderPath) && lstatSync(folderPath).isDirectory();
 };
 
+export const todayDataExists = (scriptPath: string) => {
+  const dataPath = resolve(`./${scriptPath}/data`);
+  const files = readdirSync(dataPath);
+  return files.length === 2;
+};
+
 export const createTodayFolder = async (scriptPath: string) => {
   if (!todayFolderExists(scriptPath)) {
     console.log(`Couldn't find files in ${scriptPath}.`);

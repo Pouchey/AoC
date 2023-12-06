@@ -1,6 +1,12 @@
 import { argv } from 'process';
 import * as readline from 'readline';
-import { createDataFile, createTodayFolder, readInput, todayFolderExists } from './utils/file';
+import {
+  createDataFile,
+  createTodayFolder,
+  readInput,
+  todayDataExists,
+  todayFolderExists
+} from './utils/file';
 import { getExample, getInput, submit } from './utils/aoc';
 import { assertEqual } from './utils/assert';
 
@@ -24,12 +30,23 @@ const execute = async () => {
   const year = argv[3] || now.getFullYear().toString();
 
   const scriptPath = `${year}/${day}`;
-  if (!todayFolderExists(scriptPath)) {
-    await createTodayFolder(scriptPath);
-    const example = await getExample(year, day);
-    const input = await getInput(year, day);
-    createDataFile(scriptPath, 'example', example);
-    createDataFile(scriptPath, 'input', input);
+
+  try {
+    if (!todayFolderExists(scriptPath)) {
+      await createTodayFolder(scriptPath);
+    }
+
+    if (!todayDataExists(scriptPath)) {
+      const example = await getExample(year, day);
+      const input = await getInput(year, day);
+      createDataFile(scriptPath, 'example', example);
+      createDataFile(scriptPath, 'input', input);
+    }
+  } catch (error) {
+    if (error instanceof Error) console.log(error.message);
+    else console.log('There was an error.');
+
+    process.exit();
   }
 
   const exampleFile = readInput(`./${scriptPath}/data/example`);
