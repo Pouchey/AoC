@@ -54,6 +54,6 @@ export const solve2 = (input: string) => {
 };
 
 export const exampleAnswer1 = 288;
-export const exampleAnswer2 = 0;
+export const exampleAnswer2 = 71503;
 
-export const firstPartCompleted = false;
+export const firstPartCompleted = true;
