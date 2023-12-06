@@ -1,40 +1,76 @@
-import { readdir, readdirSync } from 'fs';
+import { argv } from 'process';
 import * as readline from 'readline';
+import { createDataFile, createTodayFolder, todayFolderExists } from './utils/file';
+import { getExample, getInput, submit } from './utils/aoc';
+import { assertEqual } from './utils/assert';
 
-const SELECTED_YEAR = 2023;
-
+// Create the interface
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
 
-rl.question('Enter the day: ', async (number) => {
-  const scriptPath = `${SELECTED_YEAR}/${number}`;
+// Help command
+if (argv.includes('--help') || argv.includes('-h')) {
+  console.log(
+    'Usage:\nnode runner.js <day> <year>\nday and year defaults to current day and current year'
+  );
+  process.exit();
+}
 
-  try {
-    const script = await import(`./${scriptPath}`);
+const execute = async () => {
+  const now = new Date();
+  const day = (argv[2] || now.getDate()).toString().padStart(2, '0');
+  const year = argv[3] || now.getFullYear().toString();
 
-    console.log('=====================');
-    console.log('');
-    console.log(`Running Advent of Code 2023 /${number}`);
-    console.log('');
-    console.log('=====================');
-
-    script.default();
-  } catch (error) {
-    console.log(error);
-    const availableScipts = readdirSync(`${SELECTED_YEAR}`);
-    const availableSciptsString = availableScipts.join(' \\ ');
-    console.log('=====================');
-    console.log('');
-    console.log(`Advent of Code 2023 /${number} not found.`);
-    console.log('');
-    console.log('Available scripts:');
-    console.log('');
-    console.log(availableSciptsString);
-    console.log('');
-    console.log('=====================');
-  } finally {
-    rl.close();
+  const scriptPath = `${year}/${day}`;
+  if (!todayFolderExists(scriptPath)) {
+    await createTodayFolder(scriptPath);
+    const example = await getExample(year, day);
+    const input = await getInput(year, day);
+    createDataFile(scriptPath, 'example', example);
+    createDataFile(scriptPath, 'input', input);
   }
-});
+
+  console.log('=====================\n');
+  console.log(`Running Advent of Code 2023 /${day}\n`);
+  console.log('=====================\n');
+  const script = await import(`./${scriptPath}`);
+
+  const { solve1, solve2, exampleAnswer1, exampleAnswer2, firstPartCompleted } = script;
+
+  const part = firstPartCompleted ? 2 : 1;
+  const solve = firstPartCompleted ? solve2 : solve1;
+  const exampleAnswer = firstPartCompleted ? exampleAnswer2 : exampleAnswer1;
+
+  // try solve on example
+  console.log(`Part ${part}:\n`);
+  console.log('Running example:\n');
+  const exampleOutput = solve(await getExample(year, day));
+  if (!assertEqual(exampleOutput, exampleAnswer)) {
+    process.exit();
+  }
+
+  console.log('Running solve:\n');
+  // try solve on input
+  console.time('Solved in');
+  const inputOutput = solve(await getInput(year, day));
+  console.timeEnd('Solved in');
+  console.log(`Result is: ${inputOutput}`);
+  console.log('=====================\n');
+
+  rl.question('Submit this answer? (y/n) ', async (answer) => {
+    console.log('salt');
+    if (['y', 'Y'].includes(answer)) {
+      console.log('Submitting...');
+      await submit(year, day, inputOutput, part);
+    } else {
+      console.log('Not submitting.');
+    }
+    console.log('=====================');
+
+    rl.close();
+  });
+};
+
+execute();
