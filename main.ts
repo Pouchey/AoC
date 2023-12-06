@@ -1,6 +1,6 @@
 import { argv } from 'process';
 import * as readline from 'readline';
-import { createDataFile, createTodayFolder, todayFolderExists } from './utils/file';
+import { createDataFile, createTodayFolder, readInput, todayFolderExists } from './utils/file';
 import { getExample, getInput, submit } from './utils/aoc';
 import { assertEqual } from './utils/assert';
 
@@ -32,6 +32,9 @@ const execute = async () => {
     createDataFile(scriptPath, 'input', input);
   }
 
+  const exampleFile = readInput(`./${scriptPath}/data/example`);
+  const inputFile = readInput(`./${scriptPath}/data/input`);
+
   console.log('=====================\n');
   console.log(`Running Advent of Code 2023 /${day}\n`);
   console.log('=====================\n');
@@ -46,7 +49,7 @@ const execute = async () => {
   // try solve on example
   console.log(`Part ${part}:\n`);
   console.log('Running example:\n');
-  const exampleOutput = solve(await getExample(year, day));
+  const exampleOutput = solve(exampleFile);
   if (!assertEqual(exampleOutput, exampleAnswer)) {
     process.exit();
   }
@@ -54,13 +57,12 @@ const execute = async () => {
   console.log('Running solve:\n');
   // try solve on input
   console.time('Solved in');
-  const inputOutput = solve(await getInput(year, day));
+  const inputOutput = solve(inputFile);
   console.timeEnd('Solved in');
   console.log(`Result is: ${inputOutput}`);
   console.log('=====================\n');
 
   rl.question('Submit this answer? (y/n) ', async (answer) => {
-    console.log('salt');
     if (['y', 'Y'].includes(answer)) {
       console.log('Submitting...');
       await submit(year, day, inputOutput, part);

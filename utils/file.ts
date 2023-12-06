@@ -52,6 +52,6 @@ export const createDataFile = async (
   const dataPath = resolve(`./${scriptPath}/data/${type}`);
   if (!existsSync(dataPath)) {
     console.log('Creating data file...');
-    writeFileSync(dataPath, data);
+    writeFileSync(dataPath, data, 'utf8');
   }
 };

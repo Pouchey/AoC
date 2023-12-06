@@ -15,7 +15,7 @@ export const getExample = async (year: string, day: string) => {
 
   const code = html.split('<pre><code>')[1].split('</code></pre>')[0];
 
-  const input = code.replace(/<[^>]*>?/gm, '');
+  const input = code.replace(/<[^>]*>?/gm, '').trim();
 
   return input;
 };

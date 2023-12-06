@@ -1,15 +1,11 @@
-import path from 'path';
-import { readInput } from '../../utils/file';
-
 type Data = number[][];
 
 const timeRegex = /.:(.*)/g;
 
-const loadData = (merged = false) => {
-  const input = readInput(path.join(__dirname, 'data', 'input'));
+const loadData = (input: string, merged = false) => {
   const lines = input.split('\n');
   const data: Data = [];
-
+  console.log(lines);
   lines.forEach((line) => {
     const row = [...line.matchAll(timeRegex)][0][1]
       .trim()
@@ -26,8 +22,8 @@ const loadData = (merged = false) => {
   return data;
 };
 
-const calculate1 = () => {
-  const data = loadData();
+export const solve1 = (input: string) => {
+  const data = loadData(input);
   const [time, distance] = data;
   const wins = time.map((row, index) => {
     const speeds = Array.from({ length: row }, (_, i) => i);
@@ -41,8 +37,8 @@ const calculate1 = () => {
   return result;
 };
 
-const calculate2 = () => {
-  const data = loadData(true);
+export const solve2 = (input: string) => {
+  const data = loadData(input, true);
 
   const [time, distance] = data;
   const wins = time.map((row, index) => {
@@ -57,15 +53,7 @@ const calculate2 = () => {
   return result;
 };
 
-export default () => {
-  const firstStep = calculate1();
-  const secondStep = calculate2();
+export const exampleAnswer1 = 288;
+export const exampleAnswer2 = 0;
 
-  console.log('');
-  console.log('Result of first step:');
-  console.log(firstStep);
-  console.log('');
-  console.log('Result of second step:');
-  console.log(secondStep);
-  console.log('');
-};
+export const firstPartCompleted = false;
