@@ -68,7 +68,7 @@ export const submit = async (
 
     const time = match[1];
 
-    const matches = [...time.matchAll(/(?:(\d+)m )?(\d+)s/)][0];
+    const matches = [...time.matchAll(/(?:(\d+)m )?(\d+)s/g)][0];
     const min = matches[1] || 0;
     const sec = matches[2];
     const total = ~~min * 60 + ~~sec;
@@ -104,6 +104,7 @@ export const submit = async (
   }
 
   if (response.includes("That's the right answer!")) {
+    log('Correct answer!', 'log', 'christmas');
     return true;
   }
 
