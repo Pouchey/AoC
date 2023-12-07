@@ -261,14 +261,6 @@ export const solve2 = (input: string) => {
 
   const sortedHands = sortHands(playersWithHand, true);
 
-  const fs = require('fs');
-  const path = require('path');
-  const filePath = path.join(__dirname, 'data', 'output1.txt');
-  const stream = fs.createWriteStream(filePath);
-  sortedHands.forEach((player) => {
-    stream.write(`${player.cards.join('')} ${player.bid}\n`);
-  });
-
   const wins = sortedHands.map((player, index) => {
     const rank = index + 1;
     return player.bid * rank;
