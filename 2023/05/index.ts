@@ -11,8 +11,7 @@ type Map = {
   range: number;
 };
 
-const loadData = (range = false) => {
-  const input = readInput(path.join(__dirname, 'data', 'input'));
+const loadData = (input: string, range = false) => {
   const lines = input.split('\n');
 
   const seeds = [...lines[0].matchAll(seedRegex)][0][1]
@@ -50,8 +49,8 @@ const isSeedInRange = (seed: number, map: Map) => {
   return seed >= map.src && seed <= map.src + map.range;
 };
 
-const calculate1 = () => {
-  const data = loadData();
+export const solve1 = (input: string) => {
+  const data = loadData(input);
 
   const mappedSeeds: number[][] = Array.from({ length: data.seeds.length }, () => []);
   data.seeds.forEach((seed, seedIndex) => {
@@ -101,8 +100,8 @@ const mergeRanges = (ranges: number[][]) => {
   return merged;
 };
 
-const calculate2 = () => {
-  const data = loadData(true);
+export const solve2 = (input: string) => {
+  const data = loadData(input, true);
 
   const rangedSeeds: number[][] = [];
 
@@ -141,15 +140,7 @@ const calculate2 = () => {
   return result;
 };
 
-export default () => {
-  const firstStep = calculate1();
-  const secondStep = calculate2();
+export const exampleAnswer1 = 35;
+export const exampleAnswer2 = 46;
 
-  console.log('');
-  console.log('Result of first step:');
-  console.log(firstStep);
-  console.log('');
-  console.log('Result of second step:');
-  console.log(secondStep);
-  console.log('');
-};
+export const firstPartCompleted = true;
