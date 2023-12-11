@@ -212,12 +212,46 @@ export const solve1 = (input: string) => {
 export const solve2 = (input: string) => {
   const data = loadData(input);
 
-  const result = 0;
+  const map = [...data];
+
+  const visited: TPoint[] = [];
+
+  const start: TPoint = findStart(data);
+  const loopStarts = findLoopStarts(map, start);
+  const firstLoopStart = loopStarts[0];
+
+  let previous: TPoint = start;
+  let current: TPoint = firstLoopStart;
+
+  visited.push(previous);
+  visited.push(current);
+
+  while (current.x !== start.x || current.y !== start.y) {
+    const next = getNext(map, previous, current);
+    visited.push(next);
+    previous = current;
+    current = next;
+  }
+
+  const lacet = (path: TPoint[]) => {
+    let res = 0;
+    for (let i = 0; i < path.length; i++) {
+      const pointA = path[i];
+      const pointB = path[(i + 1) % path.length];
+      res += pointA.x * pointB.y - pointB.x * pointA.y;
+    }
+    return Math.abs(res) / 2;
+  };
+
+  const area = lacet(visited);
+  const pick = Math.ceil(area - visited.length / 2 + 1);
+
+  const result = pick;
 
   return result;
 };
 
 export const exampleAnswer1 = 4;
-export const exampleAnswer2 = 0;
+export const exampleAnswer2 = 1;
 
-export const firstPartCompleted = false;
+export const firstPartCompleted = true;
