@@ -164,47 +164,25 @@ export const solve1 = (input: string) => {
 
   const map = [...data];
 
+  const visited: TPoint[] = [];
+
   const start: TPoint = findStart(data);
-
   const loopStarts = findLoopStarts(map, start);
+  const firstLoopStart = loopStarts[0];
 
-  const loops: number[] = [];
+  let previous: TPoint = start;
+  let current: TPoint = firstLoopStart;
 
-  let step = 1;
+  visited.push(previous);
+  visited.push(current);
 
-  let previous: TPoint[] = [...loopStarts];
-  let currents: TPoint[] = loopStarts.map((loop) => getNext(map, start, loop) as TPoint);
-
-  previous.forEach((loop) => {
-    map[loop.y][loop.x] = step;
-  });
-  step++;
-
-  while (currents.length > 0) {
-    const nexts = currents.map((current, i) => getNext(map, previous[i], current));
-
-    previous = currents;
-    previous.forEach((current) => {
-      map[current.y][current.x] = step;
-    });
-    const newCurrents = nexts
-      .map((next, i) => {
-        const actual = map[next.y][next.x];
-        if (typeof actual === 'number') {
-          const prev = map[previous[i].y][previous[i].x] as number;
-          loops.push(prev);
-          return;
-        }
-        return next;
-      })
-      .filter((current) => current !== undefined);
-
-    currents = newCurrents as TPoint[];
-
-    step++;
+  while (current.x !== start.x || current.y !== start.y) {
+    const next = getNext(map, previous, current);
+    visited.push(next);
+    previous = current;
+    current = next;
   }
-
-  const result = Math.max(...loops);
+  const result = (visited.length - 1) / 2;
 
   return result;
 };
