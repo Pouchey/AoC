@@ -159,6 +159,16 @@ const getNext = (map: TMap, previous: TPoint, current: TPoint) => {
   return nextPoint;
 };
 
+const lacet = (path: TPoint[]) => {
+  let res = 0;
+  for (let i = 0; i < path.length; i++) {
+    const pointA = path[i];
+    const pointB = path[(i + 1) % path.length];
+    res += pointA.x * pointB.y - pointB.x * pointA.y;
+  }
+  return Math.abs(res) / 2;
+};
+
 export const solve1 = (input: string) => {
   const data = loadData(input);
 
@@ -210,16 +220,6 @@ export const solve2 = (input: string) => {
     previous = current;
     current = next;
   }
-
-  const lacet = (path: TPoint[]) => {
-    let res = 0;
-    for (let i = 0; i < path.length; i++) {
-      const pointA = path[i];
-      const pointB = path[(i + 1) % path.length];
-      res += pointA.x * pointB.y - pointB.x * pointA.y;
-    }
-    return Math.abs(res) / 2;
-  };
 
   const area = lacet(visited);
   const pick = Math.ceil(area - visited.length / 2 + 1);
