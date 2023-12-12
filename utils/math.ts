@@ -12,3 +12,5 @@ export const findLCM = (a: number, b: number) => {
 };
 
 export const findLCMs = (numbers: number[]) => numbers.reduce(findLCM);
+
+export const sum = (numbers: number[]) => numbers.reduce((acc, curr) => acc + curr, 0);
