@@ -1,4 +1,5 @@
 export type LogType = 'info' | 'log' | 'warn' | 'error' | 'rainbow';
+
 export type ColorType =
   | 'reset'
   | 'blue'
@@ -21,6 +22,12 @@ const colors = {
   reset: '\x1b[0m'
 };
 
+/**
+ * Colorizes a message with the specified color.
+ * @param color - The color to apply to the message.
+ * @param message - The message to colorize.
+ * @returns The colorized message.
+ */
 const colorize = (color: ColorType, message: string): string => {
   if (color === 'rainbow') {
     const rainbow = ['red', 'yellow', 'green', 'cyan', 'blue', 'magenta'];
@@ -52,6 +59,12 @@ const colorize = (color: ColorType, message: string): string => {
   return `${colors[color as keyof ColorType]}${message}${colors.reset}`;
 };
 
+/**
+ * Logs a message to the console.
+ * @param message - The message to log.
+ * @param type - The type of log message (default: 'log').
+ * @param color - The color of the log message (default: null).
+ */
 export const log = (message: string, type: LogType = 'log', color: ColorType = null) => {
   const msg = color ? colorize(color, message) : message;
 
