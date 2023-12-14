@@ -1,6 +1,7 @@
 export * from './aoc';
 export * from './array';
 export * from './assert';
+export * from './direction';
 export * from './file';
 export * from './grid';
 export * from './logger';

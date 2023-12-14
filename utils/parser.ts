@@ -5,8 +5,8 @@ import { TGrid } from './grid';
  *
  * @template T - The type of values in the grid.
  * @param input - The input string to parse.
- * @param splitRegex - The regular expression used to split each line of the input string. Defaults to \/\s*\/
  * @param transform - The function used to transform each character of the input string. Defaults to the identity function.
+ * @param splitRegex - The regular expression used to split each line of the input string. Defaults to \/\s*\/
  * @returns A grid of values.
  *
  * @example
@@ -18,8 +18,8 @@ import { TGrid } from './grid';
 
 export const parseLines = <T = string>(
   input: string,
-  splitRegex: RegExp = /\s*/,
-  transform = (char: string) => char as T
+  transform = (char: string) => char as T,
+  splitRegex: RegExp = /\s*/
 ): TGrid<T> => input.split('\n').map((line) => line.split(splitRegex).map(transform));
 
 /**

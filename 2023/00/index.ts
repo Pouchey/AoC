@@ -1,7 +1,9 @@
-const loadData = (input: string) => {
-  const lines = input.split('\n');
+import { parseLines } from '../../utils';
 
-  return lines;
+const loadData = (input: string) => {
+  const data = parseLines(input);
+
+  return data;
 };
 
 export const solve1 = (input: string) => {

@@ -35,10 +35,10 @@ export const invertGrid = <T = unknown>(grid: TGrid<T>): TGrid<T> => {
  * convertGridToString([[1, 2, 3], [4, 5, 6]]); // ['123', '456']
  * ```
  */
-export const convertGridToString = <T = unknown>(grid: TGrid<T>): string[] => {
+export const convertGridToString = <T = unknown>(grid: TGrid<T>): string => {
   const newGrid: string[] = [];
   for (const row of grid) {
     newGrid.push(row.join(''));
   }
-  return newGrid;
+  return newGrid.join('\n');
 };
