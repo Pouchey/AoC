@@ -1,5 +1,22 @@
 import { defaultTransform, parseLines, sum } from '../../utils';
 
+type TBox = {
+  id: number;
+  lenses: TLense[];
+};
+
+type TLense = {
+  id: string;
+  focalLength: number;
+};
+
+type TOperation = {
+  type: 'add' | 'remove';
+  label: string;
+  box: number;
+  focalLength?: number;
+};
+
 const loadData = (input: string) => {
   const data = parseLines(input, defaultTransform<string>, /,/);
   const steps = data.flat().map((seq) => seq.split(''));
@@ -17,23 +34,6 @@ export const solve1 = (input: string) => {
   const data = loadData(input);
   const seqs = data.map((step) => hash(step));
   return sum(seqs);
-};
-
-type TBox = {
-  id: number;
-  lenses: TLense[];
-};
-
-type TLense = {
-  id: string;
-  focalLength: number;
-};
-
-type TOperation = {
-  type: 'add' | 'remove';
-  label: string;
-  box: number;
-  focalLength?: number;
 };
 
 export const solve2 = (input: string) => {
