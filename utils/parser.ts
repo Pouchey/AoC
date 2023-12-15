@@ -1,5 +1,11 @@
 import { TGrid } from './grid';
 
+/**
+ * Transforms a character into a generic type T.
+ *
+ * @param char - The character to transform.
+ * @returns The transformed character as type T.
+ */
 export const defaultTransform = <T>(char: string) => char as T;
 
 /**

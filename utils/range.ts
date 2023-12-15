@@ -1,5 +1,11 @@
 export type TRange = [number, number];
 
+/**
+ * Checks if a value is within a specified range.
+ * @param value - The value to check.
+ * @param range - The range to check against, specified as an array of [min, max].
+ * @returns True if the value is within the range, false otherwise.
+ */
 export const isInRange = (value: number, [min, max]: TRange) => value >= min && value <= max;
 
 /**

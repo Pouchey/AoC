@@ -22,6 +22,14 @@ export const SPELLED_DIGIT = {
   9: ESpelledDigit.NINE
 };
 
+/**
+ * Converts a string representation of a number to a numeric value.
+ * If the string is a spelled-out number, it will be converted to its corresponding numeric value.
+ * If the string cannot be converted to a number, 0 will be returned.
+ *
+ * @param str - The string representation of the number.
+ * @returns The numeric value of the string.
+ */
 export const getNumber = (str: string): number => {
   const parsedNumber = parseInt(str, 10);
   if (!isNaN(parsedNumber)) return parsedNumber;
