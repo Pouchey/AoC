@@ -15,12 +15,12 @@ type TOperation = {
   type: 'add' | 'remove';
   label: string;
   box: number;
-  focalLength?: number;
+  focalLength: number;
 };
 
 const loadData = (input: string) => {
   const data = parseLines(input, defaultTransform<string>, /,/);
-  const steps = data.flat().map((seq) => seq.split(''));
+  const steps = data.flat();
   return steps;
 };
 
@@ -32,23 +32,21 @@ const hash = memoize((step: string[]) => {
 });
 
 export const solve1 = (input: string) => {
-  const data = loadData(input);
+  const data = loadData(input).map((seq) => seq.split(''));
   const seqs = data.map((step) => hash(step));
   return sum(seqs);
 };
 
 export const solve2 = (input: string) => {
-  const data: TOperation[] = loadData(input)
-    .map((step) => step.join(''))
-    .map((seq) => {
-      const op = seq.split(/=|-/).filter((s) => s);
-      return {
-        type: op.length === 2 ? 'add' : 'remove',
-        label: op[0],
-        box: hash(op[0].split('')),
-        focalLength: op[1] ? parseInt(op[1]) : undefined
-      };
-    });
+  const data: TOperation[] = loadData(input).map((seq) => {
+    const op = seq.split(/=|-/).filter((s) => s);
+    return {
+      type: op.length === 2 ? 'add' : 'remove',
+      label: op[0],
+      box: hash(op[0].split('')),
+      focalLength: +op[1]
+    };
+  });
 
   const boxes: TBox[] = new Array(256).fill(0).map((_, i) => ({
     id: i,
