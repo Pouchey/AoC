@@ -1,5 +1,7 @@
 import { TGrid } from './grid';
 
+export const defaultTransform = <T>(char: string) => char as T;
+
 /**
  * Parses the input string into a grid of values.
  *
@@ -15,10 +17,9 @@ import { TGrid } from './grid';
  * ```
  *
  */
-
 export const parseLines = <T = string>(
   input: string,
-  transform = (char: string) => char as T,
+  transform = defaultTransform<T>,
   splitRegex: RegExp = /\s*/
 ): TGrid<T> => input.split('\n').map((line) => line.split(splitRegex).map(transform));
 

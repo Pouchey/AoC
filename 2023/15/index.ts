@@ -1,7 +1,7 @@
-import { parseLines, sum } from '../../utils';
+import { defaultTransform, parseLines, sum } from '../../utils';
 
 const loadData = (input: string) => {
-  const data = parseLines(input, (char) => char, /,/);
+  const data = parseLines(input, defaultTransform<string>, /,/);
   const steps = data.flat().map((seq) => seq.split(''));
   return steps;
 };

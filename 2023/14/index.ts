@@ -1,4 +1,4 @@
-import { parseLines, ECardinalDirection, invertGrid, sum } from '../../utils';
+import { parseLines, ECardinalDirection, invertGrid, sum, defaultTransform } from '../../utils';
 import memoize from '../../utils/memoize';
 
 enum ETile {
@@ -8,7 +8,7 @@ enum ETile {
 }
 
 const loadData = (input: string) => {
-  const data = parseLines(input, (char) => char as ETile);
+  const data = parseLines(input, defaultTransform<ETile>);
   return data;
 };
 
