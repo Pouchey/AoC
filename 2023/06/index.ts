@@ -41,7 +41,6 @@ export const solve2 = (input: string) => {
   const data = loadData(input, true);
 
   const [time, distance] = data.flatMap((row) => row);
-  // find the first win
   let i = 0;
   do {
     i++;

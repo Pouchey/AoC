@@ -1,5 +1,4 @@
-import path from 'path';
-import { readInput } from '../../utils/file';
+import { TRange, intersectRange, isInRange, mergeRanges } from '../../utils';
 
 const seedRegex = /seeds: ((\d+\s*)+)/g;
 const mapRegex = /\w+-\w+-\w+ map:/g;
@@ -45,10 +44,6 @@ const loadData = (input: string, range = false) => {
   };
 };
 
-const isSeedInRange = (seed: number, map: Map) => {
-  return seed >= map.src && seed <= map.src + map.range;
-};
-
 export const solve1 = (input: string) => {
   const data = loadData(input);
 
@@ -57,7 +52,7 @@ export const solve1 = (input: string) => {
     data.maps.forEach((mapRange, mapsIndex) => {
       const actual = mapsIndex === 0 ? seed : mappedSeeds[seedIndex][mapsIndex - 1];
 
-      const map = mapRange.find((map) => isSeedInRange(actual, map));
+      const map = mapRange.find((map) => isInRange(actual, [map.src, map.src + map.range - 1]));
 
       let mappedSeed = actual;
       if (map) {
@@ -74,61 +69,40 @@ export const solve1 = (input: string) => {
   return result;
 };
 
-const intersectRange = ([start, end]: number[], map: Map) => {
-  const mapStart = map.src;
-  const mapEnd = map.src + map.range - 1;
-
-  if (start > mapEnd || end < mapStart) return;
-  if (start >= mapStart) {
-    return end < mapEnd ? [start, end] : [start, mapEnd];
-  }
-
-  return end < mapEnd ? [mapStart, end] : [mapStart, mapEnd];
-};
-
-const mergeRanges = (ranges: number[][]) => {
-  ranges.sort(([min1], [min2]) => min1 - min2);
-  const merged = [ranges[0]];
-  for (const [min, max] of ranges.slice(1)) {
-    const last = merged[merged.length - 1];
-    if (min <= last[1] + 1) {
-      last[1] = Math.max(max, last[1]);
-    } else {
-      merged.push([min, max]);
-    }
-  }
-  return merged;
-};
-
 export const solve2 = (input: string) => {
   const data = loadData(input, true);
 
-  const rangedSeeds: number[][] = [];
+  const rangedSeeds: TRange[] = [];
 
   data.seeds.forEach((seed, index) => {
     if (index % 2 === 1) return;
     rangedSeeds.push([seed, seed + data.seeds[index + 1] - 1]);
   });
 
-  let actualSeeds: number[][] = [...rangedSeeds];
+  let actualSeeds: TRange[] = [...rangedSeeds];
 
   for (const map of data.maps) {
-    let newSeeds: number[][] = [];
+    let newSeeds: TRange[] = [];
     for (const mapRange of map) {
       actualSeeds = actualSeeds
         .flatMap((rangedSeed) => {
-          const range = intersectRange(rangedSeed, mapRange);
+          const range = intersectRange(rangedSeed, [
+            mapRange.src,
+            mapRange.src + mapRange.range - 1
+          ]);
           if (!range) {
             return [rangedSeed];
           }
 
-          newSeeds.push([range[0], range[1]].map((seed) => mapRange.dest + (seed - mapRange.src)));
+          newSeeds.push(
+            [range[0], range[1]].map((seed) => mapRange.dest + (seed - mapRange.src)) as TRange
+          );
           return [
             [rangedSeed[0], range[0] - 1],
             [range[1] + 1, rangedSeed[1]]
           ].filter(([first, last]) => first <= last);
         })
-        .filter((range) => !!range) as number[][];
+        .filter((range) => !!range) as TRange[];
     }
 
     actualSeeds = mergeRanges(newSeeds.concat(actualSeeds));

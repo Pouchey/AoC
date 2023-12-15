@@ -1,34 +1,6 @@
-import path from 'path';
+import { SPELLED_DIGIT, getNumber } from '../../utils';
 
-import { readInput } from '../../utils/file';
-
-const SPELLED_NUMBERS = {
-  1: 'one',
-  2: 'two',
-  3: 'three',
-  4: 'four',
-  5: 'five',
-  6: 'six',
-  7: 'seven',
-  8: 'eight',
-  9: 'nine'
-};
-
-const getConvertedNumber = (stringNumber: string): number | undefined => {
-  const parsedNumber = parseInt(stringNumber, 10);
-  if (!isNaN(parsedNumber)) return parsedNumber;
-
-  const spelledNumber = Object.entries(SPELLED_NUMBERS).find(
-    ([_, spelledNumber]) => spelledNumber === stringNumber
-  );
-
-  if (!spelledNumber) return;
-
-  return parseInt(spelledNumber![0], 10);
-};
-
-const calculate = (regex: RegExp): number => {
-  const input = readInput(path.join(__dirname, 'data', 'input'));
+const solve = (input: string, regex: RegExp): number => {
   const lines = input.split('\n');
 
   const numbers = lines.map((line) => {
@@ -38,11 +10,11 @@ const calculate = (regex: RegExp): number => {
     if (!(spelledDigit?.length > 0)) return [0, 0];
 
     const length = spelledDigit.length;
-    const firstNumber = getConvertedNumber(spelledDigit![0]);
+    const firstNumber = getNumber(spelledDigit[0]);
 
     if (length === 1) return [firstNumber, firstNumber];
 
-    const lastNumber = getConvertedNumber(spelledDigit![length - 1]);
+    const lastNumber = getNumber(spelledDigit[length - 1]);
 
     return [firstNumber, lastNumber];
   });
@@ -55,22 +27,21 @@ const calculate = (regex: RegExp): number => {
   return addedNumbers;
 };
 
-const spelledOrDigitRegex = new RegExp(
-  `(?=(${Object.values(SPELLED_NUMBERS).join('|')}|\\d))`,
-  'g'
-);
+const spelledOrDigitRegex = new RegExp(`(?=(${Object.values(SPELLED_DIGIT).join('|')}|\\d))`, 'g');
 
 const onlyDigitsRegex = new RegExp('(?=(\\d))', 'g');
 
-export default () => {
-  const onlyNumbers = calculate(onlyDigitsRegex);
-  const withStrings = calculate(spelledOrDigitRegex);
-
-  console.log('');
-  console.log('Result of Only numbers:');
-  console.log(onlyNumbers);
-  console.log('');
-  console.log('Result of With strings:');
-  console.log(withStrings);
-  console.log('');
+export const solve1 = (input: string) => {
+  const result = solve(input, onlyDigitsRegex);
+  return result;
 };
+
+export const solve2 = (input: string) => {
+  const result = solve(input, spelledOrDigitRegex);
+  return result;
+};
+
+export const exampleAnswer1 = 209;
+export const exampleAnswer2 = 281;
+
+export const firstPartCompleted = true;

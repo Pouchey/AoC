@@ -1,6 +1,3 @@
-import path from 'path';
-import { readInput } from '../../utils/file';
-
 type Colors = 'red' | 'green' | 'blue';
 
 type Cubes = Map<Colors, number>;
@@ -9,8 +6,7 @@ type Game = {
   sets: Cubes[];
 };
 
-const parseInput = (): Game[] => {
-  const input = readInput(path.join(__dirname, 'data', 'input'));
+const loadData = (input: string): Game[] => {
   const lines = input.split('\n');
 
   const blocks = lines.map((line) => {
@@ -38,9 +34,8 @@ const parseInput = (): Game[] => {
 
   return blocks;
 };
-const calculate1 = (params: Cubes) => {
-  const games = parseInput();
 
+const calculate1 = (games: Game[], params: Cubes) => {
   const maxs = games.map((game) => {
     let redCount = 0;
     let blueCount = 0;
@@ -75,9 +70,7 @@ const calculate1 = (params: Cubes) => {
   return results;
 };
 
-const calculate2 = () => {
-  const games = parseInput();
-
+const calculate2 = (games: Game[]) => {
   const maxs = games.map((game) => {
     let redCount = 0;
     let blueCount = 0;
@@ -106,20 +99,25 @@ const calculate2 = () => {
   return results;
 };
 
-const params: Cubes = new Map<Colors, number>();
-params.set('red', 12);
-params.set('green', 13);
-params.set('blue', 14);
+export const solve1 = (input: string) => {
+  const data = loadData(input);
 
-export default () => {
-  const firstStep = calculate1(params);
-  const secondStep = calculate2();
+  const params: Cubes = new Map<Colors, number>();
+  params.set('red', 12);
+  params.set('green', 13);
+  params.set('blue', 14);
 
-  console.log('');
-  console.log('Result of first step:');
-  console.log(firstStep);
-  console.log('');
-  console.log('Result of second step:');
-  console.log(secondStep);
-  console.log('');
+  const result = calculate1(data, params);
+  return result;
 };
+
+export const solve2 = (input: string) => {
+  const data = loadData(input);
+  const result = calculate2(data);
+  return result;
+};
+
+export const exampleAnswer1 = 8;
+export const exampleAnswer2 = 2286;
+
+export const firstPartCompleted = true;

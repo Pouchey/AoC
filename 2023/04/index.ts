@@ -1,10 +1,6 @@
-import * as path from 'path';
-import { readInput as readInputUtil } from '../../utils/file';
-
 type Data = string[];
 
-const loadData = () => {
-  const input = readInputUtil(path.join(__dirname, 'data', 'input'));
+const loadData = (input: string) => {
   const lines = input.split('\n');
   const data: Data = lines;
 
@@ -13,9 +9,7 @@ const loadData = () => {
 
 const regex1 = /Card\s+(\d+):\s*((?:\s*\d+)+) \|\s*((?:\s*\d+)+)/g;
 
-const calculate1 = () => {
-  const data = loadData();
-
+const calculate1 = (data: Data) => {
   const result = data.reduce((acc, cur) => {
     const matches = [...cur.matchAll(regex1)];
     const winNumbers = matches[0][2]
@@ -39,9 +33,7 @@ const calculate1 = () => {
   return result;
 };
 
-const calculate2 = () => {
-  const data = loadData();
-
+const calculate2 = (data: Data) => {
   const points = data.map((card) => {
     const matches = [...card.matchAll(regex1)];
     const winNumbers = matches[0][2]
@@ -73,15 +65,16 @@ const calculate2 = () => {
   return result;
 };
 
-export default () => {
-  const firstStep = calculate1();
-  const secondStep = calculate2();
-
-  console.log('');
-  console.log('Result of first step:');
-  console.log(firstStep);
-  console.log('');
-  console.log('Result of second step:');
-  console.log(secondStep);
-  console.log('');
+export const solve1 = (input: string) => {
+  const data = loadData(input);
+  return calculate1(data);
 };
+
+export const solve2 = (input: string) => {
+  const data = loadData(input);
+  return calculate2(data);
+};
+export const exampleAnswer1 = 13;
+export const exampleAnswer2 = 30;
+
+export const firstPartCompleted = true;

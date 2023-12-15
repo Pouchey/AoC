@@ -1,4 +1,4 @@
-import { parseLines, EDirection, invertGrid, convertGridToString, sum } from '../../utils';
+import { parseLines, ECardinalDirection, invertGrid, sum } from '../../utils';
 import memoize from '../../utils/memoize';
 
 enum ETile {
@@ -9,7 +9,6 @@ enum ETile {
 
 const loadData = (input: string) => {
   const data = parseLines(input, (char) => char as ETile);
-
   return data;
 };
 
@@ -45,15 +44,15 @@ const moveRocksBis = memoize((data: ETile[][], direction: 'left' | 'right') => {
   return newData;
 });
 
-const moveRocks = memoize((data: ETile[][], dir = EDirection.North) => {
+const moveRocks = memoize((data: ETile[][], dir = ECardinalDirection.North) => {
   switch (dir) {
-    case EDirection.North:
+    case ECardinalDirection.North:
       return invertGrid(moveRocksBis(invertGrid(data), 'left'));
-    case EDirection.West:
+    case ECardinalDirection.West:
       return moveRocksBis(data, 'left');
-    case EDirection.South:
+    case ECardinalDirection.South:
       return invertGrid(moveRocksBis(invertGrid(data), 'right'));
-    case EDirection.East:
+    case ECardinalDirection.East:
       return moveRocksBis(data, 'right');
     default:
       throw new Error('Invalid direction');
@@ -61,10 +60,10 @@ const moveRocks = memoize((data: ETile[][], dir = EDirection.North) => {
 });
 
 const moveRocksCycle = memoize((data: ETile[][]) => {
-  const north = moveRocks(data, EDirection.North);
-  const west = moveRocks(north, EDirection.West);
-  const south = moveRocks(west, EDirection.South);
-  const east = moveRocks(south, EDirection.East);
+  const north = moveRocks(data, ECardinalDirection.North);
+  const west = moveRocks(north, ECardinalDirection.West);
+  const south = moveRocks(west, ECardinalDirection.South);
+  const east = moveRocks(south, ECardinalDirection.East);
 
   return east;
 });

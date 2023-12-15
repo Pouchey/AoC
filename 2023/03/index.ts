@@ -1,24 +1,11 @@
-import path from 'path';
-import { readInput } from '../../utils/file';
+import { TGrid, parseLines } from '../../utils';
 
-type Matrix = string[][];
-
-const loadData = () => {
-  const input = readInput(path.join(__dirname, 'data', 'input'));
-  const lines = input.split('\n');
-  const matrix: Matrix = [];
-
-  lines.forEach((line) => {
-    const row = line.split('');
-    matrix.push(row);
-  });
-
-  return matrix;
+const loadData = (input: string) => {
+  const data = parseLines(input);
+  return data;
 };
 
-const calculate1 = () => {
-  const data = loadData();
-
+const calculate1 = (data: TGrid<string>) => {
   const partNumber = [];
 
   for (let i = 0; i < data.length; i++) {
@@ -63,7 +50,7 @@ const calculate1 = () => {
 };
 
 interface FindFullNumberNeighbor {
-  data: Matrix;
+  data: TGrid<string>;
   i: number;
   j: number;
 }
@@ -105,9 +92,7 @@ const findFullNumberNeighbor = ({ data, i, j }: FindFullNumberNeighbor) => {
   return fullNumber;
 };
 
-const calculate2 = () => {
-  const data = loadData();
-
+const calculate2 = (data: TGrid<string>) => {
   const gearRatio = [];
 
   for (let i = 0; i < data.length; i++) {
@@ -134,15 +119,16 @@ const calculate2 = () => {
   return result;
 };
 
-export default () => {
-  const firstStep = calculate1();
-  const secondStep = calculate2();
-
-  console.log('');
-  console.log('Result of first step:');
-  console.log(firstStep);
-  console.log('');
-  console.log('Result of second step:');
-  console.log(secondStep);
-  console.log('');
+export const solve1 = (input: string) => {
+  const data = loadData(input);
+  return calculate1(data);
 };
+
+export const solve2 = (input: string) => {
+  const data = loadData(input);
+  return calculate2(data);
+};
+export const exampleAnswer1 = 4361;
+export const exampleAnswer2 = 467835;
+
+export const firstPartCompleted = true;
