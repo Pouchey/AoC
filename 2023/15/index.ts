@@ -1,4 +1,5 @@
 import { defaultTransform, parseLines, sum } from '../../utils';
+import memoize from '../../utils/memoize';
 
 type TBox = {
   id: number;
@@ -23,12 +24,12 @@ const loadData = (input: string) => {
   return steps;
 };
 
-const hash = (step: string[]) => {
+const hash = memoize((step: string[]) => {
   return step.reduce((acc, step) => {
     const charCode = step.charCodeAt(0);
     return ((acc + charCode) * 17) % 256;
   }, 0);
-};
+});
 
 export const solve1 = (input: string) => {
   const data = loadData(input);
