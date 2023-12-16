@@ -23,4 +23,7 @@ export enum ECardinalDirectionShort {
   West = 'W'
 }
 
-export type TPoint = { x: number; y: number };
+export interface TPoint {
+  x: number;
+  y: number;
+}
