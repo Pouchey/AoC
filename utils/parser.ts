@@ -6,7 +6,7 @@ import { TGrid } from './grid';
  * @param char - The character to transform.
  * @returns The transformed character as type T.
  */
-export const defaultTransform = <T>(char: string) => char as T;
+export const defaultTransform = <T = string>(char: string) => char as T;
 
 /**
  * Parses the input string into a grid of values.

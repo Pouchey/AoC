@@ -1,3 +1,5 @@
+import { TPoint } from './movement';
+
 export enum ESpelledDigit {
   ONE = 'one',
   TWO = 'two',
@@ -81,3 +83,18 @@ export const findLCMs = (numbers: number[]) => numbers.reduce(findLCM);
  * @returns The sum of the array of numbers.
  */
 export const sum = (numbers: number[]) => numbers.reduce((acc, curr) => acc + curr, 0);
+
+/**
+ * Calcule l'aire d'un polygone en utilisant la méthode du lacet.
+ * @param path Le chemin du polygone représenté par un tableau de points.
+ * @returns L'aire du polygone.
+ */
+export const lacet = (path: TPoint[]) => {
+  let res = 0;
+  for (let i = 0; i < path.length; i++) {
+    const pointA = path[i];
+    const pointB = path[(i + 1) % path.length];
+    res += pointA.x * pointB.y - pointB.x * pointA.y;
+  }
+  return Math.abs(res) / 2;
+};
