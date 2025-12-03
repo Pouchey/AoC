@@ -52,7 +52,7 @@ const execute = async () => {
   const inputFile = readInput(`./${scriptPath}/data/input`);
 
   log('=====================\n', 'info', 'yellow');
-  log(`Running Advent of Code 2023 /${day}\n`, 'info', 'christmas');
+  log(`Running Advent of Code ${year} /${day}\n`, 'info', 'christmas');
   log('=====================\n', 'info', 'yellow');
   const script = await import(`./${scriptPath}`);
 
