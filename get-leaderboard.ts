@@ -23,7 +23,9 @@ interface LeaderboardData {
   };
 }
 
-const LEADERBOARD_URL = `https://adventofcode.com/2025/leaderboard/private/view/${process.env.AOC_LEADERBOARD_ID}.json`;
+const currentYear = new Date().getFullYear();
+
+const LEADERBOARD_URL = `https://adventofcode.com/${currentYear}/leaderboard/private/view/${process.env.AOC_LEADERBOARD_ID}.json`;
 
 /**
  * Fetches the leaderboard data from Advent of Code
@@ -42,38 +44,6 @@ const fetchLeaderboard = async (): Promise<LeaderboardData> => {
   }
 
   return await res.json();
-};
-
-/**
- * Formats timestamp to readable date/time
- */
-const formatTimestamp = (timestamp: number): string => {
-  const date = new Date(timestamp * 1000);
-  return date.toLocaleString('fr-FR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
-  });
-};
-
-/**
- * Formats time difference in a readable way
- */
-const formatTimeDiff = (seconds: number): string => {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const secs = seconds % 60;
-
-  if (hours > 0) {
-    return `${hours}h ${minutes}m ${secs}s`;
-  }
-  if (minutes > 0) {
-    return `${minutes}m ${secs}s`;
-  }
-  return `${secs}s`;
 };
 
 /**
