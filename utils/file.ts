@@ -62,3 +62,9 @@ export const createDataFile = async (
     writeFileSync(dataPath, data, 'utf8');
   }
 };
+
+export const createMarkdownFile = (scriptPath: string, filename: string, content: string) => {
+  const filePath = resolve(`./${scriptPath}/${filename}`);
+  writeFileSync(filePath, content, 'utf8');
+  log(`Created ${filename}`, 'info', 'green');
+};

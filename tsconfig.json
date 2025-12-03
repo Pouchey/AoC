@@ -13,7 +13,7 @@
     "noImplicitThis": true
   },
   "ts-node": {
-    "esm": true
+    "esm": false
   },
   "exclude": ["node_modules"]
 }
