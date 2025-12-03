@@ -115,7 +115,7 @@ npm start 1 2025
 This will automatically:
 
 - Create the folder structure (`2025/01/`)
-- Copy a template from `2023/00/index.ts`
+- Copy a template from `template/index.ts`
 - Fetch example and input data from Advent of Code
 
 ### 2. Solution File Structure

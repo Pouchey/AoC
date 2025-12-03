@@ -24,20 +24,24 @@ Every `index.ts` file **MUST** export the following:
 ### Required Exports
 
 1. **`solve1(input: string): number`**
+
    - Solves Part 1 of the problem
    - Takes the input file content as a string
    - Returns the solution as a number
 
 2. **`solve2(input: string): number`**
+
    - Solves Part 2 of the problem
    - Takes the input file content as a string
    - Returns the solution as a number
 
 3. **`exampleAnswer1: number`**
+
    - The expected answer for Part 1 using the example input
    - Used for validation by the test runner
 
 4. **`exampleAnswer2: number`**
+
    - The expected answer for Part 2 using the example input
    - Used for validation by the test runner
 
@@ -102,6 +106,7 @@ import { parseLines, TGrid, assertEqual } from '../../utils';
 ```
 
 Common utilities available:
+
 - `parseLines(input)` - Split input into lines
 - `TGrid<T>` - Type for 2D grids
 - Grid manipulation utilities
@@ -134,7 +139,7 @@ const loadData = (input: string): Game[] => {
 
 ### 4. Template Usage
 
-When creating a new day, use `2023/00/` as a template:
+When creating a new day, use `template/` as a template:
 
 ```typescript
 import { parseLines } from '../../utils';
@@ -175,6 +180,7 @@ node main.ts [day] [year]
 - Example: `node main.ts 01 2025`
 
 The runner will:
+
 1. Create the folder structure if it doesn't exist
 2. Fetch example and input data if missing
 3. Run the solution on the example input and validate against `exampleAnswer1`/`exampleAnswer2`

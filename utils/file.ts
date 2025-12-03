@@ -36,7 +36,7 @@ export const createTodayFolder = async (scriptPath: string) => {
     log(`Couldn't find files in ${scriptPath}.`, 'warn', 'yellow');
 
     const folderPath = resolve(`./${scriptPath}`);
-    const templatePath = resolve('./2023/00');
+    const templatePath = resolve('./template');
 
     log('Creating folder...', 'info', 'blue');
     if (!existsSync(folderPath)) mkdirSync(folderPath);
