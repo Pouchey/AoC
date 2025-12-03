@@ -1,0 +1,20 @@
+🎄 Advent of Code 2025 - Leaderboard
+
+📊 Classement (2 participants)
+
+🥇 theophilesoregies - 6 ⭐ (Score: 11)
+🥈 kylian-gerard - 2 ⭐ (Score: 3)
+
+📈 Statistiques
+• Total d'étoiles: 8 ⭐
+• Moyenne: 4.0 ⭐ par participant
+• Record: 6 ⭐
+
+🆕 Dernières complétions
+• theophilesoregies - Jour 3, Partie 2 
+• theophilesoregies - Jour 3, Partie 1 
+• theophilesoregies - Jour 2, Partie 2 
+• theophilesoregies - Jour 2, Partie 1 
+• theophilesoregies - Jour 1, Partie 2 
+
+🔗 Voir le leaderboard complet: https://adventofcode.com/2025/leaderboard/private/view/5394648
