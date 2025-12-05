@@ -26,7 +26,7 @@ export const defaultTransform = <T = string>(char: string) => char as T;
 export const parseLines = <T = string>(
   input: string,
   transform = defaultTransform<T>,
-  splitRegex: RegExp = /\\s*/
+  splitRegex: RegExp = /\s*/
 ): TGrid<T> => input.split('\n').map((line) => line.split(splitRegex).map(transform));
 
 /**
