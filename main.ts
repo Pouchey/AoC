@@ -69,7 +69,11 @@ const execute = async () => {
   const exampleOutput = solve(exampleFile);
   const exampleEndTime = performance.now();
   const exampleSolveTime = exampleEndTime - exampleStartTime;
-  log(`Solved in: ${exampleSolveTime.toFixed(2)}ms\n`, 'info', 'magenta');
+  const exampleTimeStr =
+    exampleSolveTime >= 1000
+      ? `${(exampleSolveTime / 1000).toFixed(2)}s`
+      : `${exampleSolveTime.toFixed(2)}ms`;
+  log(`Solved in: ${exampleTimeStr}\n`, 'info', 'magenta');
   if (!assertEqual(exampleOutput, exampleAnswer)) {
     process.exit();
   }
@@ -80,7 +84,9 @@ const execute = async () => {
   const inputOutput = solve(inputFile);
   const endTime = performance.now();
   const solveTime = endTime - startTime;
-  log(`Solved in: ${solveTime.toFixed(2)}ms\n`, 'info', 'magenta');
+  const solveTimeStr =
+    solveTime >= 1000 ? `${(solveTime / 1000).toFixed(2)}s` : `${solveTime.toFixed(2)}ms`;
+  log(`Solved in: ${solveTimeStr}\n`, 'info', 'magenta');
   log(`Result is: `, 'log', 'green');
   log(`${inputOutput}\n`, 'log', 'magenta');
 
