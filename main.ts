@@ -65,16 +65,22 @@ const execute = async () => {
   // try solve on example
   log(`Part ${part}:\n`, 'info', 'blue');
   log('Running example:\n', 'info', 'cyan');
+  const exampleStartTime = performance.now();
   const exampleOutput = solve(exampleFile);
+  const exampleEndTime = performance.now();
+  const exampleSolveTime = exampleEndTime - exampleStartTime;
+  log(`Solved in: ${exampleSolveTime.toFixed(2)}ms\n`, 'info', 'magenta');
   if (!assertEqual(exampleOutput, exampleAnswer)) {
     process.exit();
   }
 
   log('Running solve:\n', 'info', 'cyan');
   // try solve on input
-  console.time('Solved in');
+  const startTime = performance.now();
   const inputOutput = solve(inputFile);
-  console.timeEnd('Solved in');
+  const endTime = performance.now();
+  const solveTime = endTime - startTime;
+  log(`Solved in: ${solveTime.toFixed(2)}ms\n`, 'info', 'magenta');
   log(`Result is: `, 'log', 'green');
   log(`${inputOutput}\n`, 'log', 'magenta');
 
