@@ -10,7 +10,7 @@ let cachedData: ProblemsData | null = null;
 export async function loadProblemsData(): Promise<ProblemsData> {
   if (cachedData) return cachedData;
 
-  const response = await fetch('/problems.json');
+  const response = await fetch(`${import.meta.env.BASE_URL}problems.json`);
   cachedData = await response.json();
   return cachedData!;
 }
