@@ -26,7 +26,6 @@ export const readProblemsFile = (): ProblemsFile => {
     return { years: [], problems: {} };
   }
   const content = readFileSync(PROBLEMS_FILE_PATH, 'utf8');
-  console.log('Reading problems file:', content);
   return JSON.parse(content);
 };
 

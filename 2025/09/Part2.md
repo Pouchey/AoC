@@ -1,7 +1,6 @@
---- --- Part Two --- ---
-The Elves just remembered: they can only switch out tiles that are _red_ or _green_. So, your rectangle can only include red or green tiles.
+--- --- Part Two --- ---The Elves just remembered: they can only switch out tiles that are *red* or *green*. So, your rectangle can only include red or green tiles.
 
-In your list, every red tile is connected to the red tile before and after it by a straight line of _green tiles_. The list wraps, so the first red tile is also connected to the last red tile. Tiles that are adjacent in your list will always be on either the same row or the same column.
+In your list, every red tile is connected to the red tile before and after it by a straight line of *green tiles*. The list wraps, so the first red tile is also connected to the last red tile. Tiles that are adjacent in your list will always be on either the same row or the same column.
 
 Using the same example as before, the tiles marked `X` would be green:
 
@@ -14,7 +13,7 @@ Using the same example as before, the tiles marked `X` would be green:
 .........X.X..
 .........#X#..
 ..............
-In addition, all of the tiles _inside_ this loop of red and green tiles are _also_ green. So, in this example, these are the green tiles:
+In addition, all of the tiles *inside* this loop of red and green tiles are *also* green. So, in this example, these are the green tiles:
 
 ..............
 .......#XXX#..
@@ -51,7 +50,7 @@ Or, you could make a thin rectangle with an area of `3` between `9,7` and `9,5`:
 .........OXX..
 .........OX#..
 ..............
-The largest rectangle you can make in this example using only red and green tiles has area _24_. One way to do this is between `9,5` and `2,3`:
+The largest rectangle you can make in this example using only red and green tiles has area *24*. One way to do this is between `9,5` and `2,3`:
 
 ..............
 .......#XXX#..
@@ -62,4 +61,4 @@ The largest rectangle you can make in this example using only red and green tile
 .........XXX..
 .........#X#..
 ..............
-Using two red tiles as opposite corners, _what is the largest area of any rectangle you can make using only red and green tiles?_
+Using two red tiles as opposite corners, *what is the largest area of any rectangle you can make using only red and green tiles?*
