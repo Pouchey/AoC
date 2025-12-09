@@ -1,0 +1,301 @@
+{
+  "years": [
+    {
+      "year": 2025,
+      "days": [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    },
+    {
+      "year": 2023,
+      "days": [
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25
+      ]
+    }
+  ],
+  "problems": {
+    "2025-01": {
+      "year": 2025,
+      "day": 1,
+      "title": "Dial Rotations",
+      "part1Description": "You're working with a dial that starts at position 50 on a 0-99 scale. Parse rotation instructions (L for left, R for right followed by a number) and count how many times the dial points exactly at 0 after each instruction.",
+      "part2Description": "Same dial, but now count every time you pass through 0 during each rotation, not just when you land on it.",
+      "exampleAnswer1": 3,
+      "exampleAnswer2": 6,
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2025-02": {
+      "year": 2025,
+      "day": 2,
+      "title": "Gift Shop",
+      "part1Description": "Identify invalid product IDs in ranges. An ID is invalid if it is made only of some sequence of digits repeated twice (like 55, 6464, or 123123).",
+      "part2Description": "Now an ID is invalid if it is made only of some sequence of digits repeated at least twice (like 12341234, 123123123, or 1111111).",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2025-03": {
+      "year": 2025,
+      "day": 3,
+      "title": "Lobby",
+      "part1Description": "Batteries are arranged into banks with joltage ratings from 1 to 9. Turn on exactly two batteries per bank to produce the largest possible joltage (the number formed by the digits on the batteries you've turned on).",
+      "part2Description": "Now turn on exactly twelve batteries within each bank to produce the largest possible joltage.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2025-04": {
+      "year": 2025,
+      "day": 4,
+      "title": "Printing Department",
+      "part1Description": "Rolls of paper are arranged on a grid. Forklifts can only access a roll if there are fewer than four rolls in the eight adjacent positions. Find how many rolls can be accessed.",
+      "part2Description": "Once a roll can be accessed, it can be removed. After removing accessible rolls, more rolls might become accessible. Find how many total rolls can be removed by repeating this process.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2025-05": {
+      "year": 2025,
+      "day": 5,
+      "title": "Cafeteria",
+      "part1Description": "A database contains fresh ingredient ID ranges and available ingredient IDs. Determine which of the available ingredient IDs are fresh (fall into any range).",
+      "part2Description": "Find all ingredient IDs that the fresh ingredient ID ranges consider to be fresh, regardless of the available ingredient IDs list.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2025-06": {
+      "year": 2025,
+      "day": 6,
+      "title": "Trash Compactor",
+      "part1Description": "A math worksheet has problems with numbers arranged vertically and operations at the bottom. Each problem has numbers that need to be added or multiplied together. Find the grand total of all problem answers.",
+      "part2Description": "Cephalopod math is written right-to-left in columns. Each number is given in its own column with the most significant digit at the top. Solve the problems again with this new reading method.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2025-07": {
+      "year": 2025,
+      "day": 7,
+      "title": "Laboratories",
+      "part1Description": "A tachyon beam enters a manifold at location S and moves downward. When it encounters a splitter (^), the beam stops and two new beams continue from the left and right. Count how many times the beam is split.",
+      "part2Description": "With a quantum tachyon manifold, a single particle takes both the left and right path of each splitter. Count the number of timelines active after a single particle completes all possible journeys.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2025-08": {
+      "year": 2025,
+      "day": 8,
+      "title": "Playground",
+      "part1Description": "Junction boxes are positioned in 3D space. Connect the 1000 pairs of junction boxes that are closest together. Multiply together the sizes of the three largest circuits.",
+      "part2Description": "Continue connecting the closest unconnected pairs until all junction boxes are in one large circuit. Multiply together the X coordinates of the last two junction boxes you need to connect.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2025-09": {
+      "year": 2025,
+      "day": 9,
+      "title": "Movie Theater",
+      "part1Description": "The movie theater has a big tile floor with red tiles. Find the largest rectangle that uses red tiles for two of its opposite corners.",
+      "part2Description": "Now the red tiles form a polygon boundary with green tiles connecting them. Find the largest rectangle that fits entirely inside the polygon (including the boundary).",
+      "exampleAnswer1": 50,
+      "exampleAnswer2": 24,
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2023-01": {
+      "year": 2023,
+      "day": 1,
+      "title": "Trebuchet?!",
+      "part1Description": "A calibration document consists of lines of text. Each line originally contained a calibration value found by combining the first digit and the last digit to form a two-digit number. Find the sum of all calibration values.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2023-02": {
+      "year": 2023,
+      "day": 2,
+      "title": "Cube Conundrum",
+      "part1Description": "You play several games where cubes are revealed from a bag. Each game has an ID and shows subsets of red, green, and blue cubes. Determine which games would have been possible if the bag contained only 12 red, 13 green, and 14 blue cubes. Sum the IDs of possible games.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2023-03": {
+      "year": 2023,
+      "day": 3,
+      "title": "Gear Ratios",
+      "part1Description": "An engine schematic contains numbers and symbols. Any number adjacent to a symbol (even diagonally) is a part number. Periods do not count as symbols. Find the sum of all part numbers.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2023-04": {
+      "year": 2023,
+      "day": 4,
+      "title": "Scratchcards",
+      "part1Description": "Each scratchcard has two lists of numbers separated by a vertical bar: winning numbers and numbers you have. The first match makes the card worth one point, and each match after the first doubles the point value. Find the total points.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2023-05": {
+      "year": 2023,
+      "day": 5,
+      "title": "If You Give A Seed A Fertilizer",
+      "part1Description": "An almanac lists seeds and maps that convert numbers from source categories to destination categories (seed-to-soil, soil-to-fertilizer, etc.). Maps describe ranges. Find the lowest location number that corresponds to any of the initial seeds.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2023-06": {
+      "year": 2023,
+      "day": 6,
+      "title": "Wait For It",
+      "part1Description": "Boat races have a fixed time and a record distance. Holding the button charges the boat, and releasing it allows movement. For each millisecond holding the button, speed increases by 1 mm/ms. Find how many ways you can beat the record in each race, then multiply these together.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2023-07": {
+      "year": 2023,
+      "day": 7,
+      "title": "Camel Cards",
+      "part1Description": "Order hands of five cards based on strength. Hands have types (five of a kind, four of a kind, full house, etc.) and cards are ranked A, K, Q, J, T, 9, 8, 7, 6, 5, 4, 3, 2. Each hand has a bid. Rank all hands and calculate total winnings.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2023-08": {
+      "year": 2023,
+      "day": 8,
+      "title": "Haunted Wasteland",
+      "part1Description": "Navigate a network using left/right instructions. Start at AAA and follow the instructions to reach ZZZ. If you run out of instructions, repeat the sequence. Count how many steps it takes to reach ZZZ.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2023-09": {
+      "year": 2023,
+      "day": 9,
+      "title": "Mirage Maintenance",
+      "part1Description": "A report contains histories of values. Make sequences from the difference at each step. Once all values are zero, extrapolate the next value in the original history. Find the sum of all extrapolated values.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2023-10": {
+      "year": 2023,
+      "day": 10,
+      "title": "Pipe Maze",
+      "part1Description": "Pipes are arranged in a 2D grid forming one large continuous loop. The animal starts at S. Find how many steps along the loop it takes to get from S to the point farthest from S.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2023-11": {
+      "year": 2023,
+      "day": 11,
+      "title": "Cosmic Expansion",
+      "part1Description": "An image contains empty space and galaxies. Any rows or columns with no galaxies should be twice as big. Find the sum of the lengths of the shortest path between every pair of galaxies.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2023-12": {
+      "year": 2023,
+      "day": 12,
+      "title": "Hot Springs",
+      "part1Description": "Springs are arranged in rows with condition records showing operational (.), damaged (#), or unknown (?) springs. After each row, the size of each contiguous group of damaged springs is listed. Find how many different arrangements of operational/damaged springs match the given group sizes.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2023-13": {
+      "year": 2023,
+      "day": 13,
+      "title": "Point of Incidence",
+      "part1Description": "Patterns of ash (.) and rocks (#) are noted. Find lines of reflection (horizontal or vertical) where the pattern reflects perfectly. Sum the number of columns to the left of vertical lines and 100 times the number of rows above horizontal lines.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2023-14": {
+      "year": 2023,
+      "day": 14,
+      "title": "Parabolic Reflector Dish",
+      "part1Description": "A platform has rounded rocks (O) that roll when tilted, and cube-shaped rocks (#) that stay in place. Tilt the platform north so all rocks slide as far as they will go. Calculate the total load on the north support beams.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2023-15": {
+      "year": 2023,
+      "day": 15,
+      "title": "Lens Library",
+      "part1Description": "The HASH algorithm converts a string into a number 0-255. Start with 0, add ASCII code, multiply by 17, take remainder when divided by 256. Run HASH on each step in a sequence separated by commas. Sum all the results.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2023-16": {
+      "year": 2023,
+      "day": 16,
+      "title": "The Floor Will Be Lava",
+      "part1Description": "A grid contains empty space (.), mirrors (/ and \\), and splitters (| and -). A beam enters from the top-left heading right. Mirrors reflect 90 degrees, splitters split beams. Count how many tiles become energized.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2023-17": {
+      "year": 2023,
+      "day": 17,
+      "title": "Clumsy Crucible",
+      "part1Description": "A map shows heat loss for each city block. Find the path from the lava pool to the machine parts factory that minimizes heat loss. The crucible can't go in a straight line for more than 3 blocks.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2023-18": {
+      "year": 2023,
+      "day": 18,
+      "title": "Lavaduct Lagoon",
+      "part1Description": "A dig plan specifies directions (U, D, L, R) and distances. The digger starts in a 1 meter cube hole and digs trenches. Each trench edge should be painted with a specified color. Find the area of the dug-out trench.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2023-19": {
+      "year": 2023,
+      "day": 19,
+      "title": "Aplenty",
+      "part1Description": "Parts are rated in four categories (x, m, a, s). Each part goes through workflows with rules that specify conditions and destinations. Parts are accepted (A) or rejected (R). Sum the ratings of all accepted parts.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2023-20": {
+      "year": 2023,
+      "day": 20,
+      "title": "Pulse Propagation",
+      "part1Description": "Modules communicate using high or low pulses. Flip-flop modules (%) flip on/off with low pulses. Conjunction modules (&) remember recent pulses from inputs. A button sends a low pulse to the broadcaster. Count total low and high pulses sent after 1000 button pushes.",
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2023-21": {
+      "year": 2023,
+      "day": 21,
+      "title": "Step Counter",
+      "part1Description": "A map shows starting position (S), garden plots (.), and rocks (#). Starting at S, take steps north, south, east, or west onto garden plots. Find how many garden plots can be reached with exactly 64 steps.",
+      "firstPartCompleted": false,
+      "secondPartCompleted": false
+    },
+    "2023-22": {
+      "year": 2023,
+      "day": 22,
+      "title": "Sand Slabs",
+      "part1Description": "Bricks of sand are falling and piling up. Each brick is represented by two x,y,z coordinates. Bricks fall until they land on the ground or another brick. Find how many bricks can be safely disintegrated without causing other bricks to fall.",
+      "firstPartCompleted": false,
+      "secondPartCompleted": false
+    },
+    "2023-23": {
+      "year": 2023,
+      "day": 23,
+      "title": "A Long Walk",
+      "part1Description": "A map shows paths (.), forest (#), and steep slopes (^, >, v, <). You can only move in the direction of slopes, not against them. Find the longest hike from the start to the end, never stepping on the same tile twice.",
+      "firstPartCompleted": false,
+      "secondPartCompleted": false
+    },
+    "2023-24": {
+      "year": 2023,
+      "day": 24,
+      "title": "Never Tell Me The Odds",
+      "part1Description": "Hailstones are flying in perfectly linear trajectories. Each hailstone has a position and velocity. Consider only X and Y axes. Looking forward in time, count how many pairs of hailstones' paths will intersect within a test area.",
+      "firstPartCompleted": false,
+      "secondPartCompleted": false
+    },
+    "2023-25": {
+      "year": 2023,
+      "day": 25,
+      "title": "Snowverload",
+      "part1Description": "A wiring diagram shows how components are connected. You need to disconnect at least half the equipment by cutting only three wires. Find the three wires to cut that will split the components into two groups. Multiply the sizes of the two groups together.",
+      "firstPartCompleted": false,
+      "secondPartCompleted": false
+    }
+  }
+}

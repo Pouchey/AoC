@@ -10,6 +10,7 @@ import {
 import { getExample, getInput, submit } from './utils/aoc';
 import { assertEqual } from './utils/assert';
 import { log } from './utils/logger';
+import { addProblemToFile, updateProblemCompletion } from './utils/web';
 
 // Create the interface
 const rl = readline.createInterface({
@@ -31,7 +32,9 @@ const execute = async () => {
   const scriptPath = `${year}/${day}`;
 
   try {
-    if (!todayFolderExists(scriptPath)) {
+    const isNewProblem = !todayFolderExists(scriptPath);
+
+    if (isNewProblem) {
       await createTodayFolder(scriptPath);
     }
 
@@ -40,6 +43,11 @@ const execute = async () => {
       const input = await getInput(year, day);
       createDataFile(scriptPath, 'example', example);
       createDataFile(scriptPath, 'input', input);
+    }
+
+    // Add problem to problems.json if it's a new problem
+    if (isNewProblem) {
+      addProblemToFile(year, day);
     }
   } catch (error) {
     if (error instanceof Error) log(error.message, 'error', 'red');
@@ -95,7 +103,10 @@ const execute = async () => {
   rl.question('Submit this answer? (y/n) ', async (answer) => {
     if (['y', 'Y'].includes(answer)) {
       log('Submitting...', 'info', 'blue');
-      await submit(year, day, inputOutput, part);
+      const success = await submit(year, day, inputOutput, part);
+      if (success) {
+        updateProblemCompletion(year, day, part);
+      }
     } else {
       log('Not submitting.', 'info', 'blue');
     }

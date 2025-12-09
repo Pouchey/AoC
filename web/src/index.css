@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  
+  /* Dark theme colors from visualization.html */
+  --color-bg-dark: #0d1117;
+  --color-bg-panel: #161b22;
+  --color-bg-highlight: #21262d;
+  --color-grid-line: #30363d;
+  
+  --color-accent-red: #f85149;
+  --color-accent-green: #3fb950;
+  --color-accent-blue: #58a6ff;
+  --color-accent-gold: #d29922;
+  --color-accent-purple: #a371f7;
+  
+  --color-text-primary: #e6edf3;
+  --color-text-secondary: #8b949e;
+}
+
+body {
+  @apply bg-bg-dark text-text-primary font-sans min-h-screen antialiased;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-grid-line);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-secondary);
+}
+
+/* Code syntax highlighting base */
+pre code {
+  @apply font-mono text-sm leading-relaxed;
+}
+
+/* Markdown prose styles */
+.prose {
+  @apply text-text-primary;
+}
+
+.prose code {
+  @apply bg-bg-highlight px-1.5 py-0.5 rounded text-accent-gold font-mono text-sm;
+}
+
+.prose pre {
+  @apply bg-bg-highlight rounded-lg p-4 overflow-x-auto;
+}
+
+.prose pre code {
+  @apply bg-transparent p-0;
+}
+
+.prose strong {
+  @apply text-accent-gold font-semibold;
+}
+
+.prose a {
+  @apply text-accent-blue hover:underline;
+}
+
+.prose h1, .prose h2, .prose h3 {
+  @apply text-text-primary font-bold;
+}
+
+.prose p {
+  @apply leading-relaxed;
+}
