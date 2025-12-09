@@ -1,3 +1,4 @@
+import memoize from './memoize';
 import { TPoint } from './movement';
 
 export enum ESpelledDigit {
@@ -98,3 +99,10 @@ export const lacet = (path: TPoint[]) => {
   }
   return Math.abs(res) / 2;
 };
+
+/**
+ * Finds the maximum value in an array of numbers.
+ * @param numbers - The array of numbers.
+ * @returns The maximum value in the array of numbers.
+ */
+export const max = (numbers: number[]) => numbers.reduce((acc, curr) => Math.max(acc, curr), 0);

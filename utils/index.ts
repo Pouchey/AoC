@@ -3,6 +3,7 @@ export * from './array';
 export * from './assert';
 export * from './movement';
 export * from './file';
+export * from './geometry';
 export * from './grid';
 export * from './logger';
 export * from './math';

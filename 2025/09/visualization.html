@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AoC 2025 Day 9 - Part 2 Visualization</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;600;700&display=swap');
+    
+    :root {
+      --bg-dark: #0d1117;
+      --bg-panel: #161b22;
+      --bg-highlight: #21262d;
+      --accent-red: #f85149;
+      --accent-green: #3fb950;
+      --accent-blue: #58a6ff;
+      --accent-gold: #d29922;
+      --accent-purple: #a371f7;
+      --text-primary: #e6edf3;
+      --text-secondary: #8b949e;
+      --grid-line: #30363d;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 200px;
+      background: radial-gradient(ellipse at center, rgba(59, 185, 80, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-blue) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+    
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+    }
+    
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 2rem;
+    }
+    
+    .canvas-container {
+      background: var(--bg-panel);
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid var(--grid-line);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .canvas-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-red), var(--accent-green), var(--accent-blue));
+    }
+    
+    #visualization {
+      display: block;
+      width: 100%;
+      border-radius: 8px;
+    }
+    
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .panel {
+      background: var(--bg-panel);
+      border-radius: 12px;
+      padding: 1.25rem;
+      border: 1px solid var(--grid-line);
+    }
+    
+    .panel-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .panel-title::before {
+      content: '';
+      width: 3px;
+      height: 14px;
+      background: var(--accent-green);
+      border-radius: 2px;
+    }
+    
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    
+    .btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-green), #2ea043);
+      color: white;
+      font-weight: 600;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(59, 185, 80, 0.3);
+    }
+    
+    .btn-secondary {
+      background: var(--bg-highlight);
+      color: var(--text-primary);
+      border: 1px solid var(--grid-line);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--grid-line);
+    }
+    
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+    
+    .speed-control {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .speed-control label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+    
+    .speed-control input[type="range"] {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--bg-highlight);
+      -webkit-appearance: none;
+    }
+    
+    .speed-control input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent-blue);
+      cursor: pointer;
+    }
+    
+    .legend {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+    }
+    
+    .legend-color {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+    }
+    
+    .legend-red { background: var(--accent-red); }
+    .legend-green { background: var(--accent-green); }
+    .legend-candidate { background: var(--accent-blue); opacity: 0.5; }
+    .legend-valid { background: var(--accent-gold); }
+    .legend-best { 
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue)); 
+    }
+    
+    .stats {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+    }
+    
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--grid-line);
+    }
+    
+    .stat-row:last-child {
+      border-bottom: none;
+    }
+    
+    .stat-label {
+      color: var(--text-secondary);
+    }
+    
+    .stat-value {
+      font-weight: 700;
+    }
+    
+    .stat-value.highlight {
+      color: var(--accent-gold);
+    }
+    
+    .status-message {
+      background: var(--bg-highlight);
+      padding: 1rem;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      max-height: 150px;
+      overflow-y: auto;
+    }
+    
+    .status-message .step {
+      color: var(--accent-blue);
+    }
+    
+    .status-message .success {
+      color: var(--accent-green);
+    }
+    
+    .status-message .fail {
+      color: var(--accent-red);
+    }
+    
+    .input-section {
+      margin-top: 0.5rem;
+    }
+    
+    .input-section textarea {
+      width: 100%;
+      height: 120px;
+      background: var(--bg-highlight);
+      border: 1px solid var(--grid-line);
+      border-radius: 8px;
+      padding: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      resize: vertical;
+    }
+    
+    .input-section textarea:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+    }
+    
+    .phase-indicator {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .phase {
+      flex: 1;
+      padding: 0.5rem;
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: var(--bg-highlight);
+      border-radius: 6px;
+      color: var(--text-secondary);
+      transition: all 0.3s ease;
+    }
+    
+    .phase.active {
+      background: var(--accent-green);
+      color: white;
+    }
+    
+    .phase.completed {
+      background: var(--grid-line);
+      color: var(--accent-green);
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .animating .phase.active {
+      animation: pulse 1s infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎄 AoC 2025 Day 9 - Part 2</h1>
+      <p class="subtitle">Finding the Largest Rectangle in a Polygon</p>
+    </header>
+    
+    <div class="main-content">
+      <div class="canvas-container">
+        <canvas id="visualization" width="800" height="600"></canvas>
+      </div>
+      
+      <div class="sidebar">
+        <div class="panel">
+          <div class="panel-title">Algorithm Phases</div>
+          <div class="phase-indicator" id="phaseIndicator">
+            <div class="phase" data-phase="0">Parse</div>
+            <div class="phase" data-phase="1">Polygon</div>
+            <div class="phase" data-phase="2">Fill</div>
+            <div class="phase" data-phase="3">Search</div>
+            <div class="phase" data-phase="4">Done</div>
+          </div>
+          <div class="controls">
+            <button class="btn btn-primary" id="startBtn">▶ Start Visualization</button>
+            <button class="btn btn-secondary" id="stepBtn" disabled>⏭ Step Forward</button>
+            <button class="btn btn-secondary" id="resetBtn">↺ Reset</button>
+            <div class="speed-control">
+              <label>Speed:</label>
+              <input type="range" id="speedSlider" min="1" max="10" value="5">
+            </div>
+          </div>
+        </div>
+        
+        <div class="panel">
+          <div class="panel-title">Legend</div>
+          <div class="legend">
+            <div class="legend-item">
+              <div class="legend-color legend-red"></div>
+              <span>Red Tiles</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color legend-green"></div>
+              <span>Green Tiles</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color legend-candidate"></div>
+              <span>Testing</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color legend-best"></div>
+              <span>Best Found</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="panel">
+          <div class="panel-title">Statistics</div>
+          <div class="stats">
+            <div class="stat-row">
+              <span class="stat-label">Red Tiles:</span>
+              <span class="stat-value" id="statRedTiles">-</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Candidates:</span>
+              <span class="stat-value" id="statCandidates">-</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Tested:</span>
+              <span class="stat-value" id="statTested">0</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Best Area:</span>
+              <span class="stat-value highlight" id="statBestArea">0</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="panel">
+          <div class="panel-title">Status</div>
+          <div class="status-message" id="statusMessage">
+            Ready to start. Click "Start Visualization" to begin.
+          </div>
+        </div>
+        
+        <div class="panel">
+          <div class="panel-title">Custom Input</div>
+          <div class="input-section">
+            <textarea id="customInput" placeholder="Enter coordinates (col,row per line)...">7,1
+11,1
+11,7
+9,7
+9,5
+2,5
+2,3
+7,3</textarea>
+            <button class="btn btn-secondary" style="margin-top: 0.5rem; width: 100%;" id="loadCustomBtn">Load Custom Input</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============== GEOMETRY UTILITIES ==============
+    const buildPolygon = (points) => {
+      const vertical = [];
+      const horizontal = [];
+      
+      for (let i = 0; i < points.length; i++) {
+        const [col1, row1] = points[i];
+        const [col2, row2] = points[(i + 1) % points.length];
+        
+        if (col1 === col2) {
+          vertical.push({
+            col: col1,
+            min: Math.min(row1, row2),
+            max: Math.max(row1, row2)
+          });
+        } else {
+          horizontal.push({
+            row: row1,
+            min: Math.min(col1, col2),
+            max: Math.max(col1, col2)
+          });
+        }
+      }
+      
+      return { vertical, horizontal };
+    };
+
+    const isPointInPolygon = (col, row, polygon) => {
+      // Check if point is on boundary
+      for (const edge of polygon.horizontal) {
+        if (edge.row === row && col >= edge.min && col <= edge.max) {
+          return true;
+        }
+      }
+      for (const edge of polygon.vertical) {
+        if (edge.col === col && row >= edge.min && row <= edge.max) {
+          return true;
+        }
+      }
+
+      // Ray casting
+      let crossings = 0;
+      for (const edge of polygon.vertical) {
+        if (edge.col < col && row > edge.min && row <= edge.max) {
+          crossings++;
+        }
+      }
+      
+      return crossings % 2 === 1;
+    };
+
+    const isRectangleInPolygon = (rect, polygon) => {
+      const { minC, maxC, minR, maxR } = rect;
+      
+      // Check if any edge cuts through rectangle interior
+      for (const edge of polygon.vertical) {
+        if (edge.col < minC || edge.col > maxC) continue;
+        if (edge.max < minR || edge.min > maxR) continue;
+        if (minC < edge.col && edge.col < maxC) {
+          const overlapMin = Math.max(edge.min, minR);
+          const overlapMax = Math.min(edge.max, maxR);
+          if (overlapMin < overlapMax) return false;
+        }
+      }
+
+      for (const edge of polygon.horizontal) {
+        if (edge.row < minR || edge.row > maxR) continue;
+        if (edge.max < minC || edge.min > maxC) continue;
+        if (minR < edge.row && edge.row < maxR) {
+          const overlapMin = Math.max(edge.min, minC);
+          const overlapMax = Math.min(edge.max, maxC);
+          if (overlapMin < overlapMax) return false;
+        }
+      }
+
+      // Check all four corners
+      const corners = [
+        [minC, minR], [maxC, minR], [minC, maxR], [maxC, maxR]
+      ];
+      
+      return corners.every(([col, row]) => isPointInPolygon(col, row, polygon));
+    };
+
+    // ============== VISUALIZATION STATE ==============
+    class Visualizer {
+      constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.redTiles = [];
+        this.polygon = null;
+        this.greenTiles = new Set();
+        this.rectangles = [];
+        this.currentPhase = -1;
+        this.animationStep = 0;
+        this.bestRect = null;
+        this.bestArea = 0;
+        this.testedCount = 0;
+        this.currentRect = null;
+        this.isAnimating = false;
+        this.speed = 5;
+        this.animationFrame = null;
+        
+        // Grid settings
+        this.gridMinC = 0;
+        this.gridMaxC = 14;
+        this.gridMinR = 0;
+        this.gridMaxR = 10;
+        this.cellSize = 40;
+        this.offsetX = 50;
+        this.offsetY = 50;
+        
+        this.edgeAnimProgress = 0;
+        this.currentEdgeIndex = 0;
+      }
+
+      loadInput(input) {
+        this.redTiles = input.trim().split('\n').map(line => {
+          const [col, row] = line.split(',').map(Number);
+          return [col, row];
+        });
+        
+        // Calculate grid bounds
+        const cols = this.redTiles.map(p => p[0]);
+        const rows = this.redTiles.map(p => p[1]);
+        this.gridMinC = Math.min(...cols) - 2;
+        this.gridMaxC = Math.max(...cols) + 2;
+        this.gridMinR = Math.min(...rows) - 2;
+        this.gridMaxR = Math.max(...rows) + 2;
+        
+        // Adjust cell size
+        const width = this.canvas.width - 100;
+        const height = this.canvas.height - 100;
+        this.cellSize = Math.min(
+          width / (this.gridMaxC - this.gridMinC + 1),
+          height / (this.gridMaxR - this.gridMinR + 1)
+        );
+        this.offsetX = (this.canvas.width - (this.gridMaxC - this.gridMinC + 1) * this.cellSize) / 2;
+        this.offsetY = (this.canvas.height - (this.gridMaxR - this.gridMinR + 1) * this.cellSize) / 2;
+        
+        this.reset();
+        this.draw();
+        
+        document.getElementById('statRedTiles').textContent = this.redTiles.length;
+      }
+
+      reset() {
+        this.polygon = null;
+        this.greenTiles = new Set();
+        this.rectangles = [];
+        this.currentPhase = -1;
+        this.animationStep = 0;
+        this.bestRect = null;
+        this.bestArea = 0;
+        this.testedCount = 0;
+        this.currentRect = null;
+        this.isAnimating = false;
+        this.edgeAnimProgress = 0;
+        this.currentEdgeIndex = 0;
+        
+        if (this.animationFrame) {
+          cancelAnimationFrame(this.animationFrame);
+          this.animationFrame = null;
+        }
+        
+        this.updateStats();
+        this.updatePhaseIndicator();
+        this.draw();
+      }
+
+      toCanvas(col, row) {
+        return [
+          this.offsetX + (col - this.gridMinC) * this.cellSize,
+          this.offsetY + (row - this.gridMinR) * this.cellSize
+        ];
+      }
+
+      draw() {
+        const ctx = this.ctx;
+        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Background
+        ctx.fillStyle = '#0d1117';
+        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Grid
+        this.drawGrid();
+        
+        // Green tiles (filled interior)
+        this.drawGreenTiles();
+        
+        // Polygon edges
+        this.drawPolygonEdges();
+        
+        // Current candidate rectangle
+        if (this.currentRect) {
+          this.drawRectangle(this.currentRect, 'rgba(88, 166, 255, 0.3)', 'rgba(88, 166, 255, 0.8)');
+        }
+        
+        // Best rectangle
+        if (this.bestRect) {
+          this.drawRectangle(this.bestRect, 'rgba(163, 113, 247, 0.4)', 'rgba(163, 113, 247, 1)');
+        }
+        
+        // Red tiles
+        this.drawRedTiles();
+      }
+
+      drawGrid() {
+        const ctx = this.ctx;
+        ctx.strokeStyle = '#21262d';
+        ctx.lineWidth = 1;
+        
+        for (let col = this.gridMinC; col <= this.gridMaxC; col++) {
+          for (let row = this.gridMinR; row <= this.gridMaxR; row++) {
+            const [x, y] = this.toCanvas(col, row);
+            ctx.strokeRect(x, y, this.cellSize, this.cellSize);
+          }
+        }
+        
+        // Axis labels
+        ctx.fillStyle = '#8b949e';
+        ctx.font = '10px JetBrains Mono';
+        ctx.textAlign = 'center';
+        
+        for (let col = this.gridMinC; col <= this.gridMaxC; col++) {
+          const [x] = this.toCanvas(col, this.gridMinR);
+          ctx.fillText(col.toString(), x + this.cellSize / 2, this.offsetY - 10);
+        }
+        
+        ctx.textAlign = 'right';
+        for (let row = this.gridMinR; row <= this.gridMaxR; row++) {
+          const [, y] = this.toCanvas(this.gridMinC, row);
+          ctx.fillText(row.toString(), this.offsetX - 10, y + this.cellSize / 2 + 4);
+        }
+      }
+
+      drawGreenTiles() {
+        const ctx = this.ctx;
+        
+        for (const key of this.greenTiles) {
+          const [col, row] = key.split(',').map(Number);
+          const [x, y] = this.toCanvas(col, row);
+          
+          // Gradient fill
+          const gradient = ctx.createLinearGradient(x, y, x + this.cellSize, y + this.cellSize);
+          gradient.addColorStop(0, 'rgba(63, 185, 80, 0.4)');
+          gradient.addColorStop(1, 'rgba(63, 185, 80, 0.25)');
+          ctx.fillStyle = gradient;
+          ctx.fillRect(x + 1, y + 1, this.cellSize - 2, this.cellSize - 2);
+        }
+      }
+
+      drawPolygonEdges() {
+        if (!this.polygon && this.currentPhase < 1) return;
+        
+        const ctx = this.ctx;
+        ctx.strokeStyle = '#3fb950';
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
+        
+        const totalEdges = this.redTiles.length;
+        const edgesToDraw = this.currentPhase >= 2 ? totalEdges : 
+                           Math.min(this.currentEdgeIndex + 1, totalEdges);
+        
+        for (let i = 0; i < edgesToDraw; i++) {
+          const [col1, row1] = this.redTiles[i];
+          const [col2, row2] = this.redTiles[(i + 1) % this.redTiles.length];
+          
+          const [x1, y1] = this.toCanvas(col1, row1);
+          const [x2, y2] = this.toCanvas(col2, row2);
+          
+          const cx1 = x1 + this.cellSize / 2;
+          const cy1 = y1 + this.cellSize / 2;
+          const cx2 = x2 + this.cellSize / 2;
+          const cy2 = y2 + this.cellSize / 2;
+          
+          ctx.beginPath();
+          ctx.moveTo(cx1, cy1);
+          
+          if (i === this.currentEdgeIndex && this.currentPhase === 1 && this.edgeAnimProgress < 1) {
+            const px = cx1 + (cx2 - cx1) * this.edgeAnimProgress;
+            const py = cy1 + (cy2 - cy1) * this.edgeAnimProgress;
+            ctx.lineTo(px, py);
+          } else if (i < edgesToDraw) {
+            ctx.lineTo(cx2, cy2);
+          }
+          
+          ctx.stroke();
+        }
+      }
+
+      drawRedTiles() {
+        const ctx = this.ctx;
+        
+        for (const [col, row] of this.redTiles) {
+          const [x, y] = this.toCanvas(col, row);
+          
+          // Glow effect
+          const gradient = ctx.createRadialGradient(
+            x + this.cellSize / 2, y + this.cellSize / 2, 0,
+            x + this.cellSize / 2, y + this.cellSize / 2, this.cellSize
+          );
+          gradient.addColorStop(0, 'rgba(248, 81, 73, 0.5)');
+          gradient.addColorStop(1, 'rgba(248, 81, 73, 0)');
+          ctx.fillStyle = gradient;
+          ctx.fillRect(x - this.cellSize/4, y - this.cellSize/4, 
+                      this.cellSize * 1.5, this.cellSize * 1.5);
+          
+          // Main tile
+          ctx.fillStyle = '#f85149';
+          const padding = 3;
+          ctx.beginPath();
+          ctx.roundRect(x + padding, y + padding, 
+                       this.cellSize - padding * 2, this.cellSize - padding * 2, 4);
+          ctx.fill();
+          
+          // Highlight
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+          ctx.beginPath();
+          ctx.roundRect(x + padding + 2, y + padding + 2, 
+                       this.cellSize - padding * 2 - 4, (this.cellSize - padding * 2) / 3, 2);
+          ctx.fill();
+        }
+      }
+
+      drawRectangle(rect, fillColor, strokeColor) {
+        const ctx = this.ctx;
+        const { minC, maxC, minR, maxR } = rect;
+        
+        const [x1, y1] = this.toCanvas(minC, minR);
+        const [x2, y2] = this.toCanvas(maxC + 1, maxR + 1);
+        
+        ctx.fillStyle = fillColor;
+        ctx.fillRect(x1, y1, x2 - x1, y2 - y1);
+        
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = 3;
+        ctx.setLineDash([8, 4]);
+        ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+        ctx.setLineDash([]);
+      }
+
+      updateStats() {
+        document.getElementById('statCandidates').textContent = this.rectangles.length || '-';
+        document.getElementById('statTested').textContent = this.testedCount;
+        document.getElementById('statBestArea').textContent = this.bestArea;
+      }
+
+      updatePhaseIndicator() {
+        const phases = document.querySelectorAll('.phase');
+        phases.forEach((el, i) => {
+          el.classList.remove('active', 'completed');
+          if (i < this.currentPhase) {
+            el.classList.add('completed');
+          } else if (i === this.currentPhase) {
+            el.classList.add('active');
+          }
+        });
+        
+        if (this.isAnimating) {
+          document.getElementById('phaseIndicator').classList.add('animating');
+        } else {
+          document.getElementById('phaseIndicator').classList.remove('animating');
+        }
+      }
+
+      log(message) {
+        const el = document.getElementById('statusMessage');
+        el.innerHTML = message + '<br>' + el.innerHTML;
+        el.scrollTop = 0;
+      }
+
+      // ============== ANIMATION PHASES ==============
+      async runPhase0() {
+        this.currentPhase = 0;
+        this.updatePhaseIndicator();
+        this.log('<span class="step">Phase 0:</span> Parsing input...');
+        await this.delay(500);
+        this.log(`Found ${this.redTiles.length} red tiles`);
+        this.draw();
+        await this.delay(500);
+      }
+
+      async runPhase1() {
+        this.currentPhase = 1;
+        this.updatePhaseIndicator();
+        this.log('<span class="step">Phase 1:</span> Building polygon edges...');
+        
+        for (let i = 0; i < this.redTiles.length; i++) {
+          this.currentEdgeIndex = i;
+          
+          // Animate edge drawing
+          for (let p = 0; p <= 1; p += 0.1 * (11 - this.speed)) {
+            this.edgeAnimProgress = p;
+            this.draw();
+            await this.delay(20);
+          }
+          this.edgeAnimProgress = 1;
+          
+          const [col1, row1] = this.redTiles[i];
+          const [col2, row2] = this.redTiles[(i + 1) % this.redTiles.length];
+          this.log(`Edge ${i + 1}: (${col1},${row1}) → (${col2},${row2})`);
+        }
+        
+        this.polygon = buildPolygon(this.redTiles);
+        this.log(`<span class="success">Polygon built:</span> ${this.polygon.vertical.length} vertical, ${this.polygon.horizontal.length} horizontal edges`);
+      }
+
+      async runPhase2() {
+        this.currentPhase = 2;
+        this.updatePhaseIndicator();
+        this.log('<span class="step">Phase 2:</span> Filling interior (ray casting)...');
+        
+        // Find all interior points
+        for (let row = this.gridMinR; row <= this.gridMaxR; row++) {
+          for (let col = this.gridMinC; col <= this.gridMaxC; col++) {
+            if (isPointInPolygon(col, row, this.polygon)) {
+              // Skip red tiles
+              if (!this.redTiles.some(([c, r]) => c === col && r === row)) {
+                this.greenTiles.add(`${col},${row}`);
+                this.draw();
+                await this.delay(30 / this.speed);
+              }
+            }
+          }
+        }
+        
+        this.log(`<span class="success">Interior filled:</span> ${this.greenTiles.size} green tiles`);
+      }
+
+      async runPhase3() {
+        this.currentPhase = 3;
+        this.updatePhaseIndicator();
+        this.log('<span class="step">Phase 3:</span> Finding candidate rectangles...');
+        
+        const redTileSet = new Set(this.redTiles.map(([c, r]) => `${c},${r}`));
+        
+        // Generate all valid rectangles
+        for (let i = 0; i < this.redTiles.length; i++) {
+          for (let j = i + 1; j < this.redTiles.length; j++) {
+            const [col1, row1] = this.redTiles[i];
+            const [col2, row2] = this.redTiles[j];
+            
+            const minC = Math.min(col1, col2);
+            const maxC = Math.max(col1, col2);
+            const minR = Math.min(row1, row2);
+            const maxR = Math.max(row1, row2);
+            
+            const topLeft = `${minC},${minR}`;
+            const topRight = `${maxC},${minR}`;
+            const bottomLeft = `${minC},${maxR}`;
+            const bottomRight = `${maxC},${maxR}`;
+            
+            const hasOppositeCorners =
+              (redTileSet.has(topLeft) && redTileSet.has(bottomRight)) ||
+              (redTileSet.has(topRight) && redTileSet.has(bottomLeft));
+            
+            if (hasOppositeCorners) {
+              this.rectangles.push({
+                rect: { minC, maxC, minR, maxR },
+                area: (maxC - minC + 1) * (maxR - minR + 1)
+              });
+            }
+          }
+        }
+        
+        // Sort by area descending
+        this.rectangles.sort((a, b) => b.area - a.area);
+        this.updateStats();
+        this.log(`Found ${this.rectangles.length} candidate rectangles`);
+        
+        // Test rectangles
+        this.log('<span class="step">Testing rectangles (sorted by area desc)...</span>');
+        
+        for (const { rect, area } of this.rectangles) {
+          if (area <= this.bestArea) {
+            this.log(`<span class="success">Early exit:</span> remaining candidates have area ≤ ${this.bestArea}`);
+            break;
+          }
+          
+          this.currentRect = rect;
+          this.testedCount++;
+          this.updateStats();
+          this.draw();
+          await this.delay(200 / this.speed);
+          
+          const isValid = isRectangleInPolygon(rect, this.polygon);
+          
+          if (isValid) {
+            this.bestRect = rect;
+            this.bestArea = area;
+            this.updateStats();
+            this.log(`<span class="success">✓ Valid!</span> (${rect.minC},${rect.minR}) to (${rect.maxC},${rect.maxR}) = <b>${area}</b>`);
+          } else {
+            this.log(`<span class="fail">✗ Invalid</span> (${rect.minC},${rect.minR}) to (${rect.maxC},${rect.maxR})`);
+          }
+          
+          this.draw();
+          await this.delay(100 / this.speed);
+        }
+        
+        this.currentRect = null;
+      }
+
+      async runPhase4() {
+        this.currentPhase = 4;
+        this.updatePhaseIndicator();
+        this.draw();
+        this.log(`<span class="success">★ SOLUTION: ${this.bestArea}</span>`);
+      }
+
+      async run() {
+        if (this.isAnimating) return;
+        this.isAnimating = true;
+        
+        document.getElementById('startBtn').disabled = true;
+        document.getElementById('stepBtn').disabled = true;
+        
+        try {
+          await this.runPhase0();
+          await this.runPhase1();
+          await this.runPhase2();
+          await this.runPhase3();
+          await this.runPhase4();
+        } finally {
+          this.isAnimating = false;
+          document.getElementById('startBtn').disabled = false;
+        }
+      }
+
+      delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+    }
+
+    // ============== INITIALIZATION ==============
+    const canvas = document.getElementById('visualization');
+    const viz = new Visualizer(canvas);
+
+    // Load default input
+    viz.loadInput(document.getElementById('customInput').value);
+
+    // Event listeners
+    document.getElementById('startBtn').addEventListener('click', () => {
+      viz.reset();
+      viz.run();
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      viz.reset();
+      document.getElementById('statusMessage').innerHTML = 'Ready to start. Click "Start Visualization" to begin.';
+    });
+
+    document.getElementById('speedSlider').addEventListener('input', (e) => {
+      viz.speed = parseInt(e.target.value);
+    });
+
+    document.getElementById('loadCustomBtn').addEventListener('click', () => {
+      const input = document.getElementById('customInput').value;
+      viz.loadInput(input);
+      document.getElementById('statusMessage').innerHTML = 'Custom input loaded. Click "Start Visualization" to begin.';
+    });
+  </script>
+</body>
+</html>
+
