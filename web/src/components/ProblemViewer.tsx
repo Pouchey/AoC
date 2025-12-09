@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect, startTransition } from 'react';
 import { getProblem, type ProblemsData } from '../data/problems';
+import { fetchSolutionCode, extractFunction } from '../utils/codeFetcher';
+import { CodeSnippet } from './CodeSnippet';
 
 interface ProblemViewerProps {
   data: ProblemsData;
@@ -9,7 +11,45 @@ interface ProblemViewerProps {
 
 export function ProblemViewer({ data, year, day }: ProblemViewerProps) {
   const [activeTab, setActiveTab] = useState<'part1' | 'part2'>('part1');
+  const [code1, setCode1] = useState<string | null>(null);
+  const [code2, setCode2] = useState<string | null>(null);
+  const [isLoadingCode, setIsLoadingCode] = useState(true);
   const problem = getProblem(data, year, day);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    startTransition(() => {
+      setIsLoadingCode(true);
+    });
+
+    fetchSolutionCode(year, day)
+      .then((fullCode) => {
+        if (cancelled) return;
+
+        if (fullCode) {
+          const solve1Code = extractFunction(fullCode, 'solve1');
+          const solve2Code = extractFunction(fullCode, 'solve2');
+          setCode1(solve1Code);
+          setCode2(solve2Code);
+        } else {
+          setCode1(null);
+          setCode2(null);
+        }
+        setIsLoadingCode(false);
+      })
+      .catch((error) => {
+        if (cancelled) return;
+        console.error('Failed to fetch code:', error);
+        setCode1(null);
+        setCode2(null);
+        setIsLoadingCode(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [year, day]);
 
   if (!problem) {
     return (
@@ -120,9 +160,14 @@ export function ProblemViewer({ data, year, day }: ProblemViewerProps) {
                 <span className="w-1 h-3 bg-accent-blue rounded-full" />
                 Solution File
               </h4>
-              <code className="font-mono text-accent-blue bg-bg-dark px-3 py-2 rounded-lg block">
+              <code className="font-mono text-accent-blue bg-bg-dark px-3 py-2 rounded-lg block mb-4">
                 {year}/{dayPadded}/index.ts → solve1()
               </code>
+              {!isLoadingCode && code1 && (
+                <div className="mt-4">
+                  <CodeSnippet code={code1} />
+                </div>
+              )}
             </div>
           </div>
         ) : (
@@ -152,9 +197,14 @@ export function ProblemViewer({ data, year, day }: ProblemViewerProps) {
                 <span className="w-1 h-3 bg-accent-purple rounded-full" />
                 Solution File
               </h4>
-              <code className="font-mono text-accent-purple bg-bg-dark px-3 py-2 rounded-lg block">
+              <code className="font-mono text-accent-purple bg-bg-dark px-3 py-2 rounded-lg block mb-4">
                 {year}/{dayPadded}/index.ts → solve2()
               </code>
+              {!isLoadingCode && code2 && (
+                <div className="mt-4">
+                  <CodeSnippet code={code2} />
+                </div>
+              )}
             </div>
           </div>
         )}
