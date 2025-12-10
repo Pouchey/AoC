@@ -2,46 +2,12 @@
   "years": [
     {
       "year": 2025,
-      "days": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9
-      ]
+      "days": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     },
     {
       "year": 2023,
       "days": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15,
-        16,
-        17,
-        18,
-        19,
-        20,
-        21,
-        22,
-        23,
-        24,
-        25
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25
       ]
     }
   ],
@@ -329,6 +295,14 @@
       "title": "Snowverload",
       "part1Description": "A wiring diagram shows how components are connected. You need to disconnect at least half the equipment by cutting only three wires. Find the three wires to cut that will split the components into two groups. Multiply the sizes of the two groups together.",
       "firstPartCompleted": false,
+      "secondPartCompleted": false
+    },
+    "2025-10": {
+      "year": 2025,
+      "day": 10,
+      "title": "Factory",
+      "part1Description": "Factory machines have indicator lights that start all off. Each machine has a target configuration (shown in square brackets) and buttons (in parentheses) that toggle specific lights. Find the fewest button presses needed to configure each machine's lights correctly, then sum the minimum presses for all machines.",
+      "firstPartCompleted": true,
       "secondPartCompleted": false
     }
   }
