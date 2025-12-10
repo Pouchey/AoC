@@ -1,5 +1,6 @@
-import { defaultTransform, parseLines } from '../../utils';
 import { bfs } from '../../utils/bfs';
+import { Arith, Solver, init } from 'z3-solver';
+import { addConstraints, getSum } from '../../utils/z3';
 
 enum ELight {
   Off = '.',
@@ -87,33 +88,56 @@ export const solve1 = (input: string) => {
   return result;
 };
 
-export const solve2 = (input: string) => {
+export const solve2 = async (input: string) => {
   const data = loadData(input);
+  const { Context } = await init();
+  const { Solver, Int } = Context('main');
 
-  const createMatrix = (machine: TMachine) => {
-    const matrix: boolean[][] = [];
-    for (let i = 0; i < machine.lights.length; i++) {
-      matrix.push([]);
-      for (let j = 0; j < machine.buttons.length; j++) {
-        if (machine.buttons[j].includes(i)) matrix[i].push(true);
-        else matrix[i].push(false);
+  // Solve linear system: A × x = b where:
+  // - A[i][j] = 1 if button j affects counter i, else 0
+  // - x is the vector of button press counts (what we solve for)
+  // - b is the target joltage vector
+
+  const solveMachine = async (machine: TMachine) => {
+    const buttonsLength = machine.buttons.length;
+    const buttonPresses = Array.from({ length: buttonsLength }, (_, i) => Int.const(`x${i}`));
+
+    const totalPresses = buttonPresses.reduce((sum, press) => sum.add(press), Int.val(0));
+
+    const solver = new Solver();
+    addConstraints(solver, buttonPresses, machine.joltages, machine.buttons, Int.val(0));
+
+    if ((await solver.check()) !== 'sat') {
+      throw new Error('No solution exists');
+    }
+
+    let bestSum = getSum(solver.model(), buttonPresses);
+    let upperBound = bestSum - 1;
+
+    while (upperBound >= 0) {
+      const testSolver = new Solver();
+      addConstraints(testSolver, buttonPresses, machine.joltages, machine.buttons, Int.val(0));
+      testSolver.add(totalPresses.le(upperBound));
+
+      if ((await testSolver.check()) === 'sat') {
+        bestSum = getSum(testSolver.model(), buttonPresses);
+        upperBound = bestSum - 1;
+      } else {
+        break;
       }
     }
-    return matrix;
+
+    return bestSum;
   };
 
-  const solveMachine = (machine: TMachine) => {
-    const matrix = createMatrix(machine);
-  };
-
-  console.log(solveMachine(data[0]));
-
-  const result = 0;
-
+  let result = 0;
+  for (const machine of data) {
+    result += await solveMachine(machine);
+  }
   return result;
 };
 
 export const exampleAnswer1 = 7;
-export const exampleAnswer2 = 0;
+export const exampleAnswer2 = 33;
 
-export const firstPartCompleted = false;
+export const firstPartCompleted = true;

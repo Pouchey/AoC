@@ -74,7 +74,7 @@ const execute = async () => {
   log(`Part ${part}:\n`, 'info', 'blue');
   log('Running example:\n', 'info', 'cyan');
   const exampleStartTime = performance.now();
-  const exampleOutput = solve(exampleFile);
+  const exampleOutput = await solve(exampleFile);
   const exampleEndTime = performance.now();
   const exampleSolveTime = exampleEndTime - exampleStartTime;
   const exampleTimeStr =
@@ -89,7 +89,7 @@ const execute = async () => {
   log('Running solve:\n', 'info', 'cyan');
   // try solve on input
   const startTime = performance.now();
-  const inputOutput = solve(inputFile);
+  const inputOutput = await solve(inputFile);
   const endTime = performance.now();
   const solveTime = endTime - startTime;
   const solveTimeStr =
