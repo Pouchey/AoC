@@ -2,47 +2,12 @@
   "years": [
     {
       "year": 2025,
-      "days": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10
-      ]
+      "days": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     },
     {
       "year": 2023,
       "days": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15,
-        16,
-        17,
-        18,
-        19,
-        20,
-        21,
-        22,
-        23,
-        24,
-        25
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25
       ]
     }
   ],
@@ -337,6 +302,7 @@
       "day": 10,
       "title": "Factory",
       "part1Description": "Factory machines have indicator lights that start all off. Each machine has a target configuration (shown in square brackets) and buttons (in parentheses) that toggle specific lights. Find the fewest button presses needed to configure each machine's lights correctly, then sum the minimum presses for all machines.",
+      "part2Description": "Now configure joltage counters instead of lights. Each machine has counters starting at 0 that need to reach target values (in curly braces). Buttons now increment counters by 1 instead of toggling. This is an integer linear programming problem: solve A × x = b where A[i][j] = 1 if button j affects counter i, x is button press counts, and b is target values. Minimize sum(x) subject to x ≥ 0. Solved using Z3 constraint solver.",
       "firstPartCompleted": true,
       "secondPartCompleted": true
     }
