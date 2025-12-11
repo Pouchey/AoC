@@ -311,11 +311,11 @@
       "day": 11,
       "title": "Reactor",
       "part1Description": "A reactor has devices connected by outputs. Data flows from a device through its outputs (never backwards). Find every path from the device labeled 'you' to the device labeled 'out'.",
-      "part2Description": "",
+      "part2Description": "The problematic data path passes through both 'dac' (a digital-to-analog converter) and 'fft' (a device which performs a fast Fourier transform). Find every path from 'svr' (the server rack) to 'out' that visits both 'dac' and 'fft' (in any order).",
       "exampleAnswer1": 5,
-      "exampleAnswer2": 0,
+      "exampleAnswer2": 2,
       "firstPartCompleted": true,
-      "secondPartCompleted": false
+      "secondPartCompleted": true
     }
   }
 }
