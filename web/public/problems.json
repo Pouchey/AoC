@@ -2,7 +2,7 @@
   "years": [
     {
       "year": 2025,
-      "days": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      "days": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
     },
     {
       "year": 2023,
@@ -305,6 +305,17 @@
       "part2Description": "Now configure joltage counters instead of lights. Each machine has counters starting at 0 that need to reach target values (in curly braces). Buttons now increment counters by 1 instead of toggling. This is an integer linear programming problem: solve A × x = b where A[i][j] = 1 if button j affects counter i, x is button press counts, and b is target values. Minimize sum(x) subject to x ≥ 0. Solved using Z3 constraint solver.",
       "firstPartCompleted": true,
       "secondPartCompleted": true
+    },
+    "2025-11": {
+      "year": 2025,
+      "day": 11,
+      "title": "Reactor",
+      "part1Description": "A reactor has devices connected by outputs. Data flows from a device through its outputs (never backwards). Find every path from the device labeled 'you' to the device labeled 'out'.",
+      "part2Description": "",
+      "exampleAnswer1": 5,
+      "exampleAnswer2": 0,
+      "firstPartCompleted": true,
+      "secondPartCompleted": false
     }
   }
 }

@@ -9,5 +9,6 @@ export * from './logger';
 export * from './math';
 export * from './memoize';
 export * from './parser';
+export * from './dfs';
 export * from './web';
 export * from './range';
