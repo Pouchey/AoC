@@ -36,7 +36,7 @@ export function RegionCard({
         isSelected ? 'border-accent-blue border-2' : 'border-grid-line'
       }`}
     >
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between ">
         <div>
           <div className="text-sm font-semibold text-text-primary">
             Region {regionIndex + 1}: {width}x{height}
@@ -66,11 +66,6 @@ export function RegionCard({
                     ? 'Backtracking...'
                     : currentStep.message}
               </div>
-              {currentStep.status === 'placing' && (
-                <div className="text-text-secondary mt-1 font-mono">
-                  {currentStep.currentGiftIndex + 1}/{currentStep.totalGifts + 1}
-                </div>
-              )}
             </div>
           )}
         </div>

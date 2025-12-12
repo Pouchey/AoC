@@ -21,8 +21,14 @@
   --color-text-secondary: #8b949e;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   @apply bg-bg-dark text-text-primary font-sans min-h-screen antialiased;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 /* Custom scrollbar */

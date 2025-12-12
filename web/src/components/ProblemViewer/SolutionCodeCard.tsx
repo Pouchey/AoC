@@ -23,7 +23,7 @@ export function SolutionCodeCard({
   const functionName = part === 1 ? 'solve1()' : 'solve2()';
 
   return (
-    <div className="bg-bg-highlight rounded-xl p-4 border border-grid-line">
+    <div className="bg-bg-highlight rounded-xl p-4 border border-grid-line w-full max-w-full overflow-hidden">
       <h4 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-3 flex items-center gap-2">
         <span
           className={`w-1 h-3 rounded-full ${part === 1 ? 'bg-accent-blue' : 'bg-accent-purple'}`}
@@ -31,7 +31,7 @@ export function SolutionCodeCard({
         Solution File
       </h4>
       <code
-        className={`font-mono bg-bg-dark px-3 py-2 rounded-lg block mb-4 ${
+        className={`font-mono bg-bg-dark px-3 py-2 rounded-lg block mb-4 overflow-x-auto ${
           part === 1 ? 'text-accent-blue' : 'text-accent-purple'
         }`}
       >

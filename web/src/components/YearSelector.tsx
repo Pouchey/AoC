@@ -1,22 +1,14 @@
-import { useNavigate, useParams } from 'react-router-dom';
 import type { YearData } from '../types';
 
 interface YearSelectorProps {
   years: YearData[];
   selectedYear: number | null;
+  onYearChange: (year: number) => void;
 }
 
-export function YearSelector({ years, selectedYear }: YearSelectorProps) {
-  const navigate = useNavigate();
-  const { day } = useParams<{ day?: string }>();
-
+export function YearSelector({ years, selectedYear, onYearChange }: YearSelectorProps) {
   const handleYearClick = (year: number) => {
-    // If a day is selected, navigate to the same day in the new year
-    if (day) {
-      navigate(`/${year}/${day}`);
-    } else {
-      navigate(`/${year}`);
-    }
+    onYearChange(year);
   };
 
   return (

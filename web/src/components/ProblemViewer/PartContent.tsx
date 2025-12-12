@@ -28,7 +28,7 @@ export function PartContent({
   const VisualizationComponent = getProblemVisualization(year, day, part === 1 ? 'part1' : 'part2');
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full max-w-full overflow-hidden">
       {description ? (
         <div className="prose max-w-none">
           <p className="text-text-primary leading-relaxed">{description}</p>

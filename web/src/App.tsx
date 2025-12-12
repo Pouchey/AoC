@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route, useParams, Navigate } from 'react-router-dom';
 import { Header } from './components/Header';
 import { YearSelector } from './components/YearSelector';
 import { DayGrid } from './components/DayGrid';
@@ -7,14 +6,47 @@ import { ProblemViewer } from './components/ProblemViewer';
 import { StatsPanel } from './components/StatsPanel';
 import { loadProblemsData, type ProblemsData } from './data/problems';
 
-function AppContent() {
-  const { year: yearParam, day: dayParam } = useParams<{ year?: string; day?: string }>();
+function App() {
   const [data, setData] = useState<ProblemsData | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Parse route params
-  const selectedYear = yearParam ? parseInt(yearParam, 10) : 2025;
-  const selectedDay = dayParam ? parseInt(dayParam, 10) : null;
+  // Parse query params - initialize default year if needed
+  const getSearchParams = (): { year: string | null; day: string | null } => {
+    const params = new URLSearchParams(window.location.search);
+    const year = params.get('year');
+    const day = params.get('day');
+
+    // Initialize default year if no query params
+    if (!year) {
+      params.set('year', '2025');
+      const newUrl = `${window.location.pathname}?${params.toString()}`;
+      window.history.replaceState({}, '', newUrl);
+      return { year: '2025', day: null };
+    }
+
+    return { year, day };
+  };
+
+  const [searchParams, setSearchParams] = useState<{ year: string | null; day: string | null }>(
+    getSearchParams
+  );
+
+  // Update search params when URL changes (e.g., browser back/forward)
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      setSearchParams({
+        year: params.get('year') || '2025',
+        day: params.get('day')
+      });
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const selectedYear = searchParams.year ? parseInt(searchParams.year, 10) : 2025;
+  const selectedDay = searchParams.day ? parseInt(searchParams.day, 10) : null;
 
   useEffect(() => {
     loadProblemsData().then((d) => {
@@ -22,6 +54,30 @@ function AppContent() {
       setLoading(false);
     });
   }, []);
+
+  // Helper function to update query params
+  const updateQueryParams = (updates: { year?: number; day?: number | null }) => {
+    const params = new URLSearchParams(window.location.search);
+
+    if (updates.year !== undefined) {
+      params.set('year', updates.year.toString());
+    }
+
+    if (updates.day !== undefined) {
+      if (updates.day === null) {
+        params.delete('day');
+      } else {
+        params.set('day', updates.day.toString());
+      }
+    }
+
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    window.history.pushState({}, '', newUrl);
+    setSearchParams({
+      year: params.get('year'),
+      day: params.get('day')
+    });
+  };
 
   if (loading || !data) {
     return (
@@ -35,19 +91,30 @@ function AppContent() {
   }
 
   return (
-    <div className="min-h-screen bg-bg-dark">
+    <div className="min-h-screen bg-bg-dark overflow-x-hidden w-full max-w-full">
       {/* Background pattern */}
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,185,80,0.03)_0%,transparent_50%)] pointer-events-none" />
       <div className="fixed inset-0 bg-[linear-gradient(rgba(30,36,44,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(30,36,44,0.5)_1px,transparent_1px)] bg-size-[60px_60px] pointer-events-none opacity-30" />
 
-      <div className="relative max-w-6xl mx-auto px-4 py-8">
+      <div className="relative max-w-6xl mx-auto px-4 py-8 w-full overflow-x-hidden">
         <Header />
 
         <div className="grid lg:grid-cols-[1fr,300px] gap-8">
-          <div className="space-y-6">
-            <YearSelector years={data.years} selectedYear={selectedYear} />
+          <div className="space-y-6 w-full min-w-0">
+            <YearSelector
+              years={data.years}
+              selectedYear={selectedYear}
+              onYearChange={(year) => updateQueryParams({ year, day: selectedDay })}
+            />
 
-            {selectedYear && <DayGrid data={data} year={selectedYear} selectedDay={selectedDay} />}
+            {selectedYear && (
+              <DayGrid
+                data={data}
+                year={selectedYear}
+                selectedDay={selectedDay}
+                onDayChange={(day) => updateQueryParams({ year: selectedYear, day })}
+              />
+            )}
 
             {selectedYear && selectedDay && (
               <ProblemViewer data={data} year={selectedYear} day={selectedDay} />
@@ -143,16 +210,6 @@ function AppContent() {
         </footer>
       </div>
     </div>
-  );
-}
-
-function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/2025" replace />} />
-      <Route path="/:year" element={<AppContent />} />
-      <Route path="/:year/:day" element={<AppContent />} />
-    </Routes>
   );
 }
 

@@ -63,15 +63,25 @@ export function CodeSnippet({ code, language = 'typescript' }: CodeSnippetProps)
   }
 
   return (
-    <div className="bg-bg-dark rounded-lg border border-grid-line overflow-hidden">
+    <div className="bg-bg-dark rounded-lg border border-grid-line overflow-hidden w-full max-w-full">
       <div
-        className="overflow-x-auto p-4 text-sm [&_pre]:bg-transparent [&_pre]:m-0 [&_pre]:p-0 [&_pre]:font-mono [&_pre]:text-text-primary"
+        className="overflow-x-auto p-4 text-sm [&_pre]:bg-transparent [&_pre]:m-0 [&_pre]:p-0 [&_pre]:font-mono [&_pre]:text-text-primary [&_pre]:overflow-x-auto [&_pre]:max-w-full [&_pre]:whitespace-pre"
+        style={{ maxWidth: '100%', width: '100%' }}
         dangerouslySetInnerHTML={{ __html: highlightedCode }}
       />
       <style>{`
         .shiki {
           background: transparent !important;
           color: var(--color-text-primary) !important;
+          overflow-x: auto !important;
+          max-width: 100% !important;
+          width: 100% !important;
+          display: block !important;
+        }
+        .shiki pre {
+          overflow-x: auto !important;
+          max-width: 100% !important;
+          width: 100% !important;
         }
         .shiki span {
           color: inherit;

@@ -36,7 +36,7 @@ export function ProblemViewer({ data, year, day }: ProblemViewerProps) {
       <ProblemTabs activeTab={activeTab} onTabChange={setActiveTab} />
 
       {/* Content */}
-      <div className="p-6">
+      <div className="p-6 w-full max-w-full overflow-hidden">
         <PartContent
           year={year}
           day={day}
