@@ -1,3 +1,4 @@
+import { useNavigate, useParams } from 'react-router-dom';
 import type { YearData } from '../types';
 
 interface YearSelectorProps {
@@ -7,12 +8,24 @@ interface YearSelectorProps {
 }
 
 export function YearSelector({ years, selectedYear, onSelectYear }: YearSelectorProps) {
+  const navigate = useNavigate();
+  const { day } = useParams<{ day?: string }>();
+
+  const handleYearClick = (year: number) => {
+    // If a day is selected, navigate to the same day in the new year
+    if (day) {
+      navigate(`/${year}/${day}`);
+    } else {
+      navigate(`/${year}`);
+    }
+  };
+
   return (
     <div className="flex gap-3 flex-wrap justify-center mb-8">
       {years.map((yearData) => (
         <button
           key={yearData.year}
-          onClick={() => onSelectYear(yearData.year)}
+          onClick={() => handleYearClick(yearData.year)}
           className={`
             px-6 py-3 rounded-xl font-semibold text-lg transition-all duration-200
             ${

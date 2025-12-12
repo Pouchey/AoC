@@ -1,3 +1,4 @@
+import { useNavigate, useParams } from 'react-router-dom';
 import { getYearData, getProblem, type ProblemsData } from '../data/problems';
 
 interface DayGridProps {
@@ -8,9 +9,14 @@ interface DayGridProps {
 }
 
 export function DayGrid({ data, year, selectedDay, onSelectDay }: DayGridProps) {
+  const navigate = useNavigate();
   const yearData = getYearData(data, year);
 
   if (!yearData) return null;
+
+  const handleDayClick = (day: number) => {
+    navigate(`/${year}/${day}`);
+  };
 
   return (
     <div className="bg-bg-panel rounded-2xl p-6 border border-grid-line mb-8">
@@ -33,7 +39,7 @@ export function DayGrid({ data, year, selectedDay, onSelectDay }: DayGridProps) 
           return (
             <button
               key={day}
-              onClick={() => isAvailable && onSelectDay(day)}
+              onClick={() => isAvailable && handleDayClick(day)}
               disabled={!isAvailable}
               className={`
                 aspect-square rounded-lg font-mono font-bold text-lg transition-all duration-200 relative

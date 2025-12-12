@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Routes, Route, useParams, useNavigate, Navigate } from 'react-router-dom';
 import { Header } from './components/Header';
 import { YearSelector } from './components/YearSelector';
 import { DayGrid } from './components/DayGrid';
@@ -6,11 +7,15 @@ import { ProblemViewer } from './components/ProblemViewer';
 import { StatsPanel } from './components/StatsPanel';
 import { loadProblemsData, type ProblemsData } from './data/problems';
 
-function App() {
+function AppContent() {
+  const { year: yearParam, day: dayParam } = useParams<{ year?: string; day?: string }>();
+  const navigate = useNavigate();
   const [data, setData] = useState<ProblemsData | null>(null);
-  const [selectedYear, setSelectedYear] = useState<number | null>(2025);
-  const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Parse route params
+  const selectedYear = yearParam ? parseInt(yearParam, 10) : 2025;
+  const selectedDay = dayParam ? parseInt(dayParam, 10) : null;
 
   useEffect(() => {
     loadProblemsData().then((d) => {
@@ -20,8 +25,11 @@ function App() {
   }, []);
 
   const handleYearSelect = (year: number) => {
-    setSelectedYear(year);
-    setSelectedDay(null);
+    navigate(`/${year}`);
+  };
+
+  const handleDaySelect = (day: number) => {
+    navigate(`/${selectedYear}/${day}`);
   };
 
   if (loading || !data) {
@@ -57,7 +65,7 @@ function App() {
                 data={data}
                 year={selectedYear}
                 selectedDay={selectedDay}
-                onSelectDay={setSelectedDay}
+                onSelectDay={handleDaySelect}
               />
             )}
 
@@ -155,6 +163,16 @@ function App() {
         </footer>
       </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Navigate to="/2025" replace />} />
+      <Route path="/:year" element={<AppContent />} />
+      <Route path="/:year/:day" element={<AppContent />} />
+    </Routes>
   );
 }
 
