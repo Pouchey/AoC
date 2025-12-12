@@ -2,7 +2,7 @@
   "years": [
     {
       "year": 2025,
-      "days": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+      "days": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     },
     {
       "year": 2023,
@@ -314,6 +314,17 @@
       "part2Description": "The problematic data path passes through both 'dac' (a digital-to-analog converter) and 'fft' (a device which performs a fast Fourier transform). Find every path from 'svr' (the server rack) to 'out' that visits both 'dac' and 'fft' (in any order).",
       "exampleAnswer1": 5,
       "exampleAnswer2": 2,
+      "firstPartCompleted": true,
+      "secondPartCompleted": true
+    },
+    "2025-12": {
+      "year": 2025,
+      "day": 12,
+      "title": "Christmas Tree Farm",
+      "part1Description": "Presents come in standard but weird shapes that need to fit into regions under Christmas trees. Each region has a specific size (width x length), and you need to determine if all the required presents (with specified quantities of each shape) can fit. Presents can be rotated and flipped, must be placed on a grid, and can't overlap (the '#' parts can't overlap, but '.' parts don't block other presents). Count how many regions can fit all their listed presents.",
+      "part2Description": "After helping with the presents, you notice many more Elves have arrived at the Christmas tree farm, each bringing a star to put atop one of the trees. A particularly large Christmas tree suddenly flashes brightly when a large star magically appears above it. You go look for a ladder; only 23 stars to go.",
+      "exampleAnswer1": 2,
+      "exampleAnswer2": 0,
       "firstPartCompleted": true,
       "secondPartCompleted": true
     }
