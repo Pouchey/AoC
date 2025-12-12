@@ -1,7 +1,8 @@
-import { useState, useEffect, startTransition } from 'react';
+import { useState, useEffect, startTransition, createElement } from 'react';
 import { getProblem, type ProblemsData } from '../data/problems';
 import { fetchSolutionCode, extractFunction } from '../utils/codeFetcher';
 import { CodeSnippet } from './CodeSnippet';
+import { getProblemVisualization } from './problems/visualizations';
 
 interface ProblemViewerProps {
   data: ProblemsData;
@@ -60,6 +61,7 @@ export function ProblemViewer({ data, year, day }: ProblemViewerProps) {
   }
 
   const dayPadded = day.toString().padStart(2, '0');
+  const VisualizationComponent = getProblemVisualization(year, day, activeTab);
 
   return (
     <div className="bg-bg-panel rounded-2xl border border-grid-line overflow-hidden">
@@ -155,6 +157,8 @@ export function ProblemViewer({ data, year, day }: ProblemViewerProps) {
               </div>
             )}
 
+            {VisualizationComponent && createElement(VisualizationComponent, { year, day })}
+
             <div className="bg-bg-highlight rounded-xl p-4 border border-grid-line">
               <h4 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-3 flex items-center gap-2">
                 <span className="w-1 h-3 bg-accent-blue rounded-full" />
@@ -191,6 +195,8 @@ export function ProblemViewer({ data, year, day }: ProblemViewerProps) {
                 </p>
               </div>
             )}
+
+            {VisualizationComponent && createElement(VisualizationComponent, { year, day })}
 
             <div className="bg-bg-highlight rounded-xl p-4 border border-grid-line">
               <h4 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-3 flex items-center gap-2">
