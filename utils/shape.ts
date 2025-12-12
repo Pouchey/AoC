@@ -1,4 +1,4 @@
-import { TGrid } from './grid';
+import { type TGrid } from './grid';
 
 export type TShape = boolean[][];
 

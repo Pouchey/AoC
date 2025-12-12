@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route, useParams, useNavigate, Navigate } from 'react-router-dom';
+import { Routes, Route, useParams, Navigate } from 'react-router-dom';
 import { Header } from './components/Header';
 import { YearSelector } from './components/YearSelector';
 import { DayGrid } from './components/DayGrid';
@@ -9,7 +9,6 @@ import { loadProblemsData, type ProblemsData } from './data/problems';
 
 function AppContent() {
   const { year: yearParam, day: dayParam } = useParams<{ year?: string; day?: string }>();
-  const navigate = useNavigate();
   const [data, setData] = useState<ProblemsData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -23,14 +22,6 @@ function AppContent() {
       setLoading(false);
     });
   }, []);
-
-  const handleYearSelect = (year: number) => {
-    navigate(`/${year}`);
-  };
-
-  const handleDaySelect = (day: number) => {
-    navigate(`/${selectedYear}/${day}`);
-  };
 
   if (loading || !data) {
     return (
@@ -54,20 +45,9 @@ function AppContent() {
 
         <div className="grid lg:grid-cols-[1fr,300px] gap-8">
           <div className="space-y-6">
-            <YearSelector
-              years={data.years}
-              selectedYear={selectedYear}
-              onSelectYear={handleYearSelect}
-            />
+            <YearSelector years={data.years} selectedYear={selectedYear} />
 
-            {selectedYear && (
-              <DayGrid
-                data={data}
-                year={selectedYear}
-                selectedDay={selectedDay}
-                onSelectDay={handleDaySelect}
-              />
-            )}
+            {selectedYear && <DayGrid data={data} year={selectedYear} selectedDay={selectedDay} />}
 
             {selectedYear && selectedDay && (
               <ProblemViewer data={data} year={selectedYear} day={selectedDay} />

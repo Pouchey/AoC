@@ -4,10 +4,9 @@ import type { YearData } from '../types';
 interface YearSelectorProps {
   years: YearData[];
   selectedYear: number | null;
-  onSelectYear: (year: number) => void;
 }
 
-export function YearSelector({ years, selectedYear, onSelectYear }: YearSelectorProps) {
+export function YearSelector({ years, selectedYear }: YearSelectorProps) {
   const navigate = useNavigate();
   const { day } = useParams<{ day?: string }>();
 

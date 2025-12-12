@@ -1,14 +1,13 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getYearData, getProblem, type ProblemsData } from '../data/problems';
 
 interface DayGridProps {
   data: ProblemsData;
   year: number;
   selectedDay: number | null;
-  onSelectDay: (day: number) => void;
 }
 
-export function DayGrid({ data, year, selectedDay, onSelectDay }: DayGridProps) {
+export function DayGrid({ data, year, selectedDay }: DayGridProps) {
   const navigate = useNavigate();
   const yearData = getYearData(data, year);
 

@@ -24,14 +24,24 @@ export async function fetchSolutionCode(year: number, day: number): Promise<stri
  * Extracts a function from TypeScript code using regex
  * This is a simple approach - for more robust parsing, consider using a TypeScript parser
  */
-export function extractFunction(code: string, functionName: 'solve1' | 'solve2'): string | null {
+export function extractFunction(
+  code: string,
+  functionName: 'solve1' | 'solve2' | 'loadData'
+): string | null {
   if (!code) return null;
 
   // Find the function declaration start
-  // Pattern to match: export const solve1/solve2 = (input: string) => { ... }
-  // or: export function solve1/solve2(...) { ... }
+  // Pattern to match: export const solve1/solve2/loadData = (input: string) => { ... }
+  // or: export const loadData = (input: string): Type => { ... } (with return type)
+  // or: export function solve1/solve2/loadData(...) { ... }
+  // or: const loadData = (input: string) => { ... } (loadData might not be exported)
+  const isExported = functionName === 'loadData' ? '(?:export\\s+)?' : 'export\\s+';
+  // For arrow functions: match (params) optionally followed by : Type, then => {
+  // For function declarations: match (params) optionally followed by : Type, then {
+  const arrowFunctionPattern = `const\\s+${functionName}\\s*=\\s*\\([^)]*\\)(?:\\s*:[^=>]+)?\\s*=>`;
+  const functionDeclarationPattern = `function\\s+${functionName}\\s*\\([^)]*\\)(?:\\s*:[^\\{]+)?`;
   const functionStartPattern = new RegExp(
-    `export\\s+(?:const\\s+${functionName}\\s*=\\s*\\([^)]*\\)\\s*=>|function\\s+${functionName}\\s*\\([^)]*\\))\\s*\\{`,
+    `${isExported}(?:${arrowFunctionPattern}|${functionDeclarationPattern})\\s*\\{`,
     'm'
   );
 
