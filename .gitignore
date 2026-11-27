@@ -138,3 +138,7 @@ leaderboard-teams-message.txt
 # Advent of Code puzzle inputs must not be shared publicly:
 # https://adventofcode.com/about#faq_copying
 **/data/input
+
+# Claude Code personal files
+CLAUDE.local.md
+.claude/settings.local.json

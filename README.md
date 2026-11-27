@@ -219,3 +219,17 @@ See `2023/01/index.ts` or `2025/01/index.ts` for complete examples following the
 ## 📄 License
 
 See [LICENSE](./LICENSE) file for details.
+
+## 🤖 Claude Code
+
+- `CLAUDE.md`: project context loaded by Claude Code (commands, layout, rules).
+- `.claude/settings.json`: shared permissions, plus a hook that runs Prettier on files Claude edits.
+- `.claude/skills/`: `/new-day [day] [year]`, `/verify`, `/add-visualization <day> <year>`.
+- GitHub workflows:
+  - `ci.yml`: typecheck, lint and web build on every PR.
+  - `claude-code-review.yml`: automatic Claude review of each PR.
+  - `claude.yml`: mention `@claude` in an issue or PR (repo owner only).
+
+  The last two need the [Claude GitHub App](https://github.com/apps/claude) and a
+  `CLAUDE_CODE_OAUTH_TOKEN` repository secret (`claude setup-token`). Without the secret, the
+  review job is skipped.
