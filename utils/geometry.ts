@@ -51,25 +51,27 @@ export const buildPolygon = (points: Point[]): Polygon => {
 };
 
 /**
- * Check if a point is inside or on the boundary of an axis-aligned polygon
+ * Check if a point (x = col, y = row, may be fractional) is inside or on the boundary
+ * of an axis-aligned polygon
  */
 export const isPointInPolygon = (x: number, y: number, polygon: Polygon): boolean => {
   // Check if point is on boundary
   for (const edge of polygon.horizontal) {
-    if (edge.row === x && y >= edge.min && y <= edge.max) {
+    if (edge.row === y && x >= edge.min && x <= edge.max) {
       return true;
     }
   }
   for (const edge of polygon.vertical) {
-    if (edge.col === y && x >= edge.min && x <= edge.max) {
+    if (edge.col === x && y >= edge.min && y <= edge.max) {
       return true;
     }
   }
 
-  // Ray casting: count vertical edge crossings to the left
+  // Ray casting: count vertical edges crossed by a ray going left from the point
+  // (half-open on rows so a ray passing through a vertex is counted once)
   let crossings = 0;
   for (const edge of polygon.vertical) {
-    if (edge.col < y && x > edge.min && y <= edge.max) {
+    if (edge.col < x && y >= edge.min && y < edge.max) {
       crossings++;
     }
   }
@@ -84,34 +86,37 @@ export const isPointInPolygon = (x: number, y: number, polygon: Polygon): boolea
 export const isRectangleInPolygon = (rect: Rectangle, polygon: Polygon): boolean => {
   const { minC, maxC, minR, maxR } = rect;
 
-  // Check if any edge cuts through rectangle interior
+  // No edge may cut through the rectangle interior
   for (const edge of polygon.vertical) {
-    if (edge.col < minC || edge.col > maxC) continue;
-    if (edge.max < minR || edge.min > maxR) continue;
-    if (minC < edge.col && edge.col < maxC) {
-      const overlapMin = Math.max(edge.min, minR);
-      const overlapMax = Math.min(edge.max, maxR);
-      if (overlapMin < overlapMax) return false;
+    if (minC < edge.col && edge.col < maxC && Math.max(edge.min, minR) < Math.min(edge.max, maxR)) {
+      return false;
     }
   }
-
   for (const edge of polygon.horizontal) {
-    if (edge.row < minR || edge.row > maxR) continue;
-    if (edge.max < minC || edge.min > maxC) continue;
-    if (minR < edge.row && edge.row < maxR) {
-      const overlapMin = Math.max(edge.min, minC);
-      const overlapMax = Math.min(edge.max, maxC);
-      if (overlapMin < overlapMax) return false;
+    if (minR < edge.row && edge.row < maxR && Math.max(edge.min, minC) < Math.min(edge.max, maxC)) {
+      return false;
     }
   }
 
-  // Check all four corners
-  const corners: Point[] = [
-    [minC, minR],
-    [maxC, minR],
-    [minC, maxR],
-    [maxC, maxR]
-  ];
+  // Without any edge inside it, the open interior lies entirely inside or entirely outside
+  // the polygon, so its center decides (and then its boundary is inside too).
+  if (minC < maxC && minR < maxR) {
+    return isPointInPolygon((minC + maxC) / 2, (minR + maxR) / 2, polygon);
+  }
 
-  return corners.every(([col, row]) => isPointInPolygon(col, row, polygon));
+  // Degenerate rectangle (a segment or a point): check every polygon coordinate along it
+  // and the midpoints between them.
+  const horizontalSegment = minR === maxR;
+  const [from, to] = horizontalSegment ? [minC, maxC] : [minR, maxR];
+  const crossing = horizontalSegment
+    ? polygon.vertical.map((edge) => edge.col)
+    : polygon.horizontal.map((edge) => edge.row);
+  const stops = [...new Set([from, to, ...crossing.filter((v) => v > from && v < to)])].sort(
+    (a, b) => a - b
+  );
+  const samples = stops.flatMap((v, i) => (i === 0 ? [v] : [(stops[i - 1] + v) / 2, v]));
+
+  return samples.every((v) =>
+    horizontalSegment ? isPointInPolygon(v, minR, polygon) : isPointInPolygon(minC, v, polygon)
+  );
 };
