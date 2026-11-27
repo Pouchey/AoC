@@ -8,14 +8,16 @@ Solutions in `YYYY/DD/`, CLI runner `main.ts`, shared helpers `utils/`, Vite/Rea
 - `npm start <day> <year> < /dev/null` — scaffold + fetch data if missing, run current part on
   example then input. Stdin closed = never submits. Never answer its submit prompt.
 - `npm run get-subject <day> <year>` — writes `Part1.md`/`Part2.md`
-- Checks: `npm run typecheck && npm run lint`; if `web/` or `utils/` changed also
-  `npm --prefix web run build && npm --prefix web run lint` (or `/verify`)
+- Checks (or `/verify`): `npm run typecheck && npm run lint && npm test` (one day:
+  `npm test -- <year> <day>`); if `web/` or `utils/` changed, also
+  `npm --prefix web run build && npm --prefix web run lint`
 
 ## Solution contract (`YYYY/DD/index.ts`, from `template/index.ts`)
 
 Exports `solve1(input)`, `solve2(input)`, `exampleAnswer1`, `exampleAnswer2`,
-`firstPartCompleted` (runner runs part 2 when `true`). Parse in `loadData`, import helpers from
-`../../utils` (grid, movement, range, math, memoize, bfs/dfs, shape, z3) before writing new ones.
+`firstPartCompleted` (runner runs part 2 when `true`). Part 2 uses `data/example2` if present;
+an example part that can't be checked is documented with `exampleTestSkip = { 2: 'reason' }`.
+Parse in `loadData`, import helpers from `../../utils` (grid, movement, range, math, memoize, bfs/dfs, shape, z3) before writing new ones.
 
 ## Rules
 

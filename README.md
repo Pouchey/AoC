@@ -86,6 +86,7 @@ This will create `Part1.md` and `Part2.md` files in the day's folder with the pr
 ### Code quality
 
 ```bash
+npm test            # every solution vs its exampleAnswer (npm test -- 2025 7 for one day)
 npm run typecheck   # tsc on solutions + utils
 npm run lint        # ESLint (flat config) + Prettier
 npm run lint:fix
@@ -226,7 +227,7 @@ See [LICENSE](./LICENSE) file for details.
 - `.claude/settings.json`: shared permissions, plus a hook that runs Prettier on files Claude edits.
 - `.claude/skills/`: `/new-day [day] [year]`, `/verify`, `/add-visualization <day> <year>`.
 - GitHub workflows:
-  - `ci.yml`: typecheck, lint and web build on every PR.
+  - `ci.yml`: typecheck, lint, example tests and web build on every PR.
   - `claude-code-review.yml`: automatic Claude review of each PR.
   - `claude.yml`: mention `@claude` in an issue or PR (repo owner only).
 

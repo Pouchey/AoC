@@ -33,6 +33,10 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      # Every solution must still return its exampleAnswer on its example
+      - name: Test examples
+        run: npm test
+
       - name: Install web dependencies
         working-directory: ./web
         run: npm ci

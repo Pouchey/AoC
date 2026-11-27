@@ -1,3 +1,4 @@
+import { existsSync } from 'fs';
 import { argv } from 'process';
 import * as readline from 'readline';
 import {
@@ -62,6 +63,9 @@ const execute = async () => {
   }
 
   const exampleFile = readInput(`./${scriptPath}/data/example`);
+  // Optional dedicated example for part 2, when the statement gives a different one
+  const example2Path = `./${scriptPath}/data/example2`;
+  const example2File = existsSync(example2Path) ? readInput(example2Path) : exampleFile;
   const inputFile = readInput(`./${scriptPath}/data/input`);
 
   log('=====================\n', 'info', 'yellow');
@@ -79,7 +83,7 @@ const execute = async () => {
   log(`Part ${part}:\n`, 'info', 'blue');
   log('Running example:\n', 'info', 'cyan');
   const exampleStartTime = performance.now();
-  const exampleOutput = await solve(exampleFile);
+  const exampleOutput = await solve(part === 2 ? example2File : exampleFile);
   const exampleEndTime = performance.now();
   const exampleSolveTime = exampleEndTime - exampleStartTime;
   const exampleTimeStr =
