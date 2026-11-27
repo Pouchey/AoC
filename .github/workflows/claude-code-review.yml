@@ -23,6 +23,8 @@ jobs:
     # Drafts are skipped; fork PRs get no secrets anyway
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
+    # Cost control: a stuck run can't burn subscription usage / Actions minutes for hours
+    timeout-minutes: 15
     permissions:
       contents: read
       pull-requests: read
