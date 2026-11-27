@@ -35,7 +35,7 @@ export const loadData = (input: string): TXmasTree => {
       .slice(1)
       .map((num) => Number(num));
 
-    let giftsShapes: TShape[] = [];
+    const giftsShapes: TShape[] = [];
     for (const [index, giftIndex] of giftsIndexes.entries()) {
       if (giftIndex > 0) for (let i = 0; i < giftIndex; i++) giftsShapes.push(gifts[index]);
     }

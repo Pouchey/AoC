@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import { log } from './utils/logger';
+import { aocFetch } from './utils/aoc';
 dotenv.config();
 
 interface LeaderboardMember {
@@ -25,25 +26,13 @@ interface LeaderboardData {
 
 const currentYear = new Date().getFullYear();
 
-const LEADERBOARD_URL = `https://adventofcode.com/${currentYear}/leaderboard/private/view/${process.env.AOC_LEADERBOARD_ID}.json`;
+const LEADERBOARD_PATH = `/${currentYear}/leaderboard/private/view/${process.env.AOC_LEADERBOARD_ID}.json`;
 
 /**
  * Fetches the leaderboard data from Advent of Code
  */
 const fetchLeaderboard = async (): Promise<LeaderboardData> => {
-  const res = await fetch(LEADERBOARD_URL, {
-    headers: {
-      cookie: `session=${process.env.AOC_SESSION_COOKIE}`
-    }
-  });
-
-  if (res.status !== 200) {
-    throw new Error(
-      `Fetching "${LEADERBOARD_URL}" failed with status ${res.status}:\n${await res.text()}`
-    );
-  }
-
-  return await res.json();
+  return JSON.parse(await aocFetch(LEADERBOARD_PATH));
 };
 
 /**
@@ -55,7 +44,7 @@ const generateTeamsMessage = (data: LeaderboardData): string => {
     .sort((a, b) => b.local_score - a.local_score || b.stars - a.stars);
 
   if (members.length === 0) {
-    return "🎄 Advent of Code 2025 - Leaderboard\n\nAucun participant n'a encore complété de défi.";
+    return `🎄 Advent of Code ${currentYear} - Leaderboard\n\nAucun participant n'a encore complété de défi.`;
   }
 
   let message = `🎄 Advent of Code ${data.event} - Leaderboard\n\n`;
@@ -117,7 +106,10 @@ const generateTeamsMessage = (data: LeaderboardData): string => {
     });
   }
 
-  message += `\n🔗 Voir le leaderboard complet: ${LEADERBOARD_URL.replace('.json', '')}`;
+  message += `\n🔗 Voir le leaderboard complet: https://adventofcode.com${LEADERBOARD_PATH.replace(
+    '.json',
+    ''
+  )}`;
 
   return message;
 };

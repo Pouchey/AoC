@@ -9,9 +9,9 @@
  */
 import { log } from './logger';
 
-export function assertEqual(actual: unknown, expected: unknown) {
+export function assertEqual(actual: unknown, expected: unknown, label = 'Example') {
   if (actual !== expected) {
-    log('Example 1 failed!', 'error', 'red');
+    log(`${label} failed!`, 'error', 'red');
     log(`Expected ${expected}, got ${actual}\n`, 'log', 'red');
     return false;
   }

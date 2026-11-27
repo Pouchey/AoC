@@ -21,6 +21,10 @@ Create a `.env` file in the root directory with your Advent of Code session cook
 
 ```env
 AOC_SESSION_COOKIE=your_session_cookie_here
+# Optional: identifies the tool to AoC (recommended: add a way to contact you)
+AOC_USER_AGENT=github.com/<you>/<repo> by <contact>
+# Optional: only for npm run get-leaderboard
+AOC_LEADERBOARD_ID=123456
 ```
 
 To get your session cookie:
@@ -43,7 +47,7 @@ npm start [day] [year]
 **Examples:**
 
 ```bash
-npm start           # Runs today's puzzle (current day/year)
+npm start           # Runs today's puzzle (December only, AoC time = UTC-5)
 npm start 1 2025    # Runs day 1 of 2025
 npm start 03 2025   # Runs day 3 of 2025
 ```
@@ -73,6 +77,20 @@ npm run get-subject 1 2025    # Gets day 1, 2025 problem description
 
 This will create `Part1.md` and `Part2.md` files in the day's folder with the problem descriptions.
 
+> ℹ️ Since 2025, Advent of Code has **12 days** per event (25 before).
+
+> ⚠️ Puzzle inputs are **not committed** (`**/data/input` is git-ignored), as
+> [requested by the AoC author](https://adventofcode.com/about#faq_copying).
+> They are downloaded again automatically when missing.
+
+### Code quality
+
+```bash
+npm run typecheck   # tsc on solutions + utils
+npm run lint        # ESLint (flat config) + Prettier
+npm run lint:fix
+```
+
 ## 📁 Project Structure
 
 ```
@@ -84,7 +102,7 @@ AoC/
 │       ├── Part2.md         # Part 2 problem description (optional)
 │       └── data/
 │           ├── example       # Example input (REQUIRED)
-│           └── input         # Puzzle input (REQUIRED)
+│           └── input         # Puzzle input (REQUIRED, git-ignored)
 ├── utils/                   # Utility functions
 │   ├── aoc.ts              # Advent of Code API helpers
 │   ├── array.ts            # Array utilities

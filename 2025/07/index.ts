@@ -43,7 +43,7 @@ const extendBeam = ({
     const tile = data[index][start];
     switch (tile) {
       case ETile.Splitter: {
-        let newStarts = [];
+        const newStarts = [];
         let hasLeftSplitted = false;
         let hasRightSplitted = false;
         // Creating tachyon on the left

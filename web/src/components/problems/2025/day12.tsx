@@ -1,7 +1,6 @@
 import { useState, useEffect, startTransition } from 'react';
 import type { TXmasTree } from './day12/types.js';
 import exampleData from '@aoc/2025/12/data/example?raw';
-import inputData from '@aoc/2025/12/data/input?raw';
 import { loadDataAsync } from './day12/utils.js';
 import { GiftShapes } from './day12/GiftShapes.jsx';
 import { RegionCard } from './day12/RegionCard.jsx';
@@ -9,6 +8,16 @@ import { DataSelector } from './day12/DataSelector.jsx';
 import { RunAllOverlay } from './day12/RunAllOverlay.jsx';
 import { useAlgorithm } from './day12/useAlgorithm.js';
 import { useRunAll } from './day12/useRunAll.js';
+
+// Puzzle inputs are not committed (AoC asks not to share them), so the input is
+// loaded only when it exists locally. In CI / on GitHub Pages only the example is shown.
+const inputData = Object.values(
+  import.meta.glob<string>('/../2025/12/data/inpu[t]', {
+    query: '?raw',
+    import: 'default',
+    eager: true
+  })
+)[0];
 
 export function Day12Visualization() {
   const [dataSource, setDataSource] = useState<'example' | 'input'>('example');
@@ -29,7 +38,7 @@ export function Day12Visualization() {
 
   // Load data asynchronously
   useEffect(() => {
-    const rawData = dataSource === 'example' ? exampleData : inputData;
+    const rawData = dataSource === 'input' && inputData ? inputData : exampleData;
 
     // Set loading state immediately but don't block
     startTransition(() => {
@@ -100,7 +109,11 @@ export function Day12Visualization() {
             <span className="w-1 h-3 bg-accent-green rounded-full" />
             Visualization
           </h4>
-          <DataSelector dataSource={dataSource} onSelect={setDataSource} />
+          <DataSelector
+            dataSource={dataSource}
+            onSelect={setDataSource}
+            inputAvailable={inputData !== undefined}
+          />
         </div>
         <div className="flex items-center justify-center py-12">
           <div className="text-center">
@@ -127,7 +140,11 @@ export function Day12Visualization() {
             <span className="w-1 h-3 bg-accent-green rounded-full" />
             Visualization
           </h4>
-          <DataSelector dataSource={dataSource} onSelect={setDataSource} />
+          <DataSelector
+            dataSource={dataSource}
+            onSelect={setDataSource}
+            inputAvailable={inputData !== undefined}
+          />
         </div>
 
         <GiftShapes gifts={data.gifts} />

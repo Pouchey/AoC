@@ -132,3 +132,9 @@ dist
 
 #leaderboard-teams-message.txt
 leaderboard-teams-message.txt
+# macOS
+.DS_Store
+
+# Advent of Code puzzle inputs must not be shared publicly:
+# https://adventofcode.com/about#faq_copying
+**/data/input

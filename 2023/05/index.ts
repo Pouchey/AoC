@@ -82,7 +82,7 @@ export const solve2 = (input: string) => {
   let actualSeeds: TRange[] = [...rangedSeeds];
 
   for (const map of data.maps) {
-    let newSeeds: TRange[] = [];
+    const newSeeds: TRange[] = [];
     for (const mapRange of map) {
       actualSeeds = actualSeeds
         .flatMap((rangedSeed) => {

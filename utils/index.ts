@@ -13,3 +13,4 @@ export * from './dfs';
 export * from './web';
 export * from './range';
 export * from './shape';
+export * from './date';

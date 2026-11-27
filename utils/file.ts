@@ -1,12 +1,4 @@
-import {
-  copyFileSync,
-  existsSync,
-  lstatSync,
-  mkdirSync,
-  readFileSync,
-  readdirSync,
-  writeFileSync
-} from 'fs';
+import { copyFileSync, existsSync, lstatSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 import { log } from './logger';
 
@@ -25,11 +17,13 @@ export const todayFolderExists = (scriptPath: string) => {
   return existsSync(folderPath) && lstatSync(folderPath).isDirectory();
 };
 
-export const todayDataExists = (scriptPath: string) => {
-  const dataPath = resolve(`./${scriptPath}/data`);
-  const files = readdirSync(dataPath);
-  return files.length === 2;
+export const dataFileExists = (scriptPath: string, type: 'input' | 'example') => {
+  const filePath = resolve(`./${scriptPath}/data/${type}`);
+  return existsSync(filePath);
 };
+
+export const todayDataExists = (scriptPath: string) =>
+  dataFileExists(scriptPath, 'example') && dataFileExists(scriptPath, 'input');
 
 export const createTodayFolder = async (scriptPath: string) => {
   if (!todayFolderExists(scriptPath)) {
@@ -39,7 +33,7 @@ export const createTodayFolder = async (scriptPath: string) => {
     const templatePath = resolve('./template');
 
     log('Creating folder...', 'info', 'blue');
-    if (!existsSync(folderPath)) mkdirSync(folderPath);
+    if (!existsSync(folderPath)) mkdirSync(folderPath, { recursive: true });
 
     log('Copying template to script path...', 'info', 'blue');
     if (!existsSync(`${folderPath}/index.ts`))

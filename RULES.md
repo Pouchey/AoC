@@ -11,7 +11,7 @@ YYYY/DD/
 ├── index.ts          # Main solution file (REQUIRED)
 ├── data/
 │   ├── example       # Example input from problem (REQUIRED)
-│   └── input         # Actual puzzle input (REQUIRED)
+│   └── input         # Actual puzzle input (REQUIRED, git-ignored, never commit it)
 └── Subject.md        # Problem description (OPTIONAL)
 ```
 
@@ -172,12 +172,13 @@ export const firstPartCompleted = false;
 Use the main runner:
 
 ```bash
-node main.ts [day] [year]
+npm start [day] [year]
 ```
 
-- If `day` is omitted, uses current day
+- If `day` is omitted, uses today's puzzle (only during December, AoC time UTC-5)
 - If `year` is omitted, uses current year
-- Example: `node main.ts 01 2025`
+- Days go from 1 to 12 since 2025 (1 to 25 before)
+- Example: `npm start 01 2025`
 
 The runner will:
 

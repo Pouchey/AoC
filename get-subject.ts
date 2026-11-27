@@ -2,6 +2,7 @@ import { argv } from 'process';
 import { getProblemDescription } from './utils/aoc';
 import { createMarkdownFile, todayFolderExists } from './utils/file';
 import { log } from './utils/logger';
+import { resolveDayYear } from './utils/date';
 
 // Help command
 if (argv.includes('--help') || argv.includes('-h')) {
@@ -12,13 +13,10 @@ if (argv.includes('--help') || argv.includes('-h')) {
 }
 
 const execute = async () => {
-  const now = new Date();
-  const day = (argv[2] || now.getDate()).toString().padStart(2, '0');
-  const year = argv[3] || now.getFullYear().toString();
-
-  const scriptPath = `${year}/${day}`;
-
   try {
+    const { day, year } = resolveDayYear(argv[2], argv[3]);
+    const scriptPath = `${year}/${day}`;
+
     if (!todayFolderExists(scriptPath)) {
       log(`Folder ${scriptPath} does not exist. Please create it first.`, 'error', 'red');
       process.exit(1);

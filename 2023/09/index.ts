@@ -10,7 +10,7 @@ export const solve1 = (input: string) => {
   const histories = data.map((line) => {
     const numbers = line.split(' ').map((n) => parseInt(n, 10));
 
-    let history: number[][] = [numbers];
+    const history: number[][] = [numbers];
     let historyIndex = 0;
 
     do {
@@ -49,7 +49,7 @@ export const solve2 = (input: string) => {
   const histories = data.map((line) => {
     const numbers = line.split(' ').map((n) => parseInt(n, 10));
 
-    let history: number[][] = [numbers];
+    const history: number[][] = [numbers];
     let historyIndex = 0;
 
     do {

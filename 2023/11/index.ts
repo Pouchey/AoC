@@ -24,7 +24,7 @@ const loadData = (input: string, voidLength = 1) => {
   const lines = input.split('\n');
 
   let count = 0;
-  let galaxies: TGalaxies = [];
+  const galaxies: TGalaxies = [];
 
   const map: TSpaceMap = lines.map((line, y) => {
     const row = line.split('').map((char, x) => {
