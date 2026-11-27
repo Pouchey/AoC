@@ -22,6 +22,10 @@ const colors = {
   reset: '\x1b[0m'
 };
 
+// No ANSI codes when piped (CI, Claude Code, `| tee`) or when NO_COLOR is set; FORCE_COLOR wins.
+const useColors =
+  !!process.env.FORCE_COLOR || (!process.env.NO_COLOR && process.stdout.isTTY === true);
+
 /**
  * Colorizes a message with the specified color.
  * @param color - The color to apply to the message.
@@ -66,7 +70,7 @@ const colorize = (color: ColorType, message: string): string => {
  * @param color - The color of the log message (default: null).
  */
 export const log = (message: string, type: LogType = 'log', color: ColorType = null) => {
-  const msg = color ? colorize(color, message) : message;
+  const msg = color && useColors ? colorize(color, message) : message;
 
   switch (type) {
     case 'info':

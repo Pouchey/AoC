@@ -1,25 +1,18 @@
 ---
 name: add-visualization
-description: Add an interactive visualization of an AoC day to the web site (web/). Use when the user wants to visualize or animate a puzzle or solution on the site.
+description: Add an interactive visualization of an AoC day to the web site.
 argument-hint: '<day> <year> [part1|part2]'
 ---
 
-Add a visualization for `$ARGUMENTS`. Use the 2025 day 12 one as the reference implementation:
-`web/src/components/problems/2025/day12.tsx` and its `day12/` folder.
+Visualize `$ARGUMENTS`. Reference: `web/src/components/problems/2025/day12.tsx` + `day12/`.
 
-1. **Aliases for a new year**: the site imports solutions through `@aoc/<year>`. If the year is new,
-   add it to `resolve.alias` in `web/vite.config.ts` and to `compilerOptions.paths` in
-   `web/tsconfig.app.json` (same shape as `@aoc/2025`).
-2. **Component**: create `web/src/components/problems/<year>/day<DD>.tsx` (subcomponents and hooks
-   in `day<DD>/`). Reuse parsing and logic from `utils/` and from `<year>/<DD>/index.ts` through the
-   aliases rather than duplicating them.
-3. **Data**: import the example with `?raw`. Never import `data/input` directly: inputs are
-   git-ignored, so CI would fail and the input would be published. Load it optionally like day 12:
+1. New year: add `@aoc/<year>` to `resolve.alias` (`web/vite.config.ts`) and `paths`
+   (`web/tsconfig.app.json`), like `@aoc/2025`.
+2. Component in `web/src/components/problems/<year>/day<DD>.tsx`; reuse `utils/` and the solution
+   through aliases.
+3. Example via `?raw`. Input never imported directly (git-ignored): use
    `import.meta.glob<string>('/../<year>/<DD>/data/inpu[t]', { query: '?raw', import: 'default', eager: true })`
-   and only show the "Input" option when it exists.
-4. **Register** it in `web/src/components/problems/visualizations.tsx` with the key
-   `'<year>-<DD>-part1'` (or `part2`).
-5. **Performance**: long computations must stay interruptible and not freeze the UI (chunk work,
-   `startTransition`, a stop button), like `day12/useRunAll.ts`.
-6. Check with `npm --prefix web run build` and `npm --prefix web run lint`, then run
-   `npm --prefix web run dev` (or the `run` skill) and look at the page.
+   and show the Input option only if present.
+4. Register in `web/src/components/problems/visualizations.tsx` as `'<year>-<DD>-part1'`.
+5. Long computations stay interruptible (see `day12/useRunAll.ts`).
+6. `npm --prefix web run build && npm --prefix web run lint`, then check the page in a browser.

@@ -5,7 +5,6 @@
       "Bash(npm run typecheck)",
       "Bash(npm run lint)",
       "Bash(npm run lint:fix)",
-      "Bash(npm run get-subject *)",
       "Bash(npm --prefix web run build)",
       "Bash(npm --prefix web run lint)",
       "Bash(npx prettier *)",
@@ -13,9 +12,17 @@
       "Bash(npx tsc *)",
       "Bash(git status *)",
       "Bash(git diff *)",
-      "Bash(git log *)"
+      "Bash(git log *)",
+      "Bash(npm run get-subject *)",
+      "Bash(npm start * < /dev/null)"
     ],
-    "deny": ["Read(./.env)", "Read(./.env.*)"]
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./package-lock.json)",
+      "Read(./web/package-lock.json)",
+      "Read(./web/dist/**)"
+    ]
   },
   "hooks": {
     "PostToolUse": [
