@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "CommonJS",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "noEmit": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
@@ -15,5 +15,9 @@
   "ts-node": {
     "esm": false
   },
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "web",
+    "template"
+  ]
 }

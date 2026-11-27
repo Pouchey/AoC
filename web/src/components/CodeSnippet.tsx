@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getHighlighter, type Highlighter } from 'shiki';
+import { createHighlighter, type Highlighter } from 'shiki';
 
 interface CodeSnippetProps {
   code: string | null;
@@ -9,42 +9,46 @@ interface CodeSnippetProps {
 let highlighterPromise: Promise<Highlighter> | null = null;
 
 function getHighlighterInstance(): Promise<Highlighter> {
-  if (highlighterPromise === null) {
-    highlighterPromise = getHighlighter({
-      themes: ['github-dark'],
-      langs: ['typescript']
-    });
-  }
+  highlighterPromise ??= createHighlighter({
+    themes: ['github-dark'],
+    langs: ['typescript']
+  });
   return highlighterPromise;
 }
 
 export function CodeSnippet({ code, language = 'typescript' }: CodeSnippetProps) {
-  const [highlightedCode, setHighlightedCode] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // Result is keyed by its inputs so loading state is derived instead of set in the effect
+  const [result, setResult] = useState<{
+    code: string;
+    language: string;
+    html: string | null;
+  } | null>(null);
 
   useEffect(() => {
-    if (!code) {
-      setHighlightedCode(null);
-      setIsLoading(false);
-      return;
-    }
+    if (!code) return;
 
-    setIsLoading(true);
+    let cancelled = false;
     getHighlighterInstance()
       .then((highlighter) => {
         const html = highlighter.codeToHtml(code, {
           lang: language,
           theme: 'github-dark'
         });
-        setHighlightedCode(html);
-        setIsLoading(false);
+        if (!cancelled) setResult({ code, language, html });
       })
       .catch((error) => {
         console.error('Failed to highlight code:', error);
-        setHighlightedCode(null);
-        setIsLoading(false);
+        if (!cancelled) setResult({ code, language, html: null });
       });
+
+    return () => {
+      cancelled = true;
+    };
   }, [code, language]);
+
+  const isUpToDate = result?.code === code && result?.language === language;
+  const isLoading = !!code && !isUpToDate;
+  const highlightedCode = code && isUpToDate ? result.html : null;
 
   if (isLoading) {
     return (

@@ -3,10 +3,11 @@ import * as readline from 'readline';
 import {
   createDataFile,
   createTodayFolder,
+  dataFileExists,
   readInput,
-  todayDataExists,
   todayFolderExists
 } from './utils/file';
+import { resolveDayYear } from './utils/date';
 import { getExample, getInput, submit } from './utils/aoc';
 import { assertEqual } from './utils/assert';
 import { log } from './utils/logger';
@@ -20,40 +21,44 @@ const rl = readline.createInterface({
 
 // Help command
 if (argv.includes('--help') || argv.includes('-h')) {
-  log('Usage:\nnode runner.js <day> <year>\nday and year defaults to current day and current year');
+  log(
+    "Usage:\nnpm start [day] [year]\nDefaults to today's puzzle during December (AoC time, UTC-5)."
+  );
   process.exit();
 }
 
-const execute = async () => {
-  const now = new Date();
-  const day = (argv[2] || now.getDate()).toString().padStart(2, '0');
-  const year = argv[3] || now.getFullYear().toString();
+const isSubmittable = (answer: unknown) =>
+  (typeof answer === 'number' && Number.isFinite(answer) && answer !== 0) ||
+  (typeof answer === 'bigint' && answer !== 0n) ||
+  (typeof answer === 'string' && answer.trim() !== '');
 
-  const scriptPath = `${year}/${day}`;
+const execute = async () => {
+  let day: string;
+  let year: string;
+  let scriptPath: string;
 
   try {
-    const isNewProblem = !todayFolderExists(scriptPath);
+    ({ day, year } = resolveDayYear(argv[2], argv[3]));
+    scriptPath = `${year}/${day}`;
 
-    if (isNewProblem) {
+    if (!todayFolderExists(scriptPath)) {
       await createTodayFolder(scriptPath);
     }
 
-    if (!todayDataExists(scriptPath)) {
-      const example = await getExample(year, day);
-      const input = await getInput(year, day);
-      createDataFile(scriptPath, 'example', example);
-      createDataFile(scriptPath, 'input', input);
-    }
+    // Idempotent: also catches up if a previous run failed after creating the folder
+    addProblemToFile(year, day);
 
-    // Add problem to problems.json if it's a new problem
-    if (isNewProblem) {
-      addProblemToFile(year, day);
+    if (!dataFileExists(scriptPath, 'example')) {
+      createDataFile(scriptPath, 'example', await getExample(year, day));
+    }
+    if (!dataFileExists(scriptPath, 'input')) {
+      createDataFile(scriptPath, 'input', await getInput(year, day));
     }
   } catch (error) {
     if (error instanceof Error) log(error.message, 'error', 'red');
     else log('There was an error.', 'error', 'red');
 
-    process.exit();
+    process.exit(1);
   }
 
   const exampleFile = readInput(`./${scriptPath}/data/example`);
@@ -82,8 +87,8 @@ const execute = async () => {
       ? `${(exampleSolveTime / 1000).toFixed(2)}s`
       : `${exampleSolveTime.toFixed(2)}ms`;
   log(`Solved in: ${exampleTimeStr}\n`, 'info', 'magenta');
-  if (!assertEqual(exampleOutput, exampleAnswer)) {
-    process.exit();
+  if (!assertEqual(exampleOutput, exampleAnswer, `Example part ${part}`)) {
+    process.exit(1);
   }
 
   log('Running solve:\n', 'info', 'cyan');
@@ -100,12 +105,26 @@ const execute = async () => {
 
   log('=====================\n', 'info', 'yellow');
 
+  if (!isSubmittable(inputOutput)) {
+    log(
+      `Result "${inputOutput}" doesn't look like a valid answer, not offering to submit.`,
+      'warn',
+      'yellow'
+    );
+    rl.close();
+    return;
+  }
+
   rl.question('Submit this answer? (y/n) ', async (answer) => {
     if (['y', 'Y'].includes(answer)) {
       log('Submitting...', 'info', 'blue');
-      const success = await submit(year, day, inputOutput, part);
-      if (success) {
-        updateProblemCompletion(year, day, part);
+      try {
+        const success = await submit(year, day, inputOutput, part);
+        if (success) {
+          updateProblemCompletion(year, day, part);
+        }
+      } catch (error) {
+        log(error instanceof Error ? error.message : 'Submission failed.', 'error', 'red');
       }
     } else {
       log('Not submitting.', 'info', 'blue');

@@ -12,6 +12,61 @@ interface RunAllState {
   elapsedTime: number;
 }
 
+// Interruptible version of backtrackShape that checks shouldStop frequently.
+// Pure function, kept outside the hook so it can call itself recursively.
+function backtrackShapeInterruptible(
+  grid: TGrid<boolean>,
+  shapes: TShape[],
+  shouldStop: () => boolean
+): boolean {
+  // Check for stop at the start
+  if (shouldStop()) return false;
+
+  if (shapes.length === 0) return true;
+
+  // Quick check: count available space
+  const totalNeeded = shapes.reduce((sum, s) => sum + countShapeCells(s), 0);
+  const available = grid.reduce((sum, row) => sum + row.filter((cell) => !cell).length, 0);
+  if (available < totalNeeded) return false;
+
+  const shape = shapes[0];
+  const variants = generateAllVariants(shape);
+  const rowLength = grid.length;
+  const colLength = grid[0].length;
+
+  for (const variant of variants) {
+    // Check for stop before each variant
+    if (shouldStop()) return false;
+
+    const shapeLength = variant.length;
+    const shapeWidth = variant[0].length;
+
+    if (shapeLength > rowLength || shapeWidth > colLength) continue;
+
+    for (let y = 0; y <= rowLength - shapeLength; y++) {
+      // Check for stop before each row
+      if (shouldStop()) return false;
+
+      for (let x = 0; x <= colLength - shapeWidth; x++) {
+        // Check for stop before each position
+        if (shouldStop()) return false;
+
+        if (canPlaceShapeAt(variant, grid, x, y)) {
+          placeShape(variant, grid, x, y);
+
+          // Recursive call with stop check
+          if (backtrackShapeInterruptible(grid, shapes.slice(1), shouldStop)) {
+            return true;
+          }
+
+          removeShape(variant, grid, x, y);
+        }
+      }
+    }
+  }
+  return false;
+}
+
 export function useRunAll(data: TXmasTree | null) {
   const [state, setState] = useState<RunAllState>({
     isRunning: false,
@@ -43,59 +98,6 @@ export function useRunAll(data: TXmasTree | null) {
     startTimeRef.current = null;
     setState((prev) => ({ ...prev, elapsedTime: 0 }));
   }, []);
-
-  // Interruptible version of backtrackShape that checks shouldStop frequently
-  const backtrackShapeInterruptible = useCallback(
-    (grid: TGrid<boolean>, shapes: TShape[], shouldStop: () => boolean): boolean => {
-      // Check for stop at the start
-      if (shouldStop()) return false;
-
-      if (shapes.length === 0) return true;
-
-      // Quick check: count available space
-      const totalNeeded = shapes.reduce((sum, s) => sum + countShapeCells(s), 0);
-      const available = grid.reduce((sum, row) => sum + row.filter((cell) => !cell).length, 0);
-      if (available < totalNeeded) return false;
-
-      const shape = shapes[0];
-      const variants = generateAllVariants(shape);
-      const rowLength = grid.length;
-      const colLength = grid[0].length;
-
-      for (const variant of variants) {
-        // Check for stop before each variant
-        if (shouldStop()) return false;
-
-        const shapeLength = variant.length;
-        const shapeWidth = variant[0].length;
-
-        if (shapeLength > rowLength || shapeWidth > colLength) continue;
-
-        for (let y = 0; y <= rowLength - shapeLength; y++) {
-          // Check for stop before each row
-          if (shouldStop()) return false;
-
-          for (let x = 0; x <= colLength - shapeWidth; x++) {
-            // Check for stop before each position
-            if (shouldStop()) return false;
-
-            if (canPlaceShapeAt(variant, grid, x, y)) {
-              placeShape(variant, grid, x, y);
-
-              // Recursive call with stop check
-              if (backtrackShapeInterruptible(grid, shapes.slice(1), shouldStop)) {
-                return true;
-              }
-
-              removeShape(variant, grid, x, y);
-            }
-          }
-        }
-      }
-      return false;
-    },
-    []
-  );
 
   const runAll = useCallback(
     async (onProgress: (regionIndex: number, canFit: boolean) => void) => {
@@ -151,7 +153,7 @@ export function useRunAll(data: TXmasTree | null) {
         elapsedTime: 0
       });
     },
-    [data, startTimer, stopTimer, backtrackShapeInterruptible]
+    [data, startTimer, stopTimer]
   );
 
   const stop = useCallback(() => {

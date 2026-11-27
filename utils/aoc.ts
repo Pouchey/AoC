@@ -1,54 +1,87 @@
 import dotenv from 'dotenv';
 import { log } from './logger';
-dotenv.config();
+dotenv.config({ quiet: true });
 
-export const getExample = async (year: string, day: string) => {
-  const url = `https://adventofcode.com/${year}/day/${+day}`;
+const AOC_BASE_URL = 'https://adventofcode.com';
+
+// AoC asks automated tools to identify themselves through the User-Agent header:
+// https://www.reddit.com/r/adventofcode/wiki/faqs/automation
+// Set AOC_USER_AGENT in .env to include your own contact (repo URL, email...).
+const USER_AGENT = process.env.AOC_USER_AGENT || 'aoc-typescript-runner (personal AoC tooling)';
+
+/**
+ * fetch wrapper for adventofcode.com: adds the session cookie and User-Agent,
+ * and turns non-200 responses into readable errors.
+ */
+export const aocFetch = async (path: string, init: RequestInit = {}): Promise<string> => {
+  const cookie = process.env.AOC_SESSION_COOKIE;
+  if (!cookie) {
+    throw new Error('AOC_SESSION_COOKIE is missing. Add it to your .env file (see README).');
+  }
+
+  const url = `${AOC_BASE_URL}${path}`;
   const res = await fetch(url, {
+    ...init,
     headers: {
-      cookie: `session=${process.env.AOC_SESSION_COOKIE}`
+      cookie: `session=${cookie}`,
+      'User-Agent': USER_AGENT,
+      ...init.headers
     }
   });
-  if (res.status !== 200)
-    throw new Error(`Fetching "${url}" failed with status ${res.status}:\n${await res.text()}`);
 
-  const html = await res.text();
+  const body = await res.text();
 
-  const code = html.split('<pre><code>')[1].split('</code></pre>')[0];
+  if (res.status === 400 || res.status === 401) {
+    throw new Error(
+      `Request to "${url}" was rejected (${res.status}): your AOC_SESSION_COOKIE is probably invalid or expired.`
+    );
+  }
+  if (res.status === 404) {
+    throw new Error(`"${url}" not found (404): the puzzle is probably not unlocked yet.`);
+  }
+  if (res.status !== 200) {
+    throw new Error(`Fetching "${url}" failed with status ${res.status}:\n${body.slice(0, 500)}`);
+  }
 
-  const input = code.replace(/<[^>]*>?/gm, '').trim();
+  return body;
+};
 
-  return input;
+export const getExample = async (year: string, day: string) => {
+  const html = await aocFetch(`/${year}/day/${+day}`);
+
+  // Heuristic: the example is usually the first <pre><code> block of the page.
+  const match = html.match(/<pre><code>([\s\S]*?)<\/code><\/pre>/);
+  if (!match) {
+    log(
+      'No example block found on the puzzle page, example file left empty. Fill data/example manually.',
+      'warn',
+      'yellow'
+    );
+    return '';
+  }
+
+  return decodeHtmlEntities(match[1].replace(/<[^>]*>?/gm, '')).trim();
 };
 
 export const getInput = async (year: string, day: string) => {
-  const url = `https://adventofcode.com/${year}/day/${+day}/input`;
-  const res = await fetch(url, {
-    headers: {
-      cookie: `session=${process.env.AOC_SESSION_COOKIE}`
-    }
-  });
-  if (res.status !== 200)
-    throw new Error(`Fetching "${url}" failed with status ${res.status}:\n${await res.text()}`);
-
-  const input = (await res.text()).trim();
-  return input;
+  const input = await aocFetch(`/${year}/day/${+day}/input`);
+  return input.trim();
 };
+
+const decodeHtmlEntities = (text: string) =>
+  text
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&');
 
 export const getProblemDescription = async (
   year: string,
   day: string
 ): Promise<{ part1: string; part2: string | null }> => {
-  const url = `https://adventofcode.com/${year}/day/${+day}`;
-  const res = await fetch(url, {
-    headers: {
-      cookie: `session=${process.env.AOC_SESSION_COOKIE}`
-    }
-  });
-  if (res.status !== 200)
-    throw new Error(`Fetching "${url}" failed with status ${res.status}:\n${await res.text()}`);
-
-  const html = await res.text();
+  const html = await aocFetch(`/${year}/day/${+day}`);
 
   // Extract article tags which contain the problem descriptions
   const articleMatches = html.matchAll(/<article class="day-desc">([\s\S]*?)<\/article>/g);
@@ -63,7 +96,6 @@ export const getProblemDescription = async (
     let text = htmlContent;
 
     // Convert headings
-    text = text.replace(/<h2[^>]*>(.*?)<\/h2>/g, '--- $1 ---');
     text = text.replace(/<h2[^>]*>(.*?)<\/h2>/g, '--- $1 ---');
 
     // Convert code blocks
@@ -93,13 +125,7 @@ export const getProblemDescription = async (
     text = text.replace(/<[^>]*>/g, '');
 
     // Decode HTML entities
-    text = text
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&amp;/g, '&')
-      .replace(/&quot;/g, '"')
-      .replace(/&#39;/g, "'")
-      .replace(/&nbsp;/g, ' ');
+    text = decodeHtmlEntities(text);
 
     // Clean up extra whitespace
     text = text
@@ -122,22 +148,13 @@ export const submit = async (
   answer: unknown,
   level: 1 | 2
 ): Promise<boolean> => {
-  const url = `https://adventofcode.com/${year}/day/${+day}/answer`;
-  const body = `level=${level}&answer=${answer}`;
+  const body = new URLSearchParams({ level: String(level), answer: String(answer) }).toString();
 
-  const res = await fetch(url, {
+  const response = await aocFetch(`/${year}/day/${+day}/answer`, {
     method: 'POST',
-    headers: {
-      cookie: `session=${process.env.AOC_SESSION_COOKIE}`,
-      'content-type': 'application/x-www-form-urlencoded'
-    },
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
     body
   });
-
-  if (res.status !== 200)
-    throw new Error(`Fetching "${url}" failed with status ${res.status}:\n${await res.text()}`);
-
-  const response = await res.text();
 
   if (response.includes('You gave an answer too recently')) {
     const match = response.match(/You have (.*?) left to wait/);
@@ -172,7 +189,7 @@ export const submit = async (
       return false;
     } else if (response.includes('too low')) {
       log('Answer is too low', 'error', 'christmas');
-      return true;
+      return false;
     } else {
       log('Answer not correct', 'error', 'christmas');
       return false;
@@ -189,7 +206,7 @@ export const submit = async (
     return true;
   }
 
-  log('Urecognized response while submitting, logging raw response', 'error', 'red');
+  log('Unrecognized response while submitting, logging raw response', 'error', 'red');
   log(response, 'error');
 
   return false;

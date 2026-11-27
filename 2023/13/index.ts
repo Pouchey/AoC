@@ -31,7 +31,7 @@ const loadData = (input: string) => {
 
   const ret = blocks.map((block) => {
     const rows = block.rows;
-    let cols = [];
+    const cols = [];
     for (let i = 0; i < rows[0].length; i++) {
       let col = '';
       for (let j = 0; j < rows.length; j++) {

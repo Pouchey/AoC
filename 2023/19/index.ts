@@ -127,7 +127,7 @@ export const solve1 = (input: string) => {
     .map((rating) => {
       let currentSorting = 'in';
       do {
-        let currentWorkflow = getWorkflowByName(data.workflows, currentSorting);
+        const currentWorkflow = getWorkflowByName(data.workflows, currentSorting);
         if (!currentWorkflow) throw new Error('Invalid workflow');
 
         for (const rule of currentWorkflow.rules) {

@@ -38,6 +38,7 @@ export const addProblemToFile = (year: string, day: string): void => {
   const yearNum = parseInt(year);
   const dayNum = parseInt(day);
   const key = `${year}-${day}`;
+  const before = JSON.stringify(data);
 
   // Add year if not exists
   let yearEntry = data.years.find((y) => y.year === yearNum);
@@ -66,7 +67,8 @@ export const addProblemToFile = (year: string, day: string): void => {
     log(`Added problem ${key} to problems.json`, 'info', 'green');
   }
 
-  writeProblemsFile(data);
+  // Only rewrite the file when something changed (it is called on every run)
+  if (JSON.stringify(data) !== before) writeProblemsFile(data);
 };
 
 export const updateProblemCompletion = (year: string, day: string, part: 1 | 2): void => {

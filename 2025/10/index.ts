@@ -15,7 +15,7 @@ interface TMachine {
 
 const loadData = (input: string) => {
   const data = input.split('\n').map((line) => {
-    let machine: TMachine = {
+    const machine: TMachine = {
       lights: [],
       buttons: [],
       joltages: []

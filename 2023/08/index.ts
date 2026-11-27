@@ -108,7 +108,7 @@ export const solve2 = (input: string) => {
 
   // find cycle in each path
   const cycles = starts.map((start) => {
-    let visited = new Set<string>();
+    const visited = new Set<string>();
     let current = start;
     let index = 0;
     let loop = 0;

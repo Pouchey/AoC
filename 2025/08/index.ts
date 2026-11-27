@@ -62,7 +62,7 @@ const getCircuits = (data: TPointWithIndex[], limit?: number) => {
     }
 
     // get the only one circuit, add the points to it
-    let circuit = circuits.find(
+    const circuit = circuits.find(
       (c) => c.includes(distance.point1Index) || c.includes(distance.point2Index)
     );
 
@@ -82,7 +82,7 @@ const getCircuits = (data: TPointWithIndex[], limit?: number) => {
 
 export const solve1 = (input: string) => {
   const data = loadData(input);
-  let circuitCycleLimit = data.length === 20 ? 10 : 1000;
+  const circuitCycleLimit = data.length === 20 ? 10 : 1000;
 
   const { circuits } = getCircuits(data, circuitCycleLimit);
 
