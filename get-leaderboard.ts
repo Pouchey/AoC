@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import { log } from './utils/logger';
 import { aocFetch } from './utils/aoc';
-dotenv.config();
+dotenv.config({ quiet: true });
 
 interface LeaderboardMember {
   name: string | null;

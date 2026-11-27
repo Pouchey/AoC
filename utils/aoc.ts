@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import { log } from './logger';
-dotenv.config();
+dotenv.config({ quiet: true });
 
 const AOC_BASE_URL = 'https://adventofcode.com';
 
