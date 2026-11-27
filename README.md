@@ -6,7 +6,7 @@ Solutions for [Advent of Code](https://adventofcode.com/) yearly event, written 
 
 ### Prerequisites
 
-- Node.js (v20+ recommended)
+- Node.js (v24 recommended, same as CI)
 - npm
 
 ### Installation
