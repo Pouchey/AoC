@@ -31,3 +31,6 @@ export const exampleAnswer1 = 102;
 export const exampleAnswer2 = 0;
 
 export const firstPartCompleted = false;
+
+// Checked by `npm test` (scripts/test-examples.ts); parts listed here are not checked on the example
+export const exampleTestSkip = { 1: 'not implemented in this repo (template only)' };

@@ -28,13 +28,13 @@ const findStart = (data: ETile[][]) => {
   return start;
 };
 
-const loadData = (input: string) => {
+const loadData = (input: string, part: 1 | 2) => {
   const data = parseLines(input, defaultTransform<ETile>);
 
   const start: TPoint = findStart(data);
   // exemple is 6 steps, input is 64 steps
   let limit = 0;
-  if (firstPartCompleted) {
+  if (part === 2) {
     limit = 26501365;
   } else {
     limit = data.length === 11 ? 6 : 64;
@@ -44,7 +44,7 @@ const loadData = (input: string) => {
 };
 
 export const solve1 = (input: string) => {
-  const { grid, start, limit } = loadData(input);
+  const { grid, start, limit } = loadData(input, 1);
 
   const visitTile = (tiles: TPoint[]): TPoint[] => {
     const newTilesSet: Set<string> = new Set();
@@ -77,7 +77,7 @@ export const solve1 = (input: string) => {
 };
 
 export const solve2 = (input: string) => {
-  const { grid, start, limit } = loadData(input);
+  const { grid, start, limit } = loadData(input, 2);
   const gridSize = grid.length;
   const gridWidth = grid[0].length;
 
@@ -175,3 +175,6 @@ export const exampleAnswer1 = 16;
 export const exampleAnswer2 = 394693535848011;
 
 export const firstPartCompleted = true;
+
+// Checked by `npm test` (scripts/test-examples.ts); parts listed here are not checked on the example
+export const exampleTestSkip = { 2: 'input-specific: quadratic extrapolation over 26501365 steps' };

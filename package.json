@@ -10,7 +10,8 @@
     "get-leaderboard": "ts-node get-leaderboard.ts",
     "typecheck": "tsc",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "test": "tsx scripts/test-examples.ts"
   },
   "author": "",
   "license": "ISC",
@@ -23,6 +24,7 @@
     "globals": "^17.14.0",
     "prettier": "^3.10.1",
     "ts-node": "^10.9.2",
+    "tsx": "^4.23.15",
     "typescript": "~6.0",
     "typescript-eslint": "^8.74.0"
   },
