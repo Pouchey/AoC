@@ -13,4 +13,3 @@ export function ExampleAnswerCard({ answer }: ExampleAnswerCardProps) {
     </div>
   );
 }
-

@@ -19,4 +19,3 @@ export type AlgorithmStep = {
   status: 'placing' | 'backtracking' | 'success' | 'failed';
   message: string;
 };
-

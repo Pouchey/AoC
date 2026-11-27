@@ -11,7 +11,8 @@
     "typecheck": "tsc",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "tsx scripts/test-examples.ts"
+    "test": "tsx scripts/test-examples.ts",
+    "test:viz": "tsx scripts/test-viz.ts"
   },
   "author": "",
   "license": "ISC",

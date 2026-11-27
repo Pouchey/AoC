@@ -43,4 +43,3 @@ export function ProblemHeader({ year, day, problem }: ProblemHeaderProps) {
     </div>
   );
 }
-
