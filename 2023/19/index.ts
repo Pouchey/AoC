@@ -1,4 +1,4 @@
-import { TRange, enumerate, parseBlocks, sum } from '../../utils';
+import { TRange, parseBlocks, sum } from '../../utils';
 import memoize from '../../utils/memoize';
 
 enum ECategory {
@@ -153,96 +153,63 @@ export const solve1 = (input: string) => {
 const RATING_RANGE_MIN = 1;
 const RATING_RANGE_MAX = 4000;
 
-export const getPaths = (workflows: TWorkflow[]): string[][] => {
-  const paths: string[][] = [];
-  const startWorkflow = getWorkflowByName(workflows, 'in')!;
+const rangeSize = ([min, max]: TRange) => Math.max(0, max - min + 1);
 
-  const dfs = (workflow: TWorkflow, path: string[] = []) => {
-    for (const rule of workflow.rules) {
-      if (rule.dest) {
-        const newPath = [...path, rule.dest];
-        if (rule.dest === 'R' || rule.dest === 'A') {
-          paths.push(newPath);
-        } else {
-          const nextWorkflow = getWorkflowByName(workflows, rule.dest);
-          if (nextWorkflow) {
-            dfs(nextWorkflow, newPath);
-          }
-        }
-      }
-    }
-  };
-  dfs(startWorkflow, ['in']);
-  return paths;
-};
+const countCombinations = (ranges: TRatingRange) =>
+  rangeSize(ranges.x) * rangeSize(ranges.m) * rangeSize(ranges.a) * rangeSize(ranges.s);
 
-const getRange = (range: TRange, operator: string, value: number) => {
+/**
+ * Split a range on a condition: the part that matches (sent to the rule's destination)
+ * and the part that doesn't (continues to the next rule of the workflow).
+ */
+const splitRange = ([min, max]: TRange, { operator, value }: TCondition): [TRange, TRange] => {
   if (operator === '<') {
-    return [range[0], Math.min(range[1], value - 1)];
-  } else if (operator === '>') {
-    return [Math.max(range[0], value), range[1]];
+    return [
+      [min, Math.min(max, value - 1)],
+      [Math.max(min, value), max]
+    ];
   }
-  throw new Error('Invalid operator');
+  return [
+    [Math.max(min, value + 1), max],
+    [min, Math.min(max, value)]
+  ];
 };
 
-export const getRanges = (
-  workflows: TWorkflow[],
-  path: string[],
-  ranges = {
-    x: [RATING_RANGE_MIN, RATING_RANGE_MAX],
-    m: [RATING_RANGE_MIN, RATING_RANGE_MAX],
-    a: [RATING_RANGE_MIN, RATING_RANGE_MAX],
-    s: [RATING_RANGE_MIN, RATING_RANGE_MAX]
+const countAccepted = (workflows: TWorkflow[], name: string, ranges: TRatingRange): number => {
+  if (countCombinations(ranges) === 0 || name === EDest.Reject) return 0;
+  if (name === EDest.Accept) return countCombinations(ranges);
+
+  const workflow = getWorkflowByName(workflows, name);
+  if (!workflow) throw new Error(`Invalid workflow ${name}`);
+
+  let total = 0;
+  let remaining = ranges;
+  for (const { condition, dest } of workflow.rules) {
+    if (!dest) continue;
+    if (!condition) {
+      total += countAccepted(workflows, dest, remaining);
+      break;
+    }
+    const [matching, notMatching] = splitRange(remaining[condition.category], condition);
+    total += countAccepted(workflows, dest, { ...remaining, [condition.category]: matching });
+    remaining = { ...remaining, [condition.category]: notMatching };
   }
-): TRatingRange => {
-  for (const [op, index] of enumerate(path)) {
-    const workflow = getWorkflowByName(workflows, op)!;
-    if (!workflow) continue;
-
-    const rule = workflow.rules.find((rule) => rule.dest === path[index + 1])!;
-
-    if (!rule?.condition) continue;
-
-    const { category, operator, value } = rule.condition;
-    const range = getRange(ranges[category] as TRange, operator, value);
-    ranges[category] = range;
-  }
-
-  return ranges as TRatingRange;
+  return total;
 };
 
 export const solve2 = (input: string) => {
   const data = loadData(input);
 
-  const paths = getPaths(data.workflows).filter((path) => path[path.length - 1] === 'A');
-  const ranges: TRatingRange[] = [];
-  // let actualRange: TRatingRange | undefined = undefined;
-  for (const path of paths) {
-    const range = getRanges(data.workflows, path);
-    ranges.push(range);
-    // actualRange = range;
-  }
-
-  const diffs = ranges.map((range) => {
-    return {
-      x: range.x[1] - range.x[0],
-      m: range.m[1] - range.m[0],
-      a: range.a[1] - range.a[0],
-      s: range.s[1] - range.s[0]
-    };
+  const fullRange: TRange = [RATING_RANGE_MIN, RATING_RANGE_MAX];
+  return countAccepted(data.workflows, 'in', {
+    x: fullRange,
+    m: fullRange,
+    a: fullRange,
+    s: fullRange
   });
-  const totals = diffs.map((diff) => diff.x * diff.m * diff.a * diff.s);
-  const result = sum(totals);
-
-  return result;
 };
 
 export const exampleAnswer1 = 19114;
 export const exampleAnswer2 = 167409079868000;
 
 export const firstPartCompleted = true;
-
-// Checked by `npm test` (scripts/test-examples.ts); parts listed here are not checked on the example
-export const exampleTestSkip = {
-  2: 'pre-existing bug: wrong result on the example (star obtained on input)'
-};

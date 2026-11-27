@@ -77,8 +77,3 @@ export const exampleAnswer1 = 50;
 export const exampleAnswer2 = 24;
 
 export const firstPartCompleted = true;
-
-// Checked by `npm test` (scripts/test-examples.ts); parts listed here are not checked on the example
-export const exampleTestSkip = {
-  2: 'pre-existing bug: wrong result on the example (star obtained on input)'
-};
