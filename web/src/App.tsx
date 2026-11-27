@@ -6,6 +6,10 @@ import { ProblemViewer } from './components/ProblemViewer';
 import { StatsPanel } from './components/StatsPanel';
 import { loadProblemsData, type ProblemsData } from './data/problems';
 
+// Latest AoC edition: current year from December, previous year otherwise
+const now = new Date();
+const DEFAULT_YEAR = String(now.getMonth() === 11 ? now.getFullYear() : now.getFullYear() - 1);
+
 function App() {
   const [data, setData] = useState<ProblemsData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -18,10 +22,10 @@ function App() {
 
     // Initialize default year if no query params
     if (!year) {
-      params.set('year', '2025');
+      params.set('year', DEFAULT_YEAR);
       const newUrl = `${window.location.pathname}?${params.toString()}`;
       window.history.replaceState({}, '', newUrl);
-      return { year: '2025', day: null };
+      return { year: DEFAULT_YEAR, day: null };
     }
 
     return { year, day };
@@ -36,7 +40,7 @@ function App() {
     const handlePopState = () => {
       const params = new URLSearchParams(window.location.search);
       setSearchParams({
-        year: params.get('year') || '2025',
+        year: params.get('year') || DEFAULT_YEAR,
         day: params.get('day')
       });
     };
@@ -45,7 +49,7 @@ function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  const selectedYear = searchParams.year ? parseInt(searchParams.year, 10) : 2025;
+  const selectedYear = searchParams.year ? parseInt(searchParams.year, 10) : parseInt(DEFAULT_YEAR, 10);
   const selectedDay = searchParams.day ? parseInt(searchParams.day, 10) : null;
 
   useEffect(() => {
