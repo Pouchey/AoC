@@ -31,7 +31,7 @@ function Floor({ frame, part }: { frame: Frame; part: 1 | 2 }) {
           ctx.strokeRect(X(a), Y(b), (c - a + 1) * s, (d - b + 1) * s);
         };
         if (part === 2) {
-          ctx.fillStyle = '#5fd39a26';
+          ctx.fillStyle = '#3df5a726';
           ctx.strokeStyle = C.green;
           ctx.lineWidth = 1.5;
           ctx.beginPath();
@@ -43,8 +43,8 @@ function Floor({ frame, part }: { frame: Frame; part: 1 | 2 }) {
           ctx.stroke();
         }
         if (frame.candidate && frame.candidate !== frame.best)
-          rect(frame.candidate, '#ff6b6b22', frame.ok === false && part === 2 ? C.red : C.muted);
-        if (frame.best) rect(frame.best, '#f5c45144', C.gold);
+          rect(frame.candidate, '#ff5c8a22', frame.ok === false && part === 2 ? C.red : C.muted);
+        if (frame.best) rect(frame.best, '#ffd16644', C.gold);
         const r = Math.max(1.5, Math.min(5, s / 2));
         ctx.fillStyle = C.red;
         for (const [x, y] of frame.tiles) {

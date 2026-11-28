@@ -73,7 +73,7 @@ export default function Day04(props: VizProps) {
                   key={`h${i}`}
                   className="px-1.5 py-0.5 rounded"
                   style={{
-                    background: card.winning.includes(n) ? '#f5c45133' : undefined,
+                    background: card.winning.includes(n) ? '#ffd16633' : undefined,
                     color: card.winning.includes(n) ? C.gold : C.muted
                   }}
                 >

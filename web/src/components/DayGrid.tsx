@@ -13,7 +13,7 @@ const daysInEvent = (year: number) => (year >= 2025 ? 12 : 25);
 function Star({ lit, delay }: { lit: boolean; delay: number }) {
   return (
     <span
-      className={`block w-1.5 h-1.5 rounded-full ${lit ? 'bg-accent-gold star-in' : 'bg-grid-line'}`}
+      className={`block w-1.5 h-1.5 rounded-full ${lit ? 'bg-accent-gold glow-gold star-in' : 'bg-grid-line'}`}
       style={lit ? { animationDelay: `${delay}ms` } : undefined}
     />
   );
@@ -35,7 +35,7 @@ export function DayGrid({ data, year, selectedDay, onDayChange }: DayGridProps) 
       </p>
       <div className="mt-2 h-0.5 rounded-full bg-grid-line overflow-hidden">
         <div
-          className="h-full bg-accent-gold transition-[width] duration-700"
+          className="h-full bg-linear-to-r from-accent-gold via-accent-pink to-accent-blue shadow-[0_0_10px_#ff5cc880] transition-[width] duration-700"
           style={{ width: `${(stars / (total * 2)) * 100}%` }}
         />
       </div>
@@ -57,7 +57,7 @@ export function DayGrid({ data, year, selectedDay, onDayChange }: DayGridProps) 
                 title={problem?.title}
                 className={`w-full flex flex-col items-center gap-2 rounded-lg py-3 transition-colors ${
                   selected
-                    ? 'bg-bg-highlight ring-1 ring-accent-blue text-text-primary'
+                    ? 'bg-bg-highlight glow-cyan text-text-primary'
                     : available
                       ? 'text-text-secondary hover:bg-bg-panel hover:text-text-primary'
                       : 'text-grid-line cursor-default'

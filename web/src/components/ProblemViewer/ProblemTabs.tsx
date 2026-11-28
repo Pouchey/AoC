@@ -31,7 +31,7 @@ export function ProblemTabs({ activeTab, onTabChange, problem }: ProblemTabsProp
         >
           {tab.label}
           <span
-            className={`w-1.5 h-1.5 rounded-full ${tab.done ? 'bg-accent-gold' : 'bg-grid-line'}`}
+            className={`w-1.5 h-1.5 rounded-full ${tab.done ? 'bg-accent-gold glow-gold' : 'bg-grid-line'}`}
             aria-label={tab.done ? 'solved' : 'not solved'}
           />
         </button>

@@ -28,7 +28,7 @@ function Pattern({ frame }: { frame: Frame }) {
                 ? C.blue
                 : C.muted
               : reflected
-                ? '#8ab4ff1a'
+                ? '#4fd8ff1a'
                 : C.cell;
             if (frame.smudge && frame.smudge[0] === r && frame.smudge[1] === c)
               ctx.fillStyle = C.red;

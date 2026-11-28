@@ -6,9 +6,10 @@ export const C = {
   line: '#262f47',
   text: '#e6eaf2',
   muted: '#8c95ad',
-  red: '#ff6b6b',
-  green: '#5fd39a',
-  blue: '#8ab4ff',
-  gold: '#f5c451',
-  purple: '#b49cff'
+  red: '#ff5c8a',
+  green: '#3df5a7',
+  blue: '#4fd8ff',
+  gold: '#ffd166',
+  purple: '#c38bff',
+  pink: '#ff5cc8'
 };

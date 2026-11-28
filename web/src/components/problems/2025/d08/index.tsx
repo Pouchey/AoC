@@ -4,7 +4,7 @@ import { DayViz, Stat, Stats } from '../../viz/DayViz';
 import type { VizProps } from '../../viz/types';
 import { find, trace, type Frame } from './trace';
 
-const PALETTE = [C.blue, C.green, C.gold, C.purple, C.red, '#39c5cf', '#ff7b72', '#7ee787'];
+const PALETTE = [C.blue, C.green, C.gold, C.purple, C.red, C.pink, '#ff7b72', '#7ee787'];
 
 function Space({ frame, index }: { frame: Frame; index: number }) {
   const { points, edges, count } = frame;

@@ -13,7 +13,7 @@ function Garden({ frame }: { frame: Frame }) {
   const size = n * (2 * frame.tiles + 1);
   const rock = hex('#262f47');
   const plot = hex('#141a2b');
-  const on = hex('#5fd39a');
+  const on = hex('#3df5a7');
   const seen = hex('#1f4b2c');
   return (
     <Canvas
@@ -42,7 +42,7 @@ function Garden({ frame }: { frame: Frame }) {
         ctx.imageSmoothingEnabled = false;
         ctx.drawImage(off, 0, 0, w, h);
         if (frame.tiles) {
-          ctx.strokeStyle = '#f5c45166';
+          ctx.strokeStyle = '#ffd16666';
           for (let t = 1; t < 2 * frame.tiles + 1; t++) {
             const p = (t * n * w) / size;
             ctx.beginPath();

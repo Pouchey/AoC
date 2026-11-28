@@ -37,7 +37,7 @@ export default function Day07(props: VizProps) {
                   if (n) {
                     if (props.part === 1) return C.blue;
                     const level = 0.25 + 0.75 * (Math.log(n + 1) / Math.log(max + 1));
-                    return `rgba(138, 180, 255, ${Math.min(1, level)})`;
+                    return `rgba(79, 216, 255, ${Math.min(1, level)})`;
                   }
                 }
                 return ch === '^' ? C.gold : C.cell;

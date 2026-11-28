@@ -20,7 +20,7 @@ export function YearSelector({ years, selectedYear, onYearChange }: YearSelector
             onClick={() => onYearChange(year)}
             className={
               active
-                ? 'text-6xl sm:text-7xl font-light tracking-tight text-text-primary leading-none'
+                ? 'neon-title text-6xl sm:text-7xl font-light tracking-tight leading-none'
                 : 'text-xl font-light text-text-secondary hover:text-text-primary transition-colors pb-1.5'
             }
           >
