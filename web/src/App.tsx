@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { YearSelector } from './components/YearSelector';
 import { DayGrid } from './components/DayGrid';
+import { Snow } from './components/Snow';
 import { ProblemViewer } from './components/ProblemViewer';
 import { loadProblemsData, type ProblemsData } from './data/problems';
 
@@ -93,7 +94,8 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative isolate">
+      <Snow />
       <div className="mx-auto max-w-5xl px-5 sm:px-8 pb-24">
         <Header data={data} year={selectedYear} day={selectedDay} />
 

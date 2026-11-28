@@ -1,4 +1,5 @@
 import { getProblem, getYearData, type ProblemsData } from '../data/problems';
+import { Garland } from './Garland';
 
 interface DayGridProps {
   data: ProblemsData;
@@ -33,15 +34,12 @@ export function DayGrid({ data, year, selectedDay, onDayChange }: DayGridProps) 
       <p className="text-text-secondary">
         {stars} of {total * 2} stars
       </p>
-      <div className="mt-2 h-0.5 rounded-full bg-grid-line overflow-hidden">
-        <div
-          className="h-full bg-linear-to-r from-accent-gold via-accent-pink to-accent-blue shadow-[0_0_10px_#ff5cc880] transition-[width] duration-700"
-          style={{ width: `${(stars / (total * 2)) * 100}%` }}
-        />
+      <div className="mt-3">
+        <Garland total={total * 2} lit={stars} />
       </div>
 
       <ol
-        className={`mt-6 grid gap-1.5 grid-cols-6 ${total === 12 ? 'sm:grid-cols-12' : 'sm:grid-cols-[repeat(13,minmax(0,1fr))]'}`}
+        className={`mt-4 grid gap-1.5 grid-cols-6 ${total === 12 ? 'sm:grid-cols-12' : 'sm:grid-cols-[repeat(13,minmax(0,1fr))]'}`}
       >
         {days.map((day) => {
           const available = yearData?.days.includes(day) ?? false;
