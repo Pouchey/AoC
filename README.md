@@ -226,7 +226,8 @@ See [LICENSE](./LICENSE) file for details.
 
 - `CLAUDE.md`: project context loaded by Claude Code (commands, layout, rules).
 - `.claude/settings.json`: shared permissions, plus a hook that runs Prettier on files Claude edits.
-- `.claude/skills/`: `/new-day [day] [year]`, `/verify`, `/add-visualization <day> <year>`.
+- `.claude/skills/`: `/new-day [day] [year]`, `/hint <day> <year> [part] [nudge|approach|algorithm]`
+  (theory hints, never the answer), `/verify`, `/add-visualization <day> <year>`.
 - GitHub workflows:
   - `ci.yml`: typecheck, lint, example tests and web build on every PR.
   - `claude-code-review.yml`: automatic Claude review of each PR.
