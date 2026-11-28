@@ -12,15 +12,19 @@ interface DayVizProps<F> extends VizProps {
   fps?: number;
 }
 
-type State<F> =
+type State<F> = { key: string } & (
   | { status: 'loading' }
   | { status: 'error'; message: string }
-  | { status: 'ready'; trace: Trace<F>; ms: number };
+  | { status: 'ready'; trace: Trace<F>; ms: number }
+);
 
 /** Common shell: data source switch, trace computation, player and answer. */
 export function DayViz<F>({ year, day, part, trace, render, caption, fps }: DayVizProps<F>) {
   const [source, setSource] = useState<DataSource>('example');
-  const [state, setState] = useState<State<F>>({ status: 'loading' });
+  const key = `${year}-${day}-${part}-${source}`;
+  const [computed, setState] = useState<State<F>>({ key: '', status: 'loading' });
+  // A result computed for another day, part or source is never shown with this one's renderer
+  const state: State<F> = computed.key === key ? computed : { key, status: 'loading' };
   const inputAvailable = hasInput(year, day);
 
   useEffect(() => {
@@ -33,27 +37,28 @@ export function DayViz<F>({ year, day, part, trace, render, caption, fps }: DayV
             setTimeout(() => {
               const start = performance.now();
               try {
-                done({ status: 'ready', trace: trace(text, part), ms: performance.now() - start });
+                done({
+                  key,
+                  status: 'ready',
+                  trace: trace(text, part),
+                  ms: performance.now() - start
+                });
               } catch (error) {
-                done({ status: 'error', message: String(error) });
+                done({ key, status: 'error', message: String(error) });
               }
             }, 30)
           )
       )
-      .catch((error) => ({ status: 'error', message: String(error) }) as State<F>)
+      .catch((error) => ({ key, status: 'error', message: String(error) }) as State<F>)
       .then((next) => {
         if (!cancelled) setState(next);
       });
     return () => {
       cancelled = true;
     };
-  }, [year, day, part, source, trace]);
+  }, [key, year, day, part, source, trace]);
 
-  const select = (next: DataSource) => {
-    if (next === source) return;
-    setState({ status: 'loading' });
-    setSource(next);
-  };
+  const select = (next: DataSource) => setSource(next);
 
   const tab = (value: DataSource, label: string) => (
     <button
@@ -89,7 +94,7 @@ export function DayViz<F>({ year, day, part, trace, render, caption, fps }: DayV
       )}
       {state.status === 'error' && <p className="text-accent-red text-sm">{state.message}</p>}
       {state.status === 'ready' && (
-        <Stepped key={`${source}`} trace={state.trace} render={render} fps={fps} ms={state.ms} />
+        <Stepped key={key} trace={state.trace} render={render} fps={fps} ms={state.ms} />
       )}
     </div>
   );
