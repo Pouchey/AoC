@@ -17,7 +17,7 @@ function Universe({ frame }: { frame: Frame }) {
       draw={(ctx, w, h) => {
         const cw = w / Cn;
         const ch = h / R;
-        ctx.fillStyle = '#a371f722';
+        ctx.fillStyle = '#c38bff22';
         for (const e of emptyRows) ctx.fillRect(0, pos(e, emptyRows) * ch, w, ch * (1 + t));
         for (const e of emptyCols) ctx.fillRect(pos(e, emptyCols) * cw, 0, cw * (1 + t), h);
         const r = Math.max(1.2, Math.min(cw, ch) * 0.4);

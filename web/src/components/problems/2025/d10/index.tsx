@@ -54,7 +54,7 @@ function MachineView({ frame, part }: { frame: Frame; part: 1 | 2 }) {
             style={{
               borderColor: presses[b] ? C.blue : C.line,
               color: presses[b] ? C.text : C.muted,
-              background: presses[b] ? '#58a6ff22' : C.panel
+              background: presses[b] ? '#4fd8ff22' : C.panel
             }}
           >
             ({btn.join(',')}){presses[b] ? <b style={{ color: C.gold }}> ×{presses[b]}</b> : null}

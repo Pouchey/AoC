@@ -1,6 +1,5 @@
 import type { Problem } from '../../types';
 import { renderVisualization } from '../problems/visualizations';
-import { ExampleAnswerCard } from './ExampleAnswerCard';
 import { SolutionCodeCard } from './SolutionCodeCard';
 
 interface PartContentProps {
@@ -26,16 +25,17 @@ export function PartContent({
   const exampleAnswer = part === 1 ? problem.exampleAnswer1 : problem.exampleAnswer2;
 
   return (
-    <div className="space-y-6 w-full max-w-full overflow-hidden">
-      {description ? (
-        <div className="prose max-w-none">
-          <p className="text-text-primary leading-relaxed">{description}</p>
-        </div>
-      ) : (
-        <p className="text-text-secondary italic">No description available for Part {part}</p>
-      )}
-
-      {exampleAnswer !== undefined && <ExampleAnswerCard answer={exampleAnswer} />}
+    <div className="mt-6 space-y-10 min-w-0">
+      <div className="max-w-[68ch] space-y-3">
+        <p className="text-text-primary/90 leading-relaxed">
+          {description ?? 'No summary written for this part yet.'}
+        </p>
+        {exampleAnswer !== undefined && (
+          <p className="text-sm text-text-secondary">
+            Answer on the example: <span className="text-text-primary">{exampleAnswer}</span>
+          </p>
+        )}
+      </div>
 
       {renderVisualization(year, day, part)}
 

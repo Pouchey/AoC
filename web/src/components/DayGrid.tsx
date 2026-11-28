@@ -1,4 +1,5 @@
-import { getYearData, getProblem, type ProblemsData } from '../data/problems';
+import { getProblem, getYearData, type ProblemsData } from '../data/problems';
+import { Garland } from './Garland';
 
 interface DayGridProps {
   data: ProblemsData;
@@ -7,64 +8,69 @@ interface DayGridProps {
   onDayChange: (day: number) => void;
 }
 
+/** Since 2025 an Advent of Code event has 12 days instead of 25. */
+const daysInEvent = (year: number) => (year >= 2025 ? 12 : 25);
+
+function Star({ lit, delay }: { lit: boolean; delay: number }) {
+  return (
+    <span
+      className={`block w-1.5 h-1.5 rounded-full ${lit ? 'bg-accent-gold glow-gold star-in' : 'bg-grid-line'}`}
+      style={lit ? { animationDelay: `${delay}ms` } : undefined}
+    />
+  );
+}
+
 export function DayGrid({ data, year, selectedDay, onDayChange }: DayGridProps) {
   const yearData = getYearData(data, year);
-
-  if (!yearData) return null;
-
-  const handleDayClick = (day: number) => {
-    onDayChange(day);
-  };
+  const total = daysInEvent(year);
+  const days = Array.from({ length: total }, (_, i) => i + 1);
+  const stars = days.reduce((n, d) => {
+    const p = getProblem(data, year, d);
+    return n + (p?.firstPartCompleted ? 1 : 0) + (p?.secondPartCompleted ? 1 : 0);
+  }, 0);
 
   return (
-    <div className="bg-bg-panel rounded-2xl p-6 border border-grid-line mb-8">
-      {/* Gradient top border */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-accent-red via-accent-green to-accent-blue rounded-t-2xl" />
+    <section className="mt-8" aria-label={`Days of ${year}`}>
+      <p className="text-text-secondary">
+        {stars} of {total * 2} stars
+      </p>
+      <div className="mt-3">
+        <Garland total={total * 2} lit={stars} />
+      </div>
 
-      <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-        <span className="w-1 h-5 bg-accent-green rounded-full" />
-        Select a Day
-      </h2>
-
-      <div className="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-2">
-        {Array.from({ length: 25 }, (_, i) => i + 1).map((day) => {
-          const isAvailable = yearData.days.includes(day);
+      <ol
+        className={`mt-4 grid gap-1.5 grid-cols-6 ${total === 12 ? 'sm:grid-cols-12' : 'sm:grid-cols-[repeat(13,minmax(0,1fr))]'}`}
+      >
+        {days.map((day) => {
+          const available = yearData?.days.includes(day) ?? false;
           const problem = getProblem(data, year, day);
-          const isFirstPartCompleted = problem?.firstPartCompleted;
-          const isSecondPartCompleted = problem?.secondPartCompleted;
-          const isSelected = selectedDay === day;
-
+          const selected = selectedDay === day;
           return (
-            <button
-              key={day}
-              onClick={() => isAvailable && handleDayClick(day)}
-              disabled={!isAvailable}
-              className={`
-                aspect-square rounded-lg font-mono font-bold text-lg transition-all duration-200 relative
-                ${
-                  isSelected
-                    ? 'bg-linear-to-br from-accent-purple to-accent-blue text-white shadow-lg shadow-accent-purple/30 scale-110 z-10'
-                    : isAvailable
-                      ? isSecondPartCompleted
-                        ? 'bg-bg-highlight border border-accent-green/30 text-accent-green hover:border-accent-green hover:bg-accent-green/10 hover:scale-105'
-                        : isFirstPartCompleted
-                          ? 'bg-bg-highlight border border-accent-gold/30 text-accent-gold hover:border-accent-gold hover:bg-accent-gold/10 hover:scale-105'
-                          : 'bg-bg-highlight border border-grid-line text-text-secondary hover:border-text-secondary hover:bg-bg-highlight/80 hover:scale-105'
-                      : 'bg-bg-dark/50 text-text-secondary/30 cursor-not-allowed'
-                }
-              `}
-            >
-              {day}
-              {isSecondPartCompleted && !isSelected && (
-                <span className="absolute -top-1 -right-1 text-xs">⭐⭐</span>
-              )}
-              {isFirstPartCompleted && !isSecondPartCompleted && !isSelected && (
-                <span className="absolute -top-1 -right-1 text-xs">⭐</span>
-              )}
-            </button>
+            <li key={day}>
+              <button
+                onClick={() => available && onDayChange(day)}
+                disabled={!available}
+                aria-current={selected ? 'date' : undefined}
+                aria-label={`Day ${day}${problem?.title ? `, ${problem.title}` : ''}`}
+                title={problem?.title}
+                className={`w-full flex flex-col items-center gap-2 rounded-lg py-3 transition-colors ${
+                  selected
+                    ? 'bg-bg-highlight glow-cyan text-text-primary'
+                    : available
+                      ? 'text-text-secondary hover:bg-bg-panel hover:text-text-primary'
+                      : 'text-grid-line cursor-default'
+                }`}
+              >
+                <span className="text-lg font-light leading-none">{day}</span>
+                <span className="flex gap-1" aria-hidden="true">
+                  <Star lit={!!problem?.firstPartCompleted} delay={day * 35} />
+                  <Star lit={!!problem?.secondPartCompleted} delay={day * 35 + 120} />
+                </span>
+              </button>
+            </li>
           );
         })}
-      </div>
-    </div>
+      </ol>
+    </section>
   );
 }

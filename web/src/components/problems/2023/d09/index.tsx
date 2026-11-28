@@ -36,7 +36,7 @@ export default function Day09(props: VizProps) {
                       className="min-w-10 text-center px-1 py-0.5 rounded"
                       style={{
                         color: added ? C.gold : v === 0 ? C.line : C.text,
-                        background: added ? '#d2992222' : undefined
+                        background: added ? '#ffd16622' : undefined
                       }}
                     >
                       {v}

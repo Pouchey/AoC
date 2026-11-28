@@ -2,35 +2,32 @@ import type { YearData } from '../types';
 
 interface YearSelectorProps {
   years: YearData[];
-  selectedYear: number | null;
+  selectedYear: number;
   onYearChange: (year: number) => void;
 }
 
+/** The selected year is the page title; the other years are quiet text links beside it. */
 export function YearSelector({ years, selectedYear, onYearChange }: YearSelectorProps) {
-  const handleYearClick = (year: number) => {
-    onYearChange(year);
-  };
-
   return (
-    <div className="flex gap-3 flex-wrap justify-center mb-8">
-      {years.map((yearData) => (
-        <button
-          key={yearData.year}
-          onClick={() => handleYearClick(yearData.year)}
-          className={`
-            px-6 py-3 rounded-xl font-semibold text-lg transition-all duration-200
-            ${
-              selectedYear === yearData.year
-                ? 'bg-linear-to-r from-accent-green to-accent-green/80 text-white shadow-lg shadow-accent-green/20 scale-105'
-                : 'bg-bg-panel border border-grid-line text-text-primary hover:border-accent-green/50 hover:bg-bg-highlight'
+    <div className="mt-14 flex items-end gap-6 flex-wrap" role="tablist" aria-label="Year">
+      {years.map(({ year }) => {
+        const active = year === selectedYear;
+        return (
+          <button
+            key={year}
+            role="tab"
+            aria-selected={active}
+            onClick={() => onYearChange(year)}
+            className={
+              active
+                ? 'neon-title text-6xl sm:text-7xl font-light tracking-tight leading-none'
+                : 'text-xl font-light text-text-secondary hover:text-text-primary transition-colors pb-1.5'
             }
-          `}
-        >
-          <span className="mr-2">📅</span>
-          {yearData.year}
-          <span className="ml-2 text-sm opacity-70">({yearData.days.length} days)</span>
-        </button>
-      ))}
+          >
+            {year}
+          </button>
+        );
+      })}
     </div>
   );
 }

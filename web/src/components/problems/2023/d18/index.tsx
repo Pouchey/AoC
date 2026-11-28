@@ -28,7 +28,7 @@ function Lagoon({ frame }: { frame: Frame }) {
           .forEach(([x, y], i) => (i ? ctx.lineTo : ctx.moveTo).call(ctx, X(x), Y(y)));
         if (done) {
           ctx.closePath();
-          ctx.fillStyle = '#58a6ff33';
+          ctx.fillStyle = '#4fd8ff33';
           ctx.fill();
         }
         ctx.strokeStyle = C.gold;

@@ -30,7 +30,7 @@ function Sky({ frame, part }: { frame: Frame; part: 1 | 2 }) {
         frame.stones.forEach((s, i) => {
           const speed = Math.hypot(s[3], s[4]) || 1;
           const hit = frame.hits?.includes(i);
-          ctx.strokeStyle = hit ? C.red : '#58a6ff55';
+          ctx.strokeStyle = hit ? C.red : '#4fd8ff55';
           ctx.beginPath();
           ctx.moveTo(X(s[0]), Y(s[1]));
           ctx.lineTo(X(s[0] + (s[3] / speed) * big), Y(s[1] + (s[4] / speed) * big));
@@ -39,7 +39,7 @@ function Sky({ frame, part }: { frame: Frame; part: 1 | 2 }) {
           ctx.fillRect(X(s[0]) - 1.5, Y(s[1]) - 1.5, 3, 3);
         });
         for (const [x, y, inside] of frame.crossings.slice(0, frame.shown)) {
-          ctx.fillStyle = inside ? C.green : '#f8514955';
+          ctx.fillStyle = inside ? C.green : '#ff5c8a55';
           ctx.beginPath();
           ctx.arc(X(x), Y(y), inside ? 3 : 1.5, 0, Math.PI * 2);
           ctx.fill();

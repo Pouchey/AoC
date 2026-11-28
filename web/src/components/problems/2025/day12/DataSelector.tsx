@@ -6,13 +6,13 @@ interface DataSelectorProps {
 
 export function DataSelector({ dataSource, onSelect, inputAvailable }: DataSelectorProps) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="inline-flex rounded-lg bg-bg-dark p-1">
       <button
         onClick={() => onSelect('example')}
-        className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+        className={`px-3 py-1 rounded-md text-sm transition-colors ${
           dataSource === 'example'
-            ? 'bg-accent-blue text-white'
-            : 'bg-bg-panel text-text-secondary hover:text-text-primary border border-grid-line'
+            ? 'bg-bg-highlight text-text-primary'
+            : 'text-text-secondary hover:text-text-primary'
         }`}
       >
         Example
@@ -20,10 +20,10 @@ export function DataSelector({ dataSource, onSelect, inputAvailable }: DataSelec
       {inputAvailable && (
         <button
           onClick={() => onSelect('input')}
-          className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+          className={`px-3 py-1 rounded-md text-sm transition-colors ${
             dataSource === 'input'
-              ? 'bg-accent-blue text-white'
-              : 'bg-bg-panel text-text-secondary hover:text-text-primary border border-grid-line'
+              ? 'bg-bg-highlight text-text-primary'
+              : 'text-text-secondary hover:text-text-primary'
           }`}
         >
           Input

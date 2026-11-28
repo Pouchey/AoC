@@ -103,12 +103,12 @@ export function Day12Visualization() {
   // Show loading state but don't block the page
   if (isLoading || !data) {
     return (
-      <div className="bg-bg-highlight rounded-xl p-6 border border-grid-line">
+      <div className="bg-bg-panel rounded-2xl p-4 sm:p-6">
         <div className="flex items-center justify-between mb-4">
-          <h4 className="text-sm font-semibold text-text-secondary uppercase tracking-wider flex items-center gap-2">
-            <span className="w-1 h-3 bg-accent-green rounded-full" />
+          <h3 className="text-lg font-normal flex items-center gap-3">
+            <span className="neon-rule !w-4" aria-hidden="true" />
             Visualization
-          </h4>
+          </h3>
           <DataSelector
             dataSource={dataSource}
             onSelect={setDataSource}
@@ -134,12 +134,12 @@ export function Day12Visualization() {
         elapsedTime={elapsedTime}
         onStop={stopRunAll}
       />
-      <div className="bg-bg-highlight rounded-xl p-6 border border-grid-line space-y-6">
+      <div className="bg-bg-panel rounded-2xl p-4 sm:p-6 space-y-6">
         <div className="flex items-center justify-between">
-          <h4 className="text-sm font-semibold text-text-secondary uppercase tracking-wider flex items-center gap-2">
-            <span className="w-1 h-3 bg-accent-green rounded-full" />
+          <h3 className="text-lg font-normal flex items-center gap-3">
+            <span className="neon-rule !w-4" aria-hidden="true" />
             Visualization
-          </h4>
+          </h3>
           <DataSelector
             dataSource={dataSource}
             onSelect={setDataSource}

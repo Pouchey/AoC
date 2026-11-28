@@ -23,7 +23,7 @@ function Sheet({ frame }: { frame: Frame }) {
                   key={i}
                   style={{
                     color: inside ? (r === input.length - 1 ? C.gold : C.text) : C.line,
-                    background: inside ? '#58a6ff1a' : undefined
+                    background: inside ? '#4fd8ff1a' : undefined
                   }}
                 >
                   {ch}

@@ -18,61 +18,47 @@ export function SolutionCodeCard({
   loadDataCode,
   isLoading
 }: SolutionCodeCardProps) {
-  const dayPadded = day.toString().padStart(2, '0');
-  const accentColor = part === 1 ? 'accent-blue' : 'accent-purple';
-  const functionName = part === 1 ? 'solve1()' : 'solve2()';
+  const path = `${year}/${String(day).padStart(2, '0')}/index.ts`;
+  const fn = `solve${part}`;
 
   return (
-    <div className="bg-bg-highlight rounded-xl p-4 border border-grid-line w-full max-w-full overflow-hidden">
-      <h4 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-3 flex items-center gap-2">
-        <span
-          className={`w-1 h-3 rounded-full ${part === 1 ? 'bg-accent-blue' : 'bg-accent-purple'}`}
-        />
-        Solution File
-      </h4>
-      <code
-        className={`font-mono bg-bg-dark px-3 py-2 rounded-lg block mb-4 overflow-x-auto ${
-          part === 1 ? 'text-accent-blue' : 'text-accent-purple'
-        }`}
-      >
-        {year}/{dayPadded}/index.ts → {functionName}
-      </code>
+    <section className="min-w-0">
+      <div className="flex items-baseline justify-between gap-4 flex-wrap">
+        <h3 className="text-lg font-normal flex items-center gap-3">
+          <span className="neon-rule !w-4" aria-hidden="true" />
+          Solution
+        </h3>
+        <a
+          href={`https://github.com/Pouchey/AoC/blob/main/${path}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm text-text-secondary hover:text-accent-blue font-mono"
+        >
+          {path}
+        </a>
+      </div>
       {isLoading ? (
-        <LoadingCard accentColor={accentColor as 'accent-blue' | 'accent-purple'} />
+        <LoadingCard />
       ) : (
-        <div className="space-y-4">
+        <div className="mt-4 space-y-6">
           {loadDataCode && (
             <div>
-              <div className="mb-2">
-                <code
-                  className={`font-mono text-xs ${
-                    part === 1 ? 'text-accent-blue/70' : 'text-accent-purple/70'
-                  }`}
-                >
-                  loadData()
-                </code>
-              </div>
+              <p className="mb-2 text-sm text-text-secondary">Parsing the input</p>
               <CodeSnippet code={loadDataCode} />
             </div>
           )}
           {code && (
             <div>
               {loadDataCode && (
-                <div className="mb-2">
-                  <code
-                    className={`font-mono text-xs ${
-                      part === 1 ? 'text-accent-blue/70' : 'text-accent-purple/70'
-                    }`}
-                  >
-                    {functionName}
-                  </code>
-                </div>
+                <p className="mb-2 text-sm text-text-secondary">
+                  Part {part} ({fn})
+                </p>
               )}
               <CodeSnippet code={code} />
             </div>
           )}
         </div>
       )}
-    </div>
+    </section>
   );
 }

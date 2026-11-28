@@ -11,9 +11,9 @@ const hex = (s: string) => [1, 3, 5].map((i) => parseInt(s.slice(i, i + 2), 16))
 function Garden({ frame }: { frame: Frame }) {
   const n = frame.grid.length;
   const size = n * (2 * frame.tiles + 1);
-  const rock = hex('#30363d');
-  const plot = hex('#161b22');
-  const on = hex('#3fb950');
+  const rock = hex('#34302b');
+  const plot = hex('#1b1917');
+  const on = hex('#3df5a7');
   const seen = hex('#1f4b2c');
   return (
     <Canvas
@@ -42,7 +42,7 @@ function Garden({ frame }: { frame: Frame }) {
         ctx.imageSmoothingEnabled = false;
         ctx.drawImage(off, 0, 0, w, h);
         if (frame.tiles) {
-          ctx.strokeStyle = '#d2992266';
+          ctx.strokeStyle = '#ffd16666';
           for (let t = 1; t < 2 * frame.tiles + 1; t++) {
             const p = (t * n * w) / size;
             ctx.beginPath();
