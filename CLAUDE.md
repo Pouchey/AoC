@@ -10,7 +10,7 @@ Solutions in `YYYY/DD/`, CLI runner `main.ts`, shared helpers `utils/`, Vite/Rea
 - `npm run get-subject <day> <year>` — writes `Part1.md`/`Part2.md`
 - Checks (or `/verify`): `npm run typecheck && npm run lint && npm test` (one day:
   `npm test -- <year> <day>`); if `web/` or `utils/` changed, also
-  `npm --prefix web run build && npm --prefix web run lint`
+  `npm --prefix web run build && npm --prefix web run lint && npm run test:viz`
 
 ## Solution contract (`YYYY/DD/index.ts`, from `template/index.ts`)
 

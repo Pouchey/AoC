@@ -35,4 +35,3 @@ export function ProblemTabs({ activeTab, onTabChange }: ProblemTabsProps) {
     </div>
   );
 }
-

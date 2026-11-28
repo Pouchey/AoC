@@ -15,4 +15,3 @@ export function LoadingCard({ accentColor, message = 'Loading code...' }: Loadin
     </div>
   );
 }
-

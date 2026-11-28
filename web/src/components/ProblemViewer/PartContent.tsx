@@ -1,6 +1,5 @@
-import { createElement } from 'react';
 import type { Problem } from '../../types';
-import { getProblemVisualization } from '../problems/visualizations';
+import { renderVisualization } from '../problems/visualizations';
 import { ExampleAnswerCard } from './ExampleAnswerCard';
 import { SolutionCodeCard } from './SolutionCodeCard';
 
@@ -25,7 +24,6 @@ export function PartContent({
 }: PartContentProps) {
   const description = part === 1 ? problem.part1Description : problem.part2Description;
   const exampleAnswer = part === 1 ? problem.exampleAnswer1 : problem.exampleAnswer2;
-  const VisualizationComponent = getProblemVisualization(year, day, part === 1 ? 'part1' : 'part2');
 
   return (
     <div className="space-y-6 w-full max-w-full overflow-hidden">
@@ -39,7 +37,7 @@ export function PartContent({
 
       {exampleAnswer !== undefined && <ExampleAnswerCard answer={exampleAnswer} />}
 
-      {VisualizationComponent && createElement(VisualizationComponent, { year, day })}
+      {renderVisualization(year, day, part)}
 
       <SolutionCodeCard
         year={year}
