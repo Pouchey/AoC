@@ -18,11 +18,17 @@ glance at the input's size (`wc -l -c`, `head -3`).
 
 Write like you would explain it to a friend over coffee:
 
-- **Short**: 2 to 4 sentences per level. No headings, no lists unless steps really need them.
-- **Simple words**: no jargon (DP, memoization, complexity, O(n)…) unless the user uses it first.
-  Prefer a concrete image ("like counting cars at each crossroad") to a technical term.
+- **Short**: 2 to 5 sentences per level. No headings, no lists unless steps really need them.
+- **Simple words**: explain with a concrete image ("like counting cars at each crossroad"),
+  avoid notation such as O(n) and side jargon.
+- **Do name the technique**: from level 2, say which known algorithm or technique applies
+  (dynamic programming, memoization, BFS, Dijkstra, flood fill, binary search, cycle detection,
+  LCM, shoelace formula…) so the user can look it up, and explain in one or two plain sentences
+  how it works in general, before applying it to the puzzle.
 - **One idea per level**:
   1. What the puzzle really asks, and a question that points to the key idea.
-  2. The key idea in plain words, and why the obvious way would be too slow.
-  3. The steps in plain words (3 to 5 short lines), plus the one trap to watch for.
+  2. The technique by name, how it works in general (1-2 sentences), why it fits here and why the
+     obvious way would be too slow.
+  3. The steps applied to this puzzle in plain words (3 to 5 short lines), plus the one trap to
+     watch for.
 - End with a short question or "want the next hint?", nothing else.
