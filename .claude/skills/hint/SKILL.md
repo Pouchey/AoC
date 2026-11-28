@@ -1,34 +1,28 @@
 ---
 name: hint
-description: Explain how to approach an AoC puzzle in theory, as progressive hints, without giving the answer or the code.
-argument-hint: '<day> <year> [part] [nudge|approach|algorithm]'
+description: Explain how to approach an AoC puzzle in simple words, as progressive hints, without giving the answer or the code.
+argument-hint: '<day> <year> [part] [1|2|3]'
 disable-model-invocation: true
 allowed-tools: Read Bash(npm run get-subject *) Bash(head *) Bash(wc *)
 ---
 
-Coach the user on `$ARGUMENTS` (`<day> <year> [1|2] [level]`; part defaults to the first unsolved
-one, level to `nudge`). Reply in the user's language.
+Give a hint for `$ARGUMENTS` (`<day> <year> [part] [hint level 1-3]`; part defaults to the first
+unsolved one, level to 1). Reply in the user's language.
 
-Never reveal the answer, not even partially (no number, no "it's about N", no checking a guess
-by computing it). Never write the solution code, run `npm start`, a solution, a visualization
-trace or any script on the input: all of them print the answer. If asked for the answer or the
-code, say this skill only gives hints and suggest coding it, then `/verify`.
+Never give the answer (no number, no estimate, no checking a guess) and never write code. Don't
+run `npm start`, a solution or a visualization on the input, and don't open `YYYY/DD/index.ts`
+or `web/**/trace.ts`: they contain or print the answer.
 
-1. Read the statement: `YYYY/DD/Part1.md` / `Part2.md` (or `npm run get-subject <day> <year>`;
-   part 2 needs part 1 solved). Do not open `YYYY/DD/index.ts` or `web/.../trace.ts`: they may
-   contain the solution.
-2. Look at the input's shape only: `head -5`, `wc -l -c` on `data/input` (sizes and ranges
-   decide which approach is fast enough). Never print it whole.
-3. Give only the requested level, then offer the next one:
-   - **nudge**: what the puzzle really asks, in one or two sentences, and the one observation
-     that unlocks it (as a question if possible).
-   - **approach**: the family of technique (simulation, BFS/Dijkstra, DP/memoization, interval
-     arithmetic, cycle detection, math/LCM, geometry/shoelace…), why it fits, what state to keep,
-     and why the brute force fails on the real input size.
-   - **algorithm**: steps in plain words or short pseudocode (no TypeScript), complexity, traps
-     specific to this puzzle (off-by-one, overlaps, part 2 twist, number size), and how to check
-     it on the example.
-4. Point to helpers that already exist in `utils/` (grid, movement, range, math, memoize,
-   bfs/dfs, shape…) by name only.
+Read the statement (`YYYY/DD/Part1.md`/`Part2.md`, or `npm run get-subject <day> <year>`) and only
+glance at the input's size (`wc -l -c`, `head -3`).
 
-Keep each level short. End with a question that lets the user try before asking for more.
+Write like you would explain it to a friend over coffee:
+
+- **Short**: 2 to 4 sentences per level. No headings, no lists unless steps really need them.
+- **Simple words**: no jargon (DP, memoization, complexity, O(n)…) unless the user uses it first.
+  Prefer a concrete image ("like counting cars at each crossroad") to a technical term.
+- **One idea per level**:
+  1. What the puzzle really asks, and a question that points to the key idea.
+  2. The key idea in plain words, and why the obvious way would be too slow.
+  3. The steps in plain words (3 to 5 short lines), plus the one trap to watch for.
+- End with a short question or "want the next hint?", nothing else.
