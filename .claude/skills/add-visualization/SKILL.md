@@ -1,18 +1,20 @@
 ---
 name: add-visualization
-description: Add an interactive visualization of an AoC day to the web site.
-argument-hint: '<day> <year> [part1|part2]'
+description: Add or improve the web visualization of an AoC day.
+argument-hint: '<day> <year>'
 ---
 
-Visualize `$ARGUMENTS`. Reference: `web/src/components/problems/2025/day12.tsx` + `day12/`.
+Visualize `$ARGUMENTS`. Each day is `web/src/components/problems/<year>/d<DD>/` (picked up
+automatically, loaded on demand). Copy a similar day, e.g. `2025/d04` (grid), `2025/d08` (canvas).
 
-1. New year: add `@aoc/<year>` to `resolve.alias` (`web/vite.config.ts`) and `paths`
-   (`web/tsconfig.app.json`), like `@aoc/2025`.
-2. Component in `web/src/components/problems/<year>/day<DD>.tsx`; reuse `utils/` and the solution
-   through aliases.
-3. Example via `?raw`. Input never imported directly (git-ignored): use
-   `import.meta.glob<string>('/../<year>/<DD>/data/inpu[t]', { query: '?raw', import: 'default', eager: true })`
-   and show the Input option only if present.
-4. Register in `web/src/components/problems/visualizations.tsx` as `'<year>-<DD>-part1'`.
-5. Long computations stay interruptible (see `day12/useRunAll.ts`).
-6. `npm --prefix web run build && npm --prefix web run lint`, then check the page in a browser.
+1. `trace.ts`: pure TS, no React/Vite (also run in Node). Export
+   `trace: TraceFn<Frame>` from `../../viz/types` returning `{ frames, answer }` for `(input, part)`.
+   Helpers in `viz/lib.ts`. Keep frames ≲ 500 (sample) and share big arrays between frames.
+   If the repo has no solution for the day: `export const expected = { 1: …, 2: … }`. Part only
+   valid on the real input: `export const parts = [1]`.
+2. `index.tsx`: default export `(props: VizProps) => <DayViz {...props} trace={trace} caption=… render=… />`
+   with `Stat`/`Stats`, `GridCanvas` or `Canvas` from `../../viz/`; colors from `viz/colors.ts`.
+   Never pass an inline `trace` function (it would recompute every render).
+3. Single-part day (day 25, 2025 day 12): add it to `singlePart` in `problems/visualizations.tsx`.
+4. Check: `npm run test:viz -- <year> <day>` (add `--input` locally to compare with the solution on
+   the real input), `npm --prefix web run build && npm --prefix web run lint`, then look at the page.

@@ -23,7 +23,14 @@ export const hasInput = (year: number, day: number) => path(year, day, 'input') 
 export async function loadData(year: number, day: number, part: 1 | 2, source: DataSource) {
   if (source === 'input') {
     const load = inputs[path(year, day, 'input')];
-    if (load) return load();
+    if (load) {
+      const text = await load();
+      if (!text.trim())
+        throw new Error(
+          `The local input file is empty: run "npm start ${day} ${year}" to download it.`
+        );
+      return text;
+    }
   }
   const load2 = part === 2 ? examples2[path(year, day, 'example2')] : undefined;
   const load = load2 ?? examples[path(year, day, 'example')];

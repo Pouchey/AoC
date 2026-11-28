@@ -2,7 +2,9 @@
  * Checks that every web visualization computes the right answer on the example, so the
  * animation can't silently disagree with the solution.
  * Each web/src/components/problems/<year>/dDD/trace.ts exports `trace(input, part)`;
- * its answer must equal the solution's exampleAnswer1/2 (or the trace's own `expected`).
+ * its answer must equal the solution's exampleAnswer1/2, or the trace's own `expected` when the
+ * repo has no solution for that part (then the input check is skipped for it). A trace can limit
+ * the example check with `parts` (e.g. a part that only makes sense on the real input).
  * With --input, also compares with the solution on the local (git-ignored) input.
  * Usage: npm run test:viz [-- [--input] <year> [day]]
  */
@@ -54,14 +56,16 @@ const main = async () => {
     const inputFile = join(year, day, 'data/input');
     if (withInput && existsSync(inputFile)) {
       const input = readFileSync(inputFile, 'utf8');
-      for (const part of parts) {
-        if (solution.exampleTestSkip?.[part]) continue;
+      for (const part of [1, 2] as const) {
+        if (mod.expected?.[part] !== undefined || mod.noInputCheck?.includes(part)) continue;
         try {
           const { answer } = mod.trace(input, part);
           const expected = await solution[`solve${part}`](input);
           const ok = String(answer) === String(expected);
           if (!ok) failures++;
-          results.push(ok ? `input p${part} ok` : `input p${part} FAIL expected ${expected} got ${answer}`);
+          results.push(
+            ok ? `input p${part} ok` : `input p${part} FAIL expected ${expected} got ${answer}`
+          );
         } catch (error) {
           failures++;
           results.push(`input p${part} ERROR ${(error as Error).message}`);

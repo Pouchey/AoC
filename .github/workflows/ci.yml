@@ -37,6 +37,10 @@ jobs:
       - name: Test examples
         run: npm test
 
+      # Every web visualization must compute the right answer on the example
+      - name: Test visualizations
+        run: npm run test:viz
+
       - name: Install web dependencies
         working-directory: ./web
         run: npm ci

@@ -87,6 +87,7 @@ This will create `Part1.md` and `Part2.md` files in the day's folder with the pr
 
 ```bash
 npm test            # every solution vs its exampleAnswer (npm test -- 2025 7 for one day)
+npm run test:viz    # web visualizations vs exampleAnswer (-- --input: vs solutions on local input)
 npm run typecheck   # tsc on solutions + utils
 npm run lint        # ESLint (flat config) + Prettier
 npm run lint:fix

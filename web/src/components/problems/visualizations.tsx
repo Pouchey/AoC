@@ -24,6 +24,9 @@ for (const [path, load] of Object.entries(dayModules)) {
   ));
 }
 
+// Days with a single puzzle part (day 25, and 12 since 2025)
+const singlePart = new Set(['2023-25', '2025-12']);
+
 // Hand-made visualizations that replace the generic one for a given part
 const custom = new Map<string, ComponentType<VizProps>>([['2025-12-part1', Day12Visualization]]);
 
@@ -33,6 +36,7 @@ export function getProblemVisualization(
   part: 'part1' | 'part2'
 ): ComponentType<VizProps> | null {
   const key = `${year}-${day.toString().padStart(2, '0')}`;
+  if (part === 'part2' && singlePart.has(key)) return null;
   return custom.get(`${key}-${part}`) ?? lazyDays.get(key) ?? null;
 }
 
