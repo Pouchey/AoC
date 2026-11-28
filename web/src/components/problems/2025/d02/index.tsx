@@ -29,7 +29,7 @@ export default function Day02(props: VizProps) {
                 style={{
                   borderColor: i === index ? C.blue : C.line,
                   color: i < index ? C.muted : i === index ? C.text : C.line,
-                  background: f.found.length && i <= index ? '#f8514922' : undefined
+                  background: f.found.length && i <= index ? '#ff6b6b22' : undefined
                 }}
               >
                 {f.range[0]}-{f.range[1]}

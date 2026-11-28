@@ -14,7 +14,7 @@ function Race({ frame }: { frame: Frame }) {
       draw={(ctx, w, h) => {
         const x = (t: number) => 40 + (t / time) * (w - 60);
         const y = (d: number) => h - 24 - (d / peak) * (h - 44);
-        ctx.fillStyle = '#3fb95022';
+        ctx.fillStyle = '#5fd39a22';
         ctx.fillRect(x(lo), 10, x(hi) - x(lo), h - 34);
         ctx.strokeStyle = C.red;
         ctx.setLineDash([6, 4]);

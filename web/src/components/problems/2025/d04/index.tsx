@@ -28,7 +28,7 @@ export default function Day04(props: VizProps) {
             color={(r, c) => {
               if (frame.accessible.has(r * frame.rows[0].length + c)) return C.green;
               const ch = frame.rows[r][c];
-              return ch === '@' ? C.muted : ch === 'x' ? '#d2992240' : C.cell;
+              return ch === '@' ? C.muted : ch === 'x' ? '#f5c45140' : C.cell;
             }}
           />
         </div>

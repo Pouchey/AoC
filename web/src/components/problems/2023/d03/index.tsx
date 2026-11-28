@@ -28,15 +28,15 @@ function Schematic({ frame, part }: { frame: Frame; part: 1 | 2 }) {
         const i = owner.get(k);
         if (i === undefined) {
           if (current && current.r === r && current.c === c) return C.text;
-          return gearCells.has(k) ? C.purple : '#d2992299';
+          return gearCells.has(k) ? C.purple : '#f5c45199';
         }
         if (part === 1) {
           if (i === frame.current) return C.blue;
           if (i >= frame.done) return C.line;
-          return numbers[i].part ? '#3fb950cc' : '#f85149aa';
+          return numbers[i].part ? '#5fd39acc' : '#ff6b6baa';
         }
         if (current?.nums.includes(i)) return C.blue;
-        return gearNums.has(i) ? '#3fb950cc' : C.line;
+        return gearNums.has(i) ? '#5fd39acc' : C.line;
       }}
     />
   );

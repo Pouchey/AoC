@@ -41,7 +41,7 @@ export default function Day10(props: VizProps) {
                   return `hsl(${210 + (d / Math.max(1, frame.far)) * 90}, 70%, ${props.part === 1 ? 55 : 35}%)`;
                 }
                 if (props.part === 2 && r <= frame.upTo)
-                  return frame.inside[r * W + c] ? C.green : '#0d1117';
+                  return frame.inside[r * W + c] ? C.green : '#0d1220';
                 return C.cell;
               }}
             />

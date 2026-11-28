@@ -17,7 +17,7 @@ function NumberLine({ frame }: { frame: Frame }) {
         // individual ranges, stacked
         const lane = (h * 0.45) / Math.max(1, frame.ranges.length);
         frame.ranges.forEach(([lo, hi], i) => {
-          ctx.fillStyle = '#58a6ff55';
+          ctx.fillStyle = '#8ab4ff55';
           ctx.fillRect(x(lo), 10 + i * lane, Math.max(2, x(hi) - x(lo)), Math.max(1, lane - 1));
         });
         // merged ranges

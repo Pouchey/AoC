@@ -62,11 +62,13 @@ export function DayViz<F>({ year, day, part, trace, render, caption, fps }: DayV
 
   const tab = (value: DataSource, label: string) => (
     <button
+      role="tab"
+      aria-selected={source === value}
       onClick={() => select(value)}
-      className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+      className={`px-3 py-1 rounded-md text-sm transition-colors ${
         source === value
-          ? 'bg-accent-blue text-white'
-          : 'bg-bg-panel text-text-secondary hover:text-text-primary border border-grid-line'
+          ? 'bg-bg-highlight text-text-primary'
+          : 'text-text-secondary hover:text-text-primary'
       }`}
     >
       {label}
@@ -74,29 +76,26 @@ export function DayViz<F>({ year, day, part, trace, render, caption, fps }: DayV
   );
 
   return (
-    <div className="bg-bg-highlight rounded-xl p-4 sm:p-6 border border-grid-line space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h4 className="text-sm font-semibold text-text-secondary uppercase tracking-wider flex items-center gap-2">
-          <span className="w-1 h-3 bg-accent-green rounded-full" />
-          Visualization
-        </h4>
-        <div className="flex gap-2">
+    <section className="bg-bg-panel rounded-2xl p-4 sm:p-6 space-y-4">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <h3 className="text-lg font-normal">Visualization</h3>
+        <div className="inline-flex rounded-lg bg-bg-dark p-1" role="tablist" aria-label="Data">
           {tab('example', 'Example')}
           {inputAvailable && tab('input', 'Input')}
         </div>
       </div>
-      <p className="text-sm text-text-secondary">{caption}</p>
+      <p className="text-sm text-text-secondary max-w-[75ch]">{caption}</p>
 
       {state.status === 'loading' && (
         <div className="flex justify-center py-10">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent-blue" />
+          <div className="animate-spin rounded-full h-6 w-6 border-2 border-grid-line border-t-accent-blue" />
         </div>
       )}
       {state.status === 'error' && <p className="text-accent-red text-sm">{state.message}</p>}
       {state.status === 'ready' && (
         <Stepped key={key} trace={state.trace} render={render} fps={fps} ms={state.ms} />
       )}
-    </div>
+    </section>
   );
 }
 
@@ -123,7 +122,7 @@ function Stepped<F>({
         <span>
           <span className="text-text-secondary">Answer: </span>
           <span
-            className={`font-mono font-semibold ${done ? 'text-accent-gold' : 'text-text-secondary'}`}
+            className={`font-medium tabular-nums ${done ? 'text-accent-gold' : 'text-text-secondary'}`}
           >
             {String(trace.answer)}
           </span>
@@ -137,9 +136,9 @@ function Stepped<F>({
 /** Small label/value pill for per-frame stats */
 export function Stat({ label, value, color }: { label: string; value: ReactNode; color?: string }) {
   return (
-    <span className="inline-flex items-baseline gap-1.5 rounded-md bg-bg-panel border border-grid-line px-2.5 py-1 text-sm">
+    <span className="inline-flex items-baseline gap-1.5 rounded-md bg-bg-dark px-2.5 py-1 text-sm">
       <span className="text-text-secondary">{label}</span>
-      <span className="font-mono font-semibold" style={{ color }}>
+      <span className="font-medium tabular-nums" style={{ color }}>
         {value}
       </span>
     </span>

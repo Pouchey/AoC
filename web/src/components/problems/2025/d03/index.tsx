@@ -25,7 +25,7 @@ export default function Day03(props: VizProps) {
                   key={i}
                   className="w-6 h-8 flex items-center justify-center rounded text-sm"
                   style={{
-                    background: on ? '#d2992233' : C.panel,
+                    background: on ? '#f5c45133' : C.panel,
                     color: on ? C.gold : C.muted,
                     border: `1px solid ${on ? C.gold : C.line}`,
                     boxShadow: on ? `0 0 8px ${C.gold}55` : undefined

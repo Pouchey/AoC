@@ -11,7 +11,7 @@ export function Player({
 }) {
   const { index, playing, fps, setFps, toggle, seek, step } = stepper;
   const button =
-    'px-2.5 py-1 rounded-md text-sm bg-bg-panel border border-grid-line text-text-primary hover:border-accent-blue disabled:opacity-40';
+    'px-2.5 py-1 rounded-md text-sm bg-bg-dark text-text-primary hover:bg-bg-highlight disabled:opacity-30';
 
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -22,11 +22,11 @@ export function Player({
         ◀
       </button>
       <button
-        className={`${button} min-w-16 ${playing ? 'text-accent-gold' : 'text-accent-green'}`}
+        className={`${button} min-w-20 !text-accent-blue`}
         onClick={toggle}
         disabled={count <= 1}
       >
-        {playing ? '⏸ Pause' : '▶ Play'}
+        {playing ? 'Pause' : 'Play'}
       </button>
       <button className={button} onClick={() => step(1)} disabled={index >= count - 1} title="Next">
         ▶
@@ -48,13 +48,13 @@ export function Player({
         className="flex-1 min-w-32 accent-accent-blue"
         aria-label="Frame"
       />
-      <span className="text-xs font-mono text-text-secondary tabular-nums">
+      <span className="text-xs text-text-secondary tabular-nums">
         {index + 1}/{count}
       </span>
       <select
         value={fps}
         onChange={(e) => setFps(Number(e.target.value))}
-        className="bg-bg-panel border border-grid-line rounded-md text-sm px-1.5 py-1"
+        className="bg-bg-dark rounded-md text-sm px-1.5 py-1"
         aria-label="Speed"
       >
         {[...new Set([...SPEEDS, fps])]

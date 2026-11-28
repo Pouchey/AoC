@@ -29,7 +29,7 @@ function GraphView({ frame }: { frame: Frame }) {
         ]);
         ctx.lineWidth = small ? 0.5 : 1.5;
         for (const [a, b] of graph.edges) {
-          ctx.strokeStyle = a < done ? '#58a6ff88' : '#30363d';
+          ctx.strokeStyle = a < done ? '#8ab4ff88' : '#262f47';
           ctx.beginPath();
           ctx.moveTo(xy[a][0], xy[a][1]);
           ctx.lineTo(xy[b][0], xy[b][1]);

@@ -3,7 +3,6 @@ import { Header } from './components/Header';
 import { YearSelector } from './components/YearSelector';
 import { DayGrid } from './components/DayGrid';
 import { ProblemViewer } from './components/ProblemViewer';
-import { StatsPanel } from './components/StatsPanel';
 import { loadProblemsData, type ProblemsData } from './data/problems';
 
 // Latest AoC edition: current year from December, previous year otherwise
@@ -49,7 +48,9 @@ function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  const selectedYear = searchParams.year ? parseInt(searchParams.year, 10) : parseInt(DEFAULT_YEAR, 10);
+  const selectedYear = searchParams.year
+    ? parseInt(searchParams.year, 10)
+    : parseInt(DEFAULT_YEAR, 10);
   const selectedDay = searchParams.day ? parseInt(searchParams.day, 10) : null;
 
   useEffect(() => {
@@ -85,133 +86,45 @@ function App() {
 
   if (loading || !data) {
     return (
-      <div className="min-h-screen bg-bg-dark flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-6xl mb-4 animate-bounce">🎄</div>
-          <p className="text-text-secondary">Loading problems...</p>
-        </div>
+      <div className="min-h-screen flex items-center justify-center text-text-secondary">
+        Loading puzzles…
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-bg-dark overflow-x-hidden w-full max-w-full">
-      {/* Background pattern */}
-      <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,185,80,0.03)_0%,transparent_50%)] pointer-events-none" />
-      <div className="fixed inset-0 bg-[linear-gradient(rgba(30,36,44,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(30,36,44,0.5)_1px,transparent_1px)] bg-size-[60px_60px] pointer-events-none opacity-30" />
+    <div className="min-h-screen">
+      <div className="mx-auto max-w-5xl px-5 sm:px-8 pb-24">
+        <Header data={data} year={selectedYear} day={selectedDay} />
 
-      <div className="relative max-w-6xl mx-auto px-4 py-8 w-full overflow-x-hidden">
-        <Header />
+        <main>
+          <YearSelector
+            years={data.years}
+            selectedYear={selectedYear}
+            onYearChange={(year) => updateQueryParams({ year, day: null })}
+          />
 
-        <div className="grid lg:grid-cols-[1fr,300px] gap-8">
-          <div className="space-y-6 w-full min-w-0">
-            <YearSelector
-              years={data.years}
-              selectedYear={selectedYear}
-              onYearChange={(year) => updateQueryParams({ year, day: selectedDay })}
+          <DayGrid
+            data={data}
+            year={selectedYear}
+            selectedDay={selectedDay}
+            onDayChange={(day) => updateQueryParams({ year: selectedYear, day })}
+          />
+
+          {selectedDay ? (
+            <ProblemViewer
+              key={`${selectedYear}-${selectedDay}`}
+              data={data}
+              year={selectedYear}
+              day={selectedDay}
             />
-
-            {selectedYear && (
-              <DayGrid
-                data={data}
-                year={selectedYear}
-                selectedDay={selectedDay}
-                onDayChange={(day) => updateQueryParams({ year: selectedYear, day })}
-              />
-            )}
-
-            {selectedYear && selectedDay && (
-              <ProblemViewer data={data} year={selectedYear} day={selectedDay} />
-            )}
-
-            {selectedYear && !selectedDay && (
-              <div className="bg-bg-panel rounded-2xl p-12 border border-grid-line text-center">
-                <div className="text-6xl mb-4">🎄</div>
-                <h3 className="text-xl font-semibold text-text-primary mb-2">Select a Day</h3>
-                <p className="text-text-secondary">
-                  Click on a day above to view the problem and solution
-                </p>
-              </div>
-            )}
-          </div>
-
-          <aside className="space-y-6">
-            <StatsPanel data={data} />
-
-            {/* Quick Links */}
-            <div className="bg-bg-panel rounded-2xl p-6 border border-grid-line">
-              <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4 flex items-center gap-2">
-                <span className="w-1 h-3.5 bg-accent-blue rounded-full" />
-                Quick Links
-              </h3>
-              <div className="space-y-2">
-                <a
-                  href="https://adventofcode.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 p-3 rounded-lg bg-bg-highlight hover:bg-grid-line transition-colors group"
-                >
-                  <span className="text-xl">🌐</span>
-                  <span className="text-text-primary group-hover:text-accent-blue transition-colors">
-                    Advent of Code
-                  </span>
-                </a>
-                <a
-                  href={
-                    selectedYear && selectedDay
-                      ? `https://github.com/Pouchey/AoC/tree/main/${selectedYear}/${selectedDay
-                          .toString()
-                          .padStart(2, '0')}`
-                      : selectedYear
-                        ? `https://github.com/Pouchey/AoC/tree/main/${selectedYear}`
-                        : 'https://github.com/Pouchey/AoC'
-                  }
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 p-3 rounded-lg bg-bg-highlight hover:bg-grid-line transition-colors group"
-                >
-                  <span className="text-xl">📁</span>
-                  <span className="text-text-primary group-hover:text-accent-blue transition-colors">
-                    GitHub Repository
-                  </span>
-                </a>
-              </div>
-            </div>
-
-            {/* Legend */}
-            <div className="bg-bg-panel rounded-2xl p-6 border border-grid-line">
-              <h3 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4 flex items-center gap-2">
-                <span className="w-1 h-3.5 bg-accent-purple rounded-full" />
-                Legend
-              </h3>
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-bg-highlight border border-accent-green/30 flex items-center justify-center text-accent-green font-mono font-bold text-sm">
-                    1
-                  </div>
-                  <span className="text-text-secondary text-sm">Completed (⭐ both parts)</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-bg-highlight border border-accent-gold/30 flex items-center justify-center text-accent-gold font-mono font-bold text-sm">
-                    2
-                  </div>
-                  <span className="text-text-secondary text-sm">In Progress</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-bg-dark/50 flex items-center justify-center text-text-secondary/30 font-mono font-bold text-sm">
-                    3
-                  </div>
-                  <span className="text-text-secondary text-sm">Not Started</span>
-                </div>
-              </div>
-            </div>
-          </aside>
-        </div>
-
-        {/* Footer */}
-        <footer className="mt-16 pt-8 border-t border-grid-line text-center text-text-secondary text-sm">
-          <p>Made with ❤️ for Advent of Code</p>
-        </footer>
+          ) : (
+            <p className="mt-16 text-text-secondary max-w-md">
+              Pick a day to read the puzzle, watch it being solved step by step and read the
+              solution.
+            </p>
+          )}
+        </main>
       </div>
     </div>
   );

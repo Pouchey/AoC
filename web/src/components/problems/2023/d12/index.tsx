@@ -13,7 +13,7 @@ function Springs({ text, known }: { text: string; known?: string }) {
           key={i}
           className="w-5 h-6 flex items-center justify-center text-xs rounded-sm"
           style={{
-            background: ch === '#' ? (known?.[i] === '?' ? '#d29922aa' : C.red) : C.panel,
+            background: ch === '#' ? (known?.[i] === '?' ? '#f5c451aa' : C.red) : C.panel,
             color: ch === '#' ? C.bg : (COLOR[ch] ?? C.text)
           }}
         >
