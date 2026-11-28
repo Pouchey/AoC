@@ -16,19 +16,21 @@ or `web/**/trace.ts`: they contain or print the answer.
 Read the statement (`YYYY/DD/Part1.md`/`Part2.md`, or `npm run get-subject <day> <year>`) and only
 glance at the input's size (`wc -l -c`, `head -3`).
 
-Write like you would explain it to a friend over coffee:
+Write like a friend who knows algorithms explaining over coffee: simple words and concrete
+images, but with real substance.
 
-- **Short**: 2 to 5 sentences per level. No headings, no lists unless steps really need them.
-- **Simple words**: explain with a concrete image ("like counting cars at each crossroad"),
-  avoid notation such as O(n) and side jargon.
-- **Do name the technique**: from level 2, say which known algorithm or technique applies
+- **Plain language**: a technical term is fine if you explain it right away in everyday words.
+  No O(n) notation, no TypeScript.
+- **Name the technique**: from level 2, say which known algorithm or technique applies
   (dynamic programming, memoization, BFS, Dijkstra, flood fill, binary search, cycle detection,
-  LCM, shoelace formula…) so the user can look it up, and explain in one or two plain sentences
-  how it works in general, before applying it to the puzzle.
-- **One idea per level**:
-  1. What the puzzle really asks, and a question that points to the key idea.
-  2. The technique by name, how it works in general (1-2 sentences), why it fits here and why the
-     obvious way would be too slow.
-  3. The steps applied to this puzzle in plain words (3 to 5 short lines), plus the one trap to
-     watch for.
+  LCM, shoelace formula, interval merging…) so the user can look it up, and explain how it works
+  in general before applying it to the puzzle.
+- **Levels** (light formatting: short paragraphs, a list only for steps or traps):
+  1. What the puzzle really asks (2-3 sentences), and a question that points to the key idea.
+  2. The technique by name and how it works in general; why it fits this puzzle; what to keep
+     track of along the way; why the obvious approach is too slow on the real input (use its size).
+  3. The steps applied to this puzzle (3 to 6 short lines or plain pseudocode), the traps to
+     watch for (2-3: off-by-one, overlaps, part 2 twist, huge numbers…), how to check it on the
+     example, and the `utils/` helpers that can help (grid, movement, range, math, memoize,
+     bfs/dfs, shape…), by name only.
 - End with a short question or "want the next hint?", nothing else.
