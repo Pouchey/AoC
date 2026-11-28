@@ -26,7 +26,7 @@ export function Garland({ total, lit }: { total: number; lit: number }) {
         <path
           d={wire}
           fill="none"
-          stroke="#2c3550"
+          stroke="#4a443d"
           strokeWidth="1.5"
           vectorEffect="non-scaling-stroke"
         />
@@ -47,7 +47,7 @@ export function Garland({ total, lit }: { total: number; lit: number }) {
             }}
             aria-hidden="true"
           >
-            <span className="block w-1.5 h-1 rounded-t-sm bg-[#3a4462]" />
+            <span className="block w-1.5 h-1 rounded-t-sm bg-[#57504a]" />
             <span
               className={`block w-2 h-3 rounded-full ${on ? 'bulb-on' : ''}`}
               style={
@@ -57,7 +57,7 @@ export function Garland({ total, lit }: { total: number; lit: number }) {
                       boxShadow: `0 0 6px ${color}, 0 0 16px ${color}99`,
                       animationDelay: `${(i * 0.37) % 2.4}s`
                     }
-                  : { background: '#232b42' }
+                  : { background: '#2e2a26' }
               }
             />
           </span>

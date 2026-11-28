@@ -105,7 +105,10 @@ export function Day12Visualization() {
     return (
       <div className="bg-bg-panel rounded-2xl p-4 sm:p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-normal">Visualization</h3>
+          <h3 className="text-lg font-normal flex items-center gap-3">
+            <span className="neon-rule !w-4" aria-hidden="true" />
+            Visualization
+          </h3>
           <DataSelector
             dataSource={dataSource}
             onSelect={setDataSource}
@@ -133,7 +136,10 @@ export function Day12Visualization() {
       />
       <div className="bg-bg-panel rounded-2xl p-4 sm:p-6 space-y-6">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-normal">Visualization</h3>
+          <h3 className="text-lg font-normal flex items-center gap-3">
+            <span className="neon-rule !w-4" aria-hidden="true" />
+            Visualization
+          </h3>
           <DataSelector
             dataSource={dataSource}
             onSelect={setDataSource}

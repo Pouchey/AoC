@@ -18,7 +18,7 @@ export function Header({ data, year, day }: HeaderProps) {
     : `${REPO}/tree/main/${year}`;
 
   return (
-    <header className="flex items-center justify-between gap-4 py-6 border-b border-grid-line">
+    <header className="relative flex items-center justify-between gap-4 py-6">
       <a
         href="./"
         className="flex items-baseline gap-2 font-medium tracking-tight text-text-primary whitespace-nowrap"
@@ -48,6 +48,7 @@ export function Header({ data, year, day }: HeaderProps) {
           <span className="hidden sm:inline">Source on </span>GitHub
         </a>
       </nav>
+      <div className="neon-hairline absolute inset-x-0 bottom-0" aria-hidden="true" />
     </header>
   );
 }

@@ -19,7 +19,7 @@ function Network({ frame }: { frame: Frame }) {
           h / 2 + Math.sin((i / n) * Math.PI * 2) * r
         ]);
         ctx.lineWidth = 1;
-        ctx.strokeStyle = '#262f47';
+        ctx.strokeStyle = '#34302b';
         modules.forEach((m, i) =>
           m.outputs.forEach((o) => {
             const j = index.get(o)!;

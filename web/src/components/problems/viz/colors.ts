@@ -1,11 +1,11 @@
 // Same palette as the site theme (index.css)
 export const C = {
-  bg: '#0d1220',
-  panel: '#141a2b',
-  cell: '#1b2236',
-  line: '#262f47',
-  text: '#e6eaf2',
-  muted: '#8c95ad',
+  bg: '#121110',
+  panel: '#1b1917',
+  cell: '#24211e',
+  line: '#34302b',
+  text: '#ece8e3',
+  muted: '#9a948c',
   red: '#ff5c8a',
   green: '#3df5a7',
   blue: '#4fd8ff',

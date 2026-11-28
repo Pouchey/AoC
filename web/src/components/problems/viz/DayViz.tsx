@@ -78,7 +78,10 @@ export function DayViz<F>({ year, day, part, trace, render, caption, fps }: DayV
   return (
     <section className="bg-bg-panel rounded-2xl p-4 sm:p-6 space-y-4">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h3 className="text-lg font-normal">Visualization</h3>
+        <h3 className="text-lg font-normal flex items-center gap-3">
+          <span className="neon-rule !w-4" aria-hidden="true" />
+          Visualization
+        </h3>
         <div className="inline-flex rounded-lg bg-bg-dark p-1" role="tablist" aria-label="Data">
           {tab('example', 'Example')}
           {inputAvailable && tab('input', 'Input')}

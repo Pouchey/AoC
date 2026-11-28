@@ -2,18 +2,18 @@
 @import 'tailwindcss';
 
 /*
- * "Neon Christmas night": a calm blue-night base with a faint aurora and a little snow; the
- * festive colors (red, gold, green) live in the year title and the garland of earned stars,
- * neon cyan stays for everything you can click.
+ * "Warm graphite": a soft charcoal base with a faint warm glow and a little snow. One neon
+ * gradient (red to gold) is the signature: the year title and a few short rules echo it.
+ * The garland of earned stars brings the other Christmas colors; cyan is for what you click.
  */
 @theme {
   --font-sans: 'Hanken Grotesk', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
-  --color-bg-dark: #0d1220;
-  --color-bg-panel: #141a2b;
-  --color-bg-highlight: #1b2236;
-  --color-grid-line: #262f47;
+  --color-bg-dark: #121110;
+  --color-bg-panel: #1b1917;
+  --color-bg-highlight: #24211e;
+  --color-grid-line: #34302b;
 
   --color-accent-gold: #ffd166;
   --color-accent-blue: #4fd8ff;
@@ -23,8 +23,11 @@
   --color-accent-pink: #ff5cc8;
   --color-accent-xmas: #ff4d6d;
 
-  --color-text-primary: #e6eaf2;
-  --color-text-secondary: #8c95ad;
+  --color-text-primary: #ece8e3;
+  --color-text-secondary: #9a948c;
+
+  --neon-a: #ff4d6d;
+  --neon-b: #ffc857;
 }
 
 html {
@@ -39,8 +42,8 @@ body {
   font-feature-settings: 'tnum' 1;
   /* Faint aurora behind the header */
   background-image:
-    radial-gradient(60rem 26rem at 10% -8rem, #3df5a71a, transparent 70%),
-    radial-gradient(50rem 26rem at 90% -10rem, #ff4d6d1c, transparent 70%);
+    radial-gradient(60rem 26rem at 10% -8rem, #ff4d6d14, transparent 70%),
+    radial-gradient(50rem 26rem at 90% -10rem, #ffc85712, transparent 70%);
   background-repeat: no-repeat;
   overflow-x: hidden;
   max-width: 100vw;
@@ -76,7 +79,7 @@ pre code {
 
 /* The selected year: the one loud element of the page */
 .neon-title {
-  background: linear-gradient(100deg, #ff4d6d 5%, #ffd166 50%, #3df5a7 95%);
+  background: linear-gradient(100deg, var(--neon-a) 10%, var(--neon-b) 90%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -92,6 +95,28 @@ pre code {
   box-shadow:
     0 0 0 1px #4fd8ff,
     0 0 18px #4fd8ff40;
+}
+
+/* Short reminders of the title gradient, beside headings and under the header */
+.neon-rule {
+  display: inline-block;
+  width: 1.75rem;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--neon-a), var(--neon-b));
+  box-shadow: 0 0 8px #ff4d6d66;
+}
+
+.neon-hairline {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--neon-a) 20%,
+    var(--neon-b) 80%,
+    transparent
+  );
+  opacity: 0.55;
 }
 
 /* Garland bulbs twinkle gently */

@@ -11,8 +11,8 @@ const hex = (s: string) => [1, 3, 5].map((i) => parseInt(s.slice(i, i + 2), 16))
 function Garden({ frame }: { frame: Frame }) {
   const n = frame.grid.length;
   const size = n * (2 * frame.tiles + 1);
-  const rock = hex('#262f47');
-  const plot = hex('#141a2b');
+  const rock = hex('#34302b');
+  const plot = hex('#1b1917');
   const on = hex('#3df5a7');
   const seen = hex('#1f4b2c');
   return (

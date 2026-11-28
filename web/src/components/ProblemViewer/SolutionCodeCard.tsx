@@ -24,7 +24,10 @@ export function SolutionCodeCard({
   return (
     <section className="min-w-0">
       <div className="flex items-baseline justify-between gap-4 flex-wrap">
-        <h3 className="text-lg font-normal">Solution</h3>
+        <h3 className="text-lg font-normal flex items-center gap-3">
+          <span className="neon-rule !w-4" aria-hidden="true" />
+          Solution
+        </h3>
         <a
           href={`https://github.com/Pouchey/AoC/blob/main/${path}`}
           target="_blank"
